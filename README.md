@@ -1,6 +1,13 @@
-# Nuxt 3 Minimal Starter for Bloomreach Headless
+# VisitScotland Business Support Hub - Front End Application
 
-Provides a minimal starting point for a nuxt app using the VisitScotland Component Library and the Bloomreach Headless CMS.
+A front end Nuxt application to display the Business Support Hub website, utilising the Bloomreach SPA-SDK and the VisitScotland Component Library. To be paired with a headless BRXM application.
+
+## Dependencies
+
+* node.js
+* yarn
+
+This project depends on a local site running an instance of the dot com brxm project, with the resource api enabled.
 
 ## Setup
 
@@ -26,3 +33,7 @@ Configuration for the nuxt instance is all set within `nuxt.config.ts`, includin
 That app.vue file makes the connection to the resourceApi endpoint based on the current site path, gathers the response, and then starts page construction by passing the relevant information to each of the components in /components/Base which render out the site in full.
 
 By default, whenever there is a 500 error message in the page, nuxt loads a very user-unfriendly error page with full details of that error. In order to prevent that reaching our end-users we also have an error.vue page. This is called every time something goes wrong in the execution of app.vue, and displays a generic "something has gone wrong" type error message to the user, using a dummy version of the VsBrMain called VsBrErrorMain. In development this can sometimes be problematic and get in the way of debugging. If that is the case, rename error.vue to anything else and the default nuxt crash error will be restored with all of its information.
+
+## Documentation (WIP)
+
+https://github.com/visitscotland/business-events-front-end/wiki
