@@ -9,7 +9,28 @@
 
         <VsBrGtm />
         
-        <h1>Main component</h1>
+        <VsBrPageViewEvent
+            :data="document.model.data"
+            :page-type="pageName"
+        />
+
+        <VsBrGeneral
+            v-if="pageName === 'general-page'"
+            :page="page"
+            :component="component"
+        />
+
+        <VsBr404
+            v-else-if="pageName === 'pagenotfound'"
+            :page="page"
+            :component="component"
+        />
+
+        <VsBr500
+            v-else-if="pageName === 'servererror'"
+            :page="page"
+            :component="component"
+        />
     </div>
 </template>
 
@@ -22,7 +43,13 @@ import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
 import useConfigStore from '~/stores/configStore.ts';
 
+import VsBrGeneral from '~/components/PageTypes/VsBrGeneral.vue';
+import VsBr404 from '~/components/PageTypes/VsBr404.vue';
+import VsBr500 from '~/components/PageTypes/VsBr500.vue';
+
 import VsBrGtm from '~/components/Modules/VsBrGtm.vue';
+
+import VsBrPageViewEvent from '~/components/Utils/VsBrPageViewEvent.vue';
 
 const props = defineProps<{ component: Component, page: Page }>();
 
@@ -53,19 +80,17 @@ if (page.value) {
 
     const componentModels = component.value.getModels();
 
-    /**
-     * As a quirk of the data structure in the resourceApi, this main component receives all
-     * of the labels, as well as things like the is-business-events flag, the locale and gtm
-     * information. As a lot of this is needed in the menu and footer components, the easiest
-     * way to make it available globally is to place it in this configStore at the point this
-     * component is mounted, which can then be queried anywhere.
-     */
-
     configStore.pageMetaData = componentModels.metadata;
 
-    // configStore.isBusinessEvents = componentModels['business-events'];
-    // configStore.pageItems = componentModels.pageItems;
-    // configStore.labels = componentModels.labels;
+    configStore.productSearch = componentModels.psrWidget;
+    if (componentModels.otyml) {
+        configStore.otyml = componentModels.otyml;
+    }
+    configStore.pageItems = componentModels.pageItems;
+    configStore.labels = componentModels.labels;
+    configStore.newsletterSignpost = componentModels.newsletterSignpost;
+    configStore.gtm = componentModels.gtm;
+    configStore.pageMetaData = componentModels.metadata;
 
     document = page.value.getDocument();
 

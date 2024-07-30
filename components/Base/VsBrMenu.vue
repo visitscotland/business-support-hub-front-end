@@ -1,23 +1,52 @@
 <template>
     <div class="vs-sticky-nav" :class="{ 'has-edit-button': page.isPreview() }">
         <header>
-            <h1>Header component</h1>
-        </header>
+            <VsGlobalMenu
+             active-site=""
+            />
 
-        <!-- <BrManageMenuButton :menu="menuData" /> -->
-
-        <!-- <ul>
-            <li
-                v-for="(menuItem, index) in menuItems"
-                :key="index"
+            <BrManageMenuButton :menu="menuData" />
+            <VsMeganav
+                href="/"
+                menu-toggle-alt-text=""
+                search-button-text=""
+                search-label-text=""
+                search-clear-button-text=""
+                search-close-button-text=""
+                logo-alt-text=""
+                :no-search="true"
             >
-                <a
-                    :href="menuItem.getUrl()"
-                >
-                    {{ menuItem.model.title }}
-                </a>
-            </li>
-        </ul> -->
+                <template #mega-nav-top-menu-items>
+                    <template
+                        v-for="(menuItem, index) in menuItems"
+                        :key="index"
+                    >
+                        <VsMegaNavStaticLink
+                            :href="`/${menuItem.getUrl() ? menuItem.getUrl() : menuItem.model.name}`"
+                        >
+                            {{ menuItem.model.title }}
+                        </VsMegaNavStaticLink>
+                    </template>
+                </template>
+
+                <template #mega-nav-accordion-items>
+                    <VsAccordion>
+                        <template
+                            v-for="(menuItem, index) in menuItems"
+                            :key="index"
+                        >
+                            <VsMegaNavStaticLink
+                                class="vs-mega-nav-mobile"
+                                :href="menuItem.getUrl() ? menuItem.getUrl() : menuItem.model.name"
+                                :is-full-width="true"
+                            >
+                                {{ menuItem.model.title }}
+                            </VsMegaNavStaticLink>
+                        </template>
+                    </VsAccordion>
+                </template>
+            </VsMeganav>
+        </header>
     </div>
 </template>
 
@@ -26,24 +55,31 @@ import { toRefs } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageMenuButton } from '@bloomreach/vue3-sdk';
 
+import {
+    VsGlobalMenu,
+    VsMeganav,
+    VsMegaNavStaticLink,
+    VsAccordion,
+} from '@visitscotland/component-library/components';
+
 const props = defineProps<{ component: Component, page: Page }>();
 
 const { component, page } = toRefs(props);
 
-// let menu = {
-//     $ref: '',
-// };
-// let menuData : any = {
-// };
-// let menuItems : any[] = [];
+let menu = {
+    $ref: '',
+};
+let menuData : any = {
+};
+let menuItems : any[] = [];
 
 if (page.value) {
     // Menu content can be retrieved from the models on the sdk core Menu component
     // like so
     // Multiple menus may exist depending on the site
 
-    // menu = component.value.getModels().menu;
-    // menuData = page.value.getContent(menu.$ref);
-    // menuItems = menuData.items;
+    menu = component.value.getModels().menu;
+    menuData = page.value.getContent(menu.$ref);
+    menuItems = menuData.items;
 }
 </script>

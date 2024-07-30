@@ -1,33 +1,43 @@
 import { defineStore } from 'pinia';
 
 interface IConfigState {
-    // isBusinessEvents: boolean,
-    // pageItems: any[],
-    // labels: any,
+    productSearch: any,
+    otyml: any,
+    pageItems: any[],
+    labels: any,
+    newsletterSignpost: any,
+    gtm: any,
+    locale: string,
     pageMetaData: any,
 }
 
 const useConfigStore = defineStore('configStore', {
     state: (): IConfigState => ({
-        // isBusinessEvents: false,
-        // pageItems: [],
-        // labels: {
-        // },
+        productSearch: {
+        },
+        otyml: null,
+        pageItems: [],
+        labels: {
+        },
+        newsletterSignpost: {
+        },
+        gtm: null,
+        locale: '',
         pageMetaData: {
         },
     }),
     actions: {
-        // getLabel(section: string, key: string): string {
-        //     if (!this.labels || !this.labels[section]) {
-        //         return '';
-        //     }
+        getLabel(section: string, key: string) {
+            if (!this.labels || !this.labels[section]) {
+                return '';
+            }
 
-        //     if (this.labels[section][key]) {
-        //         return this.labels[section][key];
-        //     }
+            if (this.labels[section][key]) {
+                return this.labels[section][key];
+            }
 
-        //     return '';
-        // },
+            return '';
+        },
     },
 });
 

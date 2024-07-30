@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    style="overflow-x: hidden;"
+  >
       <VsBrSkeleton
           v-show="!isMounted"
       />
