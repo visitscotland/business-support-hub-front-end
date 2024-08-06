@@ -124,8 +124,8 @@ pipeline {
                         printenv >> printenv.$STAGE_NAME
                         echo "====/PRINTENV $STAGE_NAME =====" >> printenv.$STAGE_NAME ; echo
                         export BR_CMS_ORIGIN_LOCATION=https://cms-release-brc.visitscotland.com
-                        export BR_RESOURCE_API_ENDPOINT=https://release-brc-businesssupport.visitscotland.com/resourceapi
-                        export BR_X_FORWARDED_HOST=release-brc-businesssupport.visitscotland.com
+                        export BR_RESOURCE_API_ENDPOINT=https://release-brc-businesssupport.visitscotland.org/resourceapi
+                        export BR_X_FORWARDED_HOST=release-brc-businesssupport.visitscotland.org
                         yarn build
 			            VS_BUILD_RESULT=$?
 			            if [ $VS_BUILD_RESULT = 0 ]; then
