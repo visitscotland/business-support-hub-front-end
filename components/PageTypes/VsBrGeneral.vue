@@ -9,6 +9,12 @@
         <VsBrIntroImage
             :image="heroImage"
         />
+
+        <VsBrLinkListModule
+            :heading="configStore.labels['table-contents'].title"
+            :links="tableOfContentsLinks"
+            toc
+        />
     </template>
 
     <VsBrPageIntro
@@ -86,6 +92,7 @@ import type { Component, Page } from '@bloomreach/spa-sdk';
 
 import useConfigStore from '~/stores/configStore.ts';
 
+import VsBrLinkListModule from '~/components/Modules/VsBrLinkListModule.vue';
 import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
 import VsBrIntroImage from '~/components/Modules/VsBrIntroImage.vue';
 import VsBrModuleBuilder from '~/components/Modules/VsBrModuleBuilder.vue';
@@ -131,4 +138,7 @@ if (page.value) {
         firstModuleIsLink = true;
     }
 }
+
+// Create object of anchor links and link text.
+const tableOfContentsLinks = pageItems.map(({ anchor, title }) => ({ anchor, title }));
 </script>
