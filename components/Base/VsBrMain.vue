@@ -15,7 +15,7 @@
         />
 
         <VsBrGeneral
-            v-if="pageName === 'general-page'"
+            v-if="pageName === 'bsh-page'"
             :page="page"
             :component="component"
         />
@@ -41,7 +41,7 @@ import { toRefs, provide } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 import VsBrGeneral from '~/components/PageTypes/VsBrGeneral.vue';
 import VsBr404 from '~/components/PageTypes/VsBr404.vue';
