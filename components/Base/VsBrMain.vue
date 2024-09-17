@@ -163,6 +163,10 @@ if (page.value) {
                 rel: 'manifest',
                 href: '/manifest.webmanifest',
             },
+            {
+                rel: 'canonical',
+                href: useRequestURL().toString(),
+            },
         ],
     });
 }
