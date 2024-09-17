@@ -6,14 +6,15 @@
             />
 
             <BrManageMenuButton :menu="menuData" />
+
             <VsMeganav
                 href="/"
-                menu-toggle-alt-text=""
+                :menu-toggle-alt-text="configStore.getLabel('navigation.static', 'meganav-toggle-btn-alt-text')"
                 search-button-text=""
                 search-label-text=""
                 search-clear-button-text=""
                 search-close-button-text=""
-                logo-alt-text=""
+                :logo-alt-text="configStore.getLabel('navigation.static', 'meganav.logo-alt-text')"
                 :no-search="true"
             >
                 <template #mega-nav-top-menu-items>
