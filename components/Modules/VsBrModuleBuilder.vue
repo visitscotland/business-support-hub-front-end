@@ -57,7 +57,7 @@
 
         <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
-            v-else-if="item.type === 'ArticleModule'"
+            v-else-if="item.type === 'ArticleModule' && item.layout === ''"
         >
             <VsBrArticleModule
                 :module="item"
@@ -112,7 +112,7 @@ import VsBrLongCopyModule from '~/components/Modules/VsBrLongCopyModule.vue';
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 
-import themeCalculator from '~/composables/themeCalculator.ts';
+import themeCalculator from '~/composables/themeCalculator';
 
 const props = defineProps<{
     modules: any[],
