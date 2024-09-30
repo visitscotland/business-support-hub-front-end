@@ -4,7 +4,7 @@
         v-for="(item, index) in modules"
         :key="index"
         :id="`section-${index}`"
-        :class="{ 'has-edit-button': page.isPreview() }"
+        :class="{ 'has-edit-button': page && page.isPreview() }"
     >
         <BrManageContentButton
             v-if="item.hippoBean && page"
@@ -55,11 +55,20 @@
             />
         </NuxtLazyHydrate>
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'ArticleModule'"
         >
             <VsBrArticleModule
+                :module="item"
+            />
+        </NuxtLazyHydrate> -->
+        
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'ArticleModule' && item.layout === 'accordion'"
+        >
+            <VsBrAccordionModule
                 :module="item"
             />
         </NuxtLazyHydrate>
@@ -89,7 +98,7 @@
                 :when-visible="{ rootMargin: '50px' }"
             >
                 <VsBrPreviewError
-                    v-if="page.isPreview()"
+                    v-if="page && page.isPreview()"
                     :messages="item.errorMessages"
                 />
             </NuxtLazyHydrate>
@@ -108,11 +117,12 @@ import VsBrHorizontalLinksModule from '~/components/Modules/VsBrHorizontalLinksM
 import VsBrMultiImageLinksModule from '~/components/Modules/VsBrMultiImageLinksModule.vue';
 import VsBrSingleImageLinksModule from '~/components/Modules/VsBrSingleImageLinksModule.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
+import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrLongCopyModule from '~/components/Modules/VsBrLongCopyModule.vue';
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 
-import themeCalculator from '~/composables/themeCalculator.ts';
+import themeCalculator from '~/composables/themeCalculator';
 
 const props = defineProps<{
     modules: any[],
@@ -146,7 +156,7 @@ if (modules) {
         modules[x].themeIndex = newThemeIndex;
         modules[x].themeValue = themeCalculator(newThemeIndex, modules[x]);
 
-        if (modules[x].hippoBean) {
+        if (modules[x].hippoBean && page) {
             hippoContent[x] = page.getContent(modules[x].hippoBean);
         }
     }
