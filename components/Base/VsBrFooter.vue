@@ -117,7 +117,7 @@ import {
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageMenuButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 import {
     VsFooter,

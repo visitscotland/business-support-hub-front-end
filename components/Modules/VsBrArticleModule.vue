@@ -50,7 +50,7 @@ import {
     VsArticleSection,
 } from '@visitscotland/component-library/components';
 
-import formatLink from '~/composables/formatLink.ts';
+import formatLink from '~/composables/formatLink';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrArticleSidebar from '~/components/Modules/VsBrArticleSidebar.vue';
