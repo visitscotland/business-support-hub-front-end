@@ -35,7 +35,7 @@
             </NuxtLazyHydrate>
         </template>
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'MultiImageLinksModule'"
         >
@@ -43,9 +43,9 @@
                 :module="item"
                 :theme="item.themeValue"
             />
-        </NuxtLazyHydrate>
+        </NuxtLazyHydrate> -->
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'SingleImageLinksModule'"
         >
@@ -53,7 +53,7 @@
                 :module="item"
                 :theme="item.themeValue"
             />
-        </NuxtLazyHydrate>
+        </NuxtLazyHydrate> -->
 
         <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
@@ -72,24 +72,33 @@
                 :module="item"
             />
         </NuxtLazyHydrate>
-
+        
         <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'ArticleModule' && styledListLayouts.includes(item.layout)"
+        >
+            <VsBrStyledListModule
+                :module="item"
+            />
+        </NuxtLazyHydrate>
+
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'LongCopyModule'"
         >
             <VsBrLongCopyModule
                 :module="item"
             />
-        </NuxtLazyHydrate>
+        </NuxtLazyHydrate> -->
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'FormModule'"
         >
             <VsBrForm
                 :module="item"
             />
-        </NuxtLazyHydrate>
+        </NuxtLazyHydrate> -->
 
         <div
             v-else-if="item.type === 'ErrorModule'"
@@ -118,6 +127,7 @@ import VsBrMultiImageLinksModule from '~/components/Modules/VsBrMultiImageLinksM
 import VsBrSingleImageLinksModule from '~/components/Modules/VsBrSingleImageLinksModule.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
 import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
+import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
 import VsBrLongCopyModule from '~/components/Modules/VsBrLongCopyModule.vue';
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
@@ -136,6 +146,9 @@ const themeCount = 3;
 let currentMegaLinkSection = -1;
 const hippoContent : any = {
 };
+
+// Article layouts that use the Styled list module.
+const styledListLayouts = ['bullet-list', 'horizontal-list', 'numbered-list', 'visual-list'];
 
 if (modules) {
     for (let x = 0; x < modules.length; x++) {
