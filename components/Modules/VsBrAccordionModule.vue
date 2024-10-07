@@ -1,5 +1,16 @@
 <template>
+    <!-- <pre>{{ props.module }}</pre> -->
     <VsContainer>
+        <VsRow>
+            <VsCol>
+                <VsHeading
+                    :id="props.module.anchor ? props.module.anchor : null"
+                    level="2"
+                >
+                    {{ props.module.title }}
+                </VsHeading>
+            </VsCol>
+        </VsRow>
         <VsAccordion>
             <VsAccordionItem
                 v-for="(item, index) in accordionItems"
@@ -22,6 +33,7 @@ import {
     VsAccordion,
     VsAccordionItem,
     VsContainer,
+    VsHeading,
 } from '@visitscotland/component-library/components';
 import separateTitleFromContent from '~/composables/separateTitleFromContent';
 
