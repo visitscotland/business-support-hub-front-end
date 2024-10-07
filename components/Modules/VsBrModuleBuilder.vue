@@ -4,7 +4,7 @@
         v-for="(item, index) in modules"
         :key="index"
         :id="`section-${index}`"
-        :class="{ 'has-edit-button': page.isPreview() }"
+        :class="{ 'has-edit-button': page && page.isPreview() }"
     >
         <BrManageContentButton
             v-if="item.hippoBean && page"
@@ -35,7 +35,7 @@
             </NuxtLazyHydrate>
         </template>
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'MultiImageLinksModule'"
         >
@@ -43,9 +43,9 @@
                 :module="item"
                 :theme="item.themeValue"
             />
-        </NuxtLazyHydrate>
+        </NuxtLazyHydrate> -->
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'SingleImageLinksModule'"
         >
@@ -53,34 +53,52 @@
                 :module="item"
                 :theme="item.themeValue"
             />
-        </NuxtLazyHydrate>
+        </NuxtLazyHydrate> -->
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'ArticleModule' && item.layout === ''"
         >
             <VsBrArticleModule
                 :module="item"
             />
+        </NuxtLazyHydrate> -->
+        
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'ArticleModule' && item.layout === 'accordion'"
+        >
+            <VsBrAccordionModule
+                :module="item"
+            />
+        </NuxtLazyHydrate>
+        
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'ArticleModule' && styledListLayouts.includes(item.layout)"
+        >
+            <VsBrStyledListModule
+                :module="item"
+            />
         </NuxtLazyHydrate>
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'LongCopyModule'"
         >
             <VsBrLongCopyModule
                 :module="item"
             />
-        </NuxtLazyHydrate>
+        </NuxtLazyHydrate> -->
 
-        <NuxtLazyHydrate
+        <!-- <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'FormModule'"
         >
             <VsBrForm
                 :module="item"
             />
-        </NuxtLazyHydrate>
+        </NuxtLazyHydrate> -->
 
         <div
             v-else-if="item.type === 'ErrorModule'"
@@ -89,7 +107,7 @@
                 :when-visible="{ rootMargin: '50px' }"
             >
                 <VsBrPreviewError
-                    v-if="page.isPreview()"
+                    v-if="page && page.isPreview()"
                     :messages="item.errorMessages"
                 />
             </NuxtLazyHydrate>
@@ -108,6 +126,8 @@ import VsBrHorizontalLinksModule from '~/components/Modules/VsBrHorizontalLinksM
 import VsBrMultiImageLinksModule from '~/components/Modules/VsBrMultiImageLinksModule.vue';
 import VsBrSingleImageLinksModule from '~/components/Modules/VsBrSingleImageLinksModule.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
+import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
+import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
 import VsBrLongCopyModule from '~/components/Modules/VsBrLongCopyModule.vue';
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
@@ -126,6 +146,9 @@ const themeCount = 3;
 let currentMegaLinkSection = -1;
 const hippoContent : any = {
 };
+
+// Article layouts that use the Styled list module.
+const styledListLayouts = ['bullet-list', 'horizontal-list', 'numbered-list', 'visual-list'];
 
 if (modules) {
     for (let x = 0; x < modules.length; x++) {
@@ -146,7 +169,7 @@ if (modules) {
         modules[x].themeIndex = newThemeIndex;
         modules[x].themeValue = themeCalculator(newThemeIndex, modules[x]);
 
-        if (modules[x].hippoBean) {
+        if (modules[x].hippoBean && page) {
             hippoContent[x] = page.getContent(modules[x].hippoBean);
         }
     }

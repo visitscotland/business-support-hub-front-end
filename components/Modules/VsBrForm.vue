@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 import {
     VsContainer,
@@ -53,5 +53,4 @@ const configStore = useConfigStore();
 
 const props = defineProps<{ module: Object }>();
 const module: any = props.module;
-
 </script>
