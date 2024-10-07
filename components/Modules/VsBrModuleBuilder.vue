@@ -35,34 +35,14 @@
             </NuxtLazyHydrate>
         </template>
 
-        <!-- <NuxtLazyHydrate
-            :when-visible="{ rootMargin: '50px' }"
-            v-else-if="item.type === 'MultiImageLinksModule'"
-        >
-            <VsBrMultiImageLinksModule
-                :module="item"
-                :theme="item.themeValue"
-            />
-        </NuxtLazyHydrate> -->
-
-        <!-- <NuxtLazyHydrate
-            :when-visible="{ rootMargin: '50px' }"
-            v-else-if="item.type === 'SingleImageLinksModule'"
-        >
-            <VsBrSingleImageLinksModule
-                :module="item"
-                :theme="item.themeValue"
-            />
-        </NuxtLazyHydrate> -->
-
-        <!-- <NuxtLazyHydrate
+        <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'ArticleModule' && item.layout === ''"
         >
             <VsBrArticleModule
                 :module="item"
             />
-        </NuxtLazyHydrate> -->
+        </NuxtLazyHydrate>
         
         <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
@@ -81,24 +61,6 @@
                 :module="item"
             />
         </NuxtLazyHydrate>
-
-        <!-- <NuxtLazyHydrate
-            :when-visible="{ rootMargin: '50px' }"
-            v-else-if="item.type === 'LongCopyModule'"
-        >
-            <VsBrLongCopyModule
-                :module="item"
-            />
-        </NuxtLazyHydrate> -->
-
-        <!-- <NuxtLazyHydrate
-            :when-visible="{ rootMargin: '50px' }"
-            v-else-if="item.type === 'FormModule'"
-        >
-            <VsBrForm
-                :module="item"
-            />
-        </NuxtLazyHydrate> -->
 
         <div
             v-else-if="item.type === 'ErrorModule'"
@@ -123,13 +85,10 @@ import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
 import VsBrListLinksModule from '~/components/Modules/VsBrListLinksModule.vue';
 import VsBrHorizontalLinksModule from '~/components/Modules/VsBrHorizontalLinksModule.vue';
-import VsBrMultiImageLinksModule from '~/components/Modules/VsBrMultiImageLinksModule.vue';
-import VsBrSingleImageLinksModule from '~/components/Modules/VsBrSingleImageLinksModule.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
 import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
-import VsBrLongCopyModule from '~/components/Modules/VsBrLongCopyModule.vue';
-import VsBrForm from '~/components/Modules/VsBrForm.vue';
+// import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 
 import themeCalculator from '~/composables/themeCalculator';
