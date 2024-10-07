@@ -1,5 +1,8 @@
 <template>
-    <VsQuote :variant="variant">
+    <VsQuote
+        :variant="variant"
+        with-border
+    >
         <template
             #quote-image
             v-if="quote.image"
