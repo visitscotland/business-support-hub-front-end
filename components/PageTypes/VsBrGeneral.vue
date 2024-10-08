@@ -139,6 +139,12 @@ if (page.value) {
     }
 }
 
-// Create object of anchor links and link text.
-const tableOfContentsLinks = pageItems.map(({ anchor, title }) => ({ anchor, title }));
+// Create list of anchor links and titles for each module, excluding nested modules.
+const tableOfContentsLinks = computed(() => {
+    return pageItems.flatMap(({ anchor, title, nested }) => {
+        if (nested) return [];
+
+        return { anchor, title };
+    });
+});
 </script>
