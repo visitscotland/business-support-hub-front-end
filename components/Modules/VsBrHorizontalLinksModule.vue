@@ -59,9 +59,9 @@ import {
     VsCarouselSlide,
 } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
-import formatLink from '~/composables/formatLink.ts';
+import formatLink from '~/composables/formatLink';
 
 const configStore = useConfigStore();
 

@@ -2,10 +2,11 @@
     <VsArticle
         :title="module.title"
         :anchor-link="module.anchor ? formatLink(module.anchor) : ''"
+        businessSupport
     >
         <template
-            #vs-article-img
             v-if="module.image"
+            #vs-article-img
         >
             <VsBrImageWithCaption
                 :image="module.image.cmsImage"
@@ -22,7 +23,8 @@
         <VsArticleSection
             v-for="(section, index) in articleSections"
             :key="index"
-            :sidebar-align="section.alignment"
+            sidebar-align="right"
+            businessSupport
         >
             <template
                 #article-sidebar
@@ -30,7 +32,7 @@
             >
                 <VsBrArticleSidebar
                     :section="section"
-                    :alignment="section.alignment"
+                    alignment="right"
                 />
             </template>
 
@@ -50,7 +52,7 @@ import {
     VsArticleSection,
 } from '@visitscotland/component-library/components';
 
-import formatLink from '~/composables/formatLink.ts';
+import formatLink from '~/composables/formatLink';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrArticleSidebar from '~/components/Modules/VsBrArticleSidebar.vue';

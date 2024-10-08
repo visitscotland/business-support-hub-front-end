@@ -92,7 +92,7 @@
         <!-- TODO - copyright labels -->
         <VsFooterCopyright
             href="https://www.scotland.org/"
-            link-alt-text=""
+            :link-alt-text="configStore.getLabel('navigation.static', 'footer.logo-alt-text')"
         >
             <template #copyright>
                 VisitScotland. All rights reserved.
@@ -117,7 +117,7 @@ import {
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageMenuButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 import {
     VsFooter,

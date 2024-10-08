@@ -48,7 +48,7 @@ import {
     VsModal, VsVideo, VsRow, VsCol, VsRichTextWrapper,
 } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 const configStore = useConfigStore();
 

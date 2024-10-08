@@ -15,7 +15,7 @@
         />
 
         <VsBrGeneral
-            v-if="pageName === 'general-page'"
+            v-if="pageName === 'bsh-page'"
             :page="page"
             :component="component"
         />
@@ -41,7 +41,7 @@ import { toRefs, provide } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 import VsBrGeneral from '~/components/PageTypes/VsBrGeneral.vue';
 import VsBr404 from '~/components/PageTypes/VsBr404.vue';
@@ -123,6 +123,21 @@ if (page.value) {
     const runtimeConfig = useRuntimeConfig();
 
     useHead({
+        title: document.model.data.seoTitle,
+        meta: [
+            {
+                name: 'title',
+                content: document.model.data.seoTitle,
+            },
+            {
+                name: 'description',
+                content: document.model.data.seoDescription,
+            },
+            {
+                name: 'robots',
+                content: document.model.data.noIndex ? 'noindex': '', 
+            },
+        ],
         htmlAttrs: {
             lang: langString,
             'data-version': configStore.pageMetaData.version,
@@ -147,6 +162,10 @@ if (page.value) {
             {
                 rel: 'manifest',
                 href: '/manifest.webmanifest',
+            },
+            {
+                rel: 'canonical',
+                href: useRequestURL().toString(),
             },
         ],
     });

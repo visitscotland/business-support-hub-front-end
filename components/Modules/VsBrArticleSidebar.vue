@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import { VsArticleSidebar } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrQuote from '~/components/Modules/VsBrQuote.vue';
 
@@ -59,5 +59,4 @@ const configStore = useConfigStore();
 const props = defineProps<{ section: any, alignment: string }>();
 const section: any = props.section;
 const alignment: string = props.alignment;
-
 </script>

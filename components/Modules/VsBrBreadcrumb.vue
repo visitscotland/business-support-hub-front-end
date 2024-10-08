@@ -27,7 +27,7 @@ import {
     VsBreadcrumbItem,
 } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 const configStore = useConfigStore();
 
@@ -71,5 +71,4 @@ useJsonld({
     '@type': 'BreadcrumbList',
     itemListElement: itemList,
 });
-
 </script>
