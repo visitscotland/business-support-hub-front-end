@@ -1,5 +1,4 @@
 <template>
-    <!-- <pre>{{ props.module }}</pre> -->
     <VsContainer>
         <VsRow>
             <VsCol>
