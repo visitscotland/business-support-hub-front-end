@@ -15,7 +15,7 @@
             v-for="(item, index) in listItems"
             :key="index"
             :heading="item.title"
-            :imageSrc="item.imageSrc ? item.imageSrc : false"
+            :imageSrc="item.imageSrc ? item.imageSrc : null"
             :variant="variant"
         >
             <div v-html="item.content" />
@@ -41,6 +41,13 @@ const {
 } = props.module;
 const page: Page | undefined = inject('page');
 
+const variantMap = {
+    'bullet-list': 'icon',
+    'horizontal-list': 'image-horizontal',
+    'numbered-list': 'numbered',
+    'visual-list': 'image',
+};
+
 // Set the listItem content by extracting the data from the sections.
 const listItems = computed(() => {
     return sections.map(({ copy, image }: { copy: LooseObject, image: LooseObject }) => {
@@ -58,14 +65,18 @@ const listItems = computed(() => {
 });
 
 const variant = computed(() => {
-    if (layout === 'bullet-list') {
-        return 'icon';
-    } else if (layout === 'horizontal-list') {
-        return 'image-horizontal';
-    } else if (layout === 'numbered-list') {
-        return 'numbered';
-    } else if (layout === 'visual-list') {
-        return 'image';
+    switch (layout) {
+        case 'bullet-list':
+            return 'icon';
+            break;
+        case 'horizontal-list':
+            return 'image-horizontal';
+            break;
+        case 'numbered-list':
+            return 'numbered';
+            break;
+        case 'visual-list':
+            return 'image';
     }
 });
 </script>
