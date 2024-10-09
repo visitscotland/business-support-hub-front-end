@@ -1,5 +1,4 @@
 <template>
-    <pre>{{ module.sections }}</pre>
     <VsContainer>
         <VsRow>
             <VsCol>
@@ -21,7 +20,12 @@
                     {{ item.title }}
                 </template>
 
-                <div class="p-3" v-html="item.content" />
+                <div class="p-3">
+                    <VsBrRichText
+                        :input-content="item.content"
+                        class="p-3"
+                    />
+                </div>
             </VsAccordionItem>
         </VsAccordion>
     </VsContainer>
@@ -37,6 +41,7 @@ import {
     VsHeading,
     VsRow,
 } from '@visitscotland/component-library/components';
+import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import separateTitleFromContent from '~/composables/separateTitleFromContent';
 
 const props = defineProps<{

@@ -11,9 +11,7 @@
             v-if="module.introduction"
             #vs-megalinks-intro
         >
-            <div
-                v-html="module.introduction.value"
-            />
+            <VsBrRichText :input-content="module.introduction.value" />
         </template>
 
         <VsCol
@@ -41,7 +39,7 @@
                     #vs-single-image-content
                     v-if="module.innerIntroduction"
                 >
-                    <div v-html="module.innerIntroduction.value" />
+                    <VsBrRichText :input-content="module.introduction.value" />
                 </template>
 
                 <template
@@ -93,11 +91,12 @@ import {
     VsLinkListItem,
 } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
-import formatLink from '~/composables/formatLink.ts';
+import formatLink from '~/composables/formatLink';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
+import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
 const configStore = useConfigStore();
 
