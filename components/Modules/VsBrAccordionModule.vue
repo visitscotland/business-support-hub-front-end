@@ -1,4 +1,5 @@
 <template>
+    <pre>{{ module.sections }}</pre>
     <VsContainer>
         <VsRow>
             <VsCol>
@@ -31,8 +32,10 @@ import type { LooseObject } from '~/types/types';
 import {
     VsAccordion,
     VsAccordionItem,
+    VsCol,
     VsContainer,
     VsHeading,
+    VsRow,
 } from '@visitscotland/component-library/components';
 import separateTitleFromContent from '~/composables/separateTitleFromContent';
 

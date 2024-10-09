@@ -7,15 +7,21 @@
  * @return {object} { title, content } to be used within a component.
  */
 export default (copy: string) => {
-    // Split the copy string to separate the title from the body content.
-    const value = copy.split('</vs-heading>');
+    const headingClosingTag = '</vs-heading>';
 
-    // Remove "<vs-heading...>" tag from the beginning of the string
-    // to get the title.
-    const title = value[0].replace(/<vs-heading.*>/, '');
+    // Get position of first heading closing tag.
+    const indexOfClosingTag = copy.indexOf(headingClosingTag);
 
-    // Replace line breaks at beginning of string.
-    const content = value[1].replace(/\n\n</g, '<');
+    // Extract the title from the copy and remove heading tags.
+    const title = copy
+        .substring(0, indexOfClosingTag + headingClosingTag.length)
+        .replace(headingClosingTag, '')
+        .replace(/<vs-heading.*>/, '');
+    
+    // Extract the content from the copy and remove line breaks at the beginning.
+    const content = copy
+        .substring(indexOfClosingTag + headingClosingTag.length)
+        .replace(/\n\n</, '<');
 
     return { title, content };
 };
