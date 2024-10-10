@@ -42,13 +42,6 @@ const {
 } = props.module;
 const page: Page | undefined = inject('page');
 
-const variantMap = {
-    'bullet-list': 'icon',
-    'horizontal-list': 'image-horizontal',
-    'numbered-list': 'numbered',
-    'visual-list': 'image',
-};
-
 // Set the listItem content by extracting the data from the sections.
 const listItems = computed(() => {
     return sections.map(({ copy, image }: { copy: LooseObject, image: LooseObject }) => {
