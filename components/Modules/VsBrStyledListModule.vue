@@ -8,7 +8,7 @@
             v-if="introduction"
             #intro
         >
-            <div v-html="introduction.value" />
+            <VsBrRichText :input-content="introduction.value" />
         </template>
 
         <VsStyledListItem
@@ -18,7 +18,7 @@
             :imageSrc="item.imageSrc ? item.imageSrc : null"
             :variant="variant"
         >
-            <div v-html="item.content" />
+            <VsBrRichText :input-content="item.content" />
         </VsStyledListItem>
     </VsStyledList>
 </template>
@@ -27,6 +27,7 @@
 import type { Page } from '@bloomreach/spa-sdk';
 import type { LooseObject } from '~/types/types';
 import { VsStyledList, VsStyledListItem } from '@visitscotland/component-library/components';
+import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
 const props = defineProps<{
     module: LooseObject,
@@ -40,13 +41,6 @@ const {
     title,
 } = props.module;
 const page: Page | undefined = inject('page');
-
-const variantMap = {
-    'bullet-list': 'icon',
-    'horizontal-list': 'image-horizontal',
-    'numbered-list': 'numbered',
-    'visual-list': 'image',
-};
 
 // Set the listItem content by extracting the data from the sections.
 const listItems = computed(() => {

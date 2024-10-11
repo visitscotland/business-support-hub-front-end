@@ -37,7 +37,7 @@
 
         <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
-            v-else-if="item.type === 'ArticleModule' && item.layout === ''"
+            v-else-if="item.type === 'ArticleModule' && item.layout === 'standard'"
         >
             <VsBrArticleModule
                 :module="item"
