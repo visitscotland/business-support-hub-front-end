@@ -13,7 +13,7 @@
         <VsAccordion>
             <VsAccordionItem
                 v-for="(item, index) in accordionItems"
-                :control-id="`accordionItem${index}`"
+                :control-id="`${props.idPrefix}${index}`"
                 variant="transparent"
             >
                 <template #title>
@@ -46,6 +46,7 @@ import separateTitleFromContent from '~/composables/separateTitleFromContent';
 
 const props = defineProps<{
     module: LooseObject,
+    idPrefix: string,
 }>();
 
 // Set the accordionItem content by extracting the data from the sections.

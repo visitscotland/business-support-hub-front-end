@@ -50,6 +50,7 @@
         >
             <VsBrAccordionModule
                 :module="item"
+                :id-prefix="`accordionItem-${index}-`"
             />
         </NuxtLazyHydrate>
         
