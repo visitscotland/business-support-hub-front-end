@@ -4,10 +4,6 @@
         :light-background="true"
     />
 
-    <VsBrIntroImage
-        :image="heroImage"
-    />
-
     <VsBrModuleBuilder
         v-if="pageItems"
         :modules="pageItems"
