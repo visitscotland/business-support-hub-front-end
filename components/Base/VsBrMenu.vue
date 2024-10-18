@@ -6,15 +6,17 @@
             />
 
             <BrManageMenuButton :menu="menuData" />
+
             <VsMeganav
                 href="/"
-                menu-toggle-alt-text=""
+                :menu-toggle-alt-text="configStore.getLabel('navigation.static', 'meganav-toggle-btn-alt-text')"
                 search-button-text=""
                 search-label-text=""
                 search-clear-button-text=""
                 search-close-button-text=""
-                logo-alt-text=""
+                :logo-alt-text="configStore.getLabel('navigation.static', 'meganav.logo-alt-text')"
                 :no-search="true"
+                :is-static="true"
             >
                 <template #mega-nav-top-menu-items>
                     <template
@@ -55,6 +57,8 @@ import { toRefs } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageMenuButton } from '@bloomreach/vue3-sdk';
 
+import useConfigStore from '~/stores/configStore';
+
 import {
     VsGlobalMenu,
     VsMeganav,
@@ -71,7 +75,9 @@ let menu = {
 };
 let menuData : any = {
 };
-let menuItems : any[] = [];
+let menuItems: any[] = [];
+
+const configStore = useConfigStore();
 
 if (page.value) {
     // Menu content can be retrieved from the models on the sdk core Menu component

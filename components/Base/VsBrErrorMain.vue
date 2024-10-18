@@ -15,7 +15,7 @@
 import { toRefs, provide } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 import VsBrGtm from '~/components/Modules/VsBrGtm.vue';
 

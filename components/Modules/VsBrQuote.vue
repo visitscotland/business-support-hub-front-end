@@ -1,5 +1,8 @@
 <template>
-    <VsQuote :variant="variant">
+    <VsQuote
+        :variant="variant"
+        with-border
+    >
         <template
             #quote-image
             v-if="quote.image"
@@ -12,7 +15,7 @@
         </template>
 
         <template #quote-content>
-            <div v-html="quoteContent.value" />
+            <VsBrRichText :input-content="quoteContent.value" />
         </template>
 
         <template
@@ -50,6 +53,7 @@ import {
     VsButton,
     VsImg,
 } from '@visitscotland/component-library/components';
+import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
 interface IProps {
     quote: any,

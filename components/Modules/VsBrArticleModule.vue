@@ -2,16 +2,8 @@
     <VsArticle
         :title="module.title"
         :anchor-link="module.anchor ? formatLink(module.anchor) : ''"
+        businessSupport
     >
-        <template
-            #vs-article-img
-            v-if="module.image"
-        >
-            <VsBrImageWithCaption
-                :image="module.image.cmsImage"
-            />
-        </template>
-
         <template
             #vs-article-intro
             v-if="module.introduction"
@@ -19,10 +11,40 @@
             <div v-html="module.introduction.value" />
         </template>
 
+        <template
+            v-if="module.image"
+            #vs-article-img
+        >
+            <VsBrImageWithCaption
+                :image="module.image.cmsImage"
+            />
+        </template>
+
+        <template
+            v-if="module.video"
+            #vs-article-img
+        >
+            <VsVideo
+                :video-title="module.video.label"
+                :video-id="module.video.youtubeId
+                    ? module.video.youtubeId
+                    : extractYoutubeId(module.video.url)
+                "
+                :locale="configStore.locale"
+                :single-minute-descriptor="configStore.getLabel('video', 'video.minute-text')"
+                :plural-minute-descriptor="configStore.getLabel('video', 'video.minutes-text')"
+                :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
+                :no-js-message="configStore.getLabel('video', 'video.no-js')"
+                :cookie-btn-text="configStore.getLabel('essentials.global', 'cookie.link-message')"
+                :error-message="configStore.getLabel('essentials.global', 'third-party-error')"
+            />
+        </template>
+
         <VsArticleSection
             v-for="(section, index) in articleSections"
             :key="index"
-            :sidebar-align="section.alignment"
+            sidebar-align="right"
+            businessSupport
         >
             <template
                 #article-sidebar
@@ -30,14 +52,15 @@
             >
                 <VsBrArticleSidebar
                     :section="section"
-                    :alignment="section.alignment"
+                    alignment="right"
                 />
             </template>
 
-            <div
+            <template
                 v-if="section.copy"
-                v-html="section.copy.value"
-            />
+            >
+                <VsBrRichText :input-content="section.copy.value" />
+            </template>
         </VsArticleSection>
     </VsArticle>
 </template>
@@ -48,12 +71,16 @@
 import {
     VsArticle,
     VsArticleSection,
+    VsVideo,
 } from '@visitscotland/component-library/components';
 
-import formatLink from '~/composables/formatLink.ts';
+import formatLink from '~/composables/formatLink';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrArticleSidebar from '~/components/Modules/VsBrArticleSidebar.vue';
+import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
+import useConfigStore from '~/stores/configStore';
+const configStore = useConfigStore();
 
 const props = defineProps<{ module: Object }>();
 const module: any = props.module;
