@@ -2092,10 +2092,10 @@
     node-gyp-build "^4.2.2"
     resolve-from "^5.0.0"
 
-"@visitscotland/component-library@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-3.3.0.tgz#ae20322799c729bf3dffd307367dd2287d533cb1"
-  integrity sha512-3SMYWTVvB8AWYAazUvv1pWD5S0Bvah8yfR4nnxNu8uGsJnR9zNbgLjC45no5oy15j42DPLS+CHq/9DtXeAl6/w==
+"@visitscotland/component-library@^3.3.7":
+  version "3.3.8"
+  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-3.3.8.tgz#3585765c1adf851309a3bf259c3a73131b1ff886"
+  integrity sha512-cnITnh+fHDbFBXMCGqLCXyEhf90aTizmTRShlr+w28RrhUxFThxznSW5XD/2AipYLO/N4MG9oHLv9oL7J5ccuQ==
   dependencies:
     "@mapbox/geojson-extent" "^1.0.1"
     "@pinia/testing" "^0.1.3"
