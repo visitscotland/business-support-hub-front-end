@@ -60,10 +60,14 @@
         <template
             #vs-blog-data
         >
-            <VsBlogDetails
+        <!-- Temporary addition to show the publishDate and readtime unstyled for now -->
+        <p v-if="publishDate">{{ publishDate }}</p>
+        <p vif="readTime">{{ readTime }}</p>
+
+            <!-- <VsBlogDetails
                 :blog-publish-date="publishDate"
                 :blog-read-time="readTime"
-            />
+            /> -->
         </template>
 
         <!-- TODO - Share Button -->
@@ -113,7 +117,7 @@ const {
 
 const breadcrumb = ref<any[]>([]);
 const isHome = ref(false);
-const readTime = ref('');
+const readTime = ref<string | null>(null);
 const publishDate = ref('');
 const heroVideo = ref<any>(undefined);
 const youtubeId = ref('');
@@ -129,8 +133,6 @@ if (page) {
         // TODO - localised labels for minute/s and reading time:
         if (content.value.readingTime > 1) {
             readTime.value = `Reading time: ${content.value.readingTime} minutes`;
-        } else {
-            readTime.value = `Reading time: ${content.value.readingTime} minute`;
         }
 
         if (content.value.publishDate) {
