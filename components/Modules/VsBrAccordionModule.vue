@@ -12,19 +12,16 @@
         </VsRow>
         <VsAccordion>
             <VsAccordionItem
-                v-for="(item, index) in accordionItems"
+                v-for="(item, index) in props.module.sections"
                 :control-id="`${props.idPrefix}${index}`"
                 variant="transparent"
             >
                 <template #title>
-                    {{ item.title }}
+                    {{ item.heading }}
                 </template>
 
                 <div class="p-3">
-                    <VsBrRichText
-                        :input-content="item.content"
-                        class="p-3"
-                    />
+                    <VsBrRichText :input-content="item.copy.value" />
                 </div>
             </VsAccordionItem>
         </VsAccordion>
@@ -42,17 +39,9 @@ import {
     VsRow,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
-import separateTitleFromContent from '~/composables/separateTitleFromContent';
 
 const props = defineProps<{
     module: LooseObject,
     idPrefix: string,
 }>();
-
-// Set the accordionItem content by extracting the data from the sections.
-const accordionItems = computed(() => {
-    return props.module.sections.map(({ copy }: { copy: LooseObject }) => {
-        return separateTitleFromContent(copy.value);
-    });
-});
 </script>
