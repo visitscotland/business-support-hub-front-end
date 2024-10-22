@@ -4,7 +4,8 @@
             <VsCol>
                 <VsHeading
                     :id="props.module.anchor ? props.module.anchor : null"
-                    level="2"
+                    level="3"
+                    headingStyle="heading-m"
                 >
                     {{ props.module.title }}
                 </VsHeading>
@@ -20,11 +21,8 @@
                     {{ item.title }}
                 </template>
 
-                <div class="p-3">
-                    <VsBrRichText
-                        :input-content="item.content"
-                        class="p-3"
-                    />
+                <div class="p-075">
+                    <VsBrRichText :input-content="item.content" />
                 </div>
             </VsAccordionItem>
         </VsAccordion>
