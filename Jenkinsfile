@@ -17,7 +17,7 @@ if (BRANCH_NAME == "main" && (JOB_NAME ==~ "feature-(business)?support.visitscot
 } else if (BRANCH_NAME == "main" && (JOB_NAME ==~ "release-brc-(business)?support.visitscotland.com(-frontend)?(-mb)?/main")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3032"
-} else if (BRANCH_NAME ==~ "([^/]*/)?ops/(feature-environment(s)?-enhancements|pipeline-updates)" && (JOB_NAME ==~ "feature(-(businessevents|(business)?support))?.visitscotland.(com|org)(-mb)?(-frontend)?/ops%(25)?2F(feature-environment(s)?-enhancements|pipeline-updates)")) {
+} else if (BRANCH_NAME ==~ "ops/(feature-environment(s)?-enhancements|pipeline-updates)" && (JOB_NAME ==~ "([^/]*/)?feature(-(businessevents|(business)?support))?.visitscotland.(com|org)(-mb)?(-frontend)?/ops%(25)?2F(feature-environment(s)?-enhancements|pipeline-updates)")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3039"
     env.VS_CONTAINER_PRESERVE = "FALSE"
