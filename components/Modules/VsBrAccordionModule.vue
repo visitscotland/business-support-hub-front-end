@@ -4,7 +4,7 @@
             <VsCol>
                 <VsHeading
                     :id="props.module.anchor ? props.module.anchor : null"
-                    level="3"
+                    level="2"
                     headingStyle="heading-m"
                 >
                     {{ props.module.title }}
