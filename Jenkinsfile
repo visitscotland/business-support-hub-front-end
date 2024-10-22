@@ -43,6 +43,7 @@ if (!env.VS_SKIP_BUILD_FOR_BRANCH) { env.VS_SKIP_BUILD_FOR_BRANCH = "feature/VS-
 if (!env.VS_SSR_PROXY_ON) { env.VS_SSR_PROXY_ON = "TRUE" }
 if (!env.VS_USE_DOCKER_BUILDER) { env.VS_USE_DOCKER_BUILDER = "TRUE" }
 if (!env.VS_RELEASE_SNAPSHOT) { env.VS_RELEASE_SNAPSHOT = "FALSE" }
+if (!env.VS_PROXY_SERVER_FQDN) { env.VS_PROXY_SERVER_FQDN = "feature-support.visitscotland.org" }
 if (!env.HOSTNAME) { env.HOSTNAME = env.NODE_NAME }
 echo "==/Setting default environment variables"
 
@@ -70,7 +71,8 @@ pipeline {
     agent {label thisAgent}
 
     environment {
-        GITHUB_PAT_JENKINS_CI = credentials('github-pat-jenkins-ci')
+            //GITHUB_PAT_JENKINS_CI = credentials('github-pat-jenkins-ci')
+	    GITHUB_PAT_JENKINS_CI = "not-in-use"
     }
 
     stages {
