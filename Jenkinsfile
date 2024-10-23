@@ -5,16 +5,16 @@ thisAgent = "docker-02"
 // set any environment-specific environment variables here using the format: env.MY_VAR = "conditional_value" }
 // please see ci/README_PIPELINE_VARIABLES.md or consult Web Operations for details on environment variables and their purposes
 echo "== Setting conditional environment variables"
-if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?feature-(business)?support.visitscotland.com(-frontend)?(-mb)?/main")) {
+if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?feature-(business)?support.visitscotland.(com|org)(-frontend)?(-mb)?/main")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3030"
-} else if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?develop-(business)?support.visitscotland.com(-frontend)?(-mb)?/main")) {
+} else if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?develop-(business)?support.visitscotland.(com|org)(-frontend)?(-mb)?/main")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3034"
-} else if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?develop-brc-(business)?support.visitscotland.com(-frontend)?(-mb)?/main")) {
+} else if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?develop-brc-(business)?support.visitscotland.(com|org)(-frontend)?(-mb)?/main")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3031"
-} else if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?release-brc-(business)?support.visitscotland.com(-frontend)?(-mb)?/main")) {
+} else if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?release-brc-(business)?support.visitscotland.(com|org)(-frontend)?(-mb)?/main")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3032"
 } else if (BRANCH_NAME ==~ "ops/(feature-environment(s)?-enhancements|pipeline-updates)" && (JOB_NAME ==~ "([^/]*/)?feature(-(businessevents|(business)?support))?.visitscotland.(com|org)(-mb)?(-frontend)?/ops%(25)?2F(feature-environment(s)?-enhancements|pipeline-updates)")) {
