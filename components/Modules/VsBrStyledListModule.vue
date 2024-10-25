@@ -14,7 +14,7 @@
         <VsStyledListItem
             v-for="(item, index) in listItems"
             :key="index"
-            :heading="item.title"
+            :heading="item.heading"
             :imageSrc="item.imageSrc ? item.imageSrc : null"
             :variant="variant"
         >
@@ -44,8 +44,8 @@ const page: Page | undefined = inject('page');
 
 // Set the listItem content by extracting the data from the sections.
 const listItems = computed(() => {
-    return sections.map(({ copy, image }: { copy: LooseObject, image: LooseObject }) => {
-        const { title, content } = separateTitleFromContent(copy.value);
+    return sections.map(({ copy, heading, image }: { copy: LooseObject, heading: string, image: LooseObject }) => {
+        const content = copy.value;
         let imageSrc = '';
 
         // Get the image src URL.
@@ -54,23 +54,30 @@ const listItems = computed(() => {
             imageSrc = imageValue.getOriginal().getUrl();
         }
 
-        return { title, content, imageSrc };
+        return { content, heading, imageSrc };
     });
 });
 
 const variant = computed(() => {
+    let selectedVariant = '';
+
     switch (layout) {
         case 'bullet-list':
-            return 'icon';
+            selectedVariant = 'icon';
             break;
         case 'horizontal-list':
-            return 'image-horizontal';
+            selectedVariant = 'image-horizontal';
             break;
         case 'numbered-list':
-            return 'numbered';
+            selectedVariant = 'numbered';
             break;
         case 'visual-list':
-            return 'image';
+            selectedVariant = 'image';
+            break;
+        default:
+            selectedVariant = 'image';
     }
+
+    return selectedVariant;
 });
 </script>
