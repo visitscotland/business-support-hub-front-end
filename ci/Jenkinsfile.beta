@@ -167,7 +167,7 @@ pipeline {
                     VS_CONTAINER_PORTS="-p 3038:3000"
                     VS_CONTAINER_ENVIRONMENT=""
                     VS_CONTAINER_ENVIRONMENT_FILE="--env-file [FILE_NAME]"
-                    VS_CONTAINER_NETWORK="--add-host support.visitscotland.org:10.11.13.16"
+                    VS_CONTAINER_NETWORK="--add-host beta-support.visitscotland.org:10.11.13.16"
                     VS_CONTAINER_INIT_EXEC="cat"
                     #VS_CONTAINER_EXEC="NODE_DEBUG=cluster,net,http,fs,tls,module,timers node .output/server/index.mjs"
                     #VS_CONTAINER_EXEC="/bin/bash -c \\"HOME=$PWD; set | tee ./nodeapp.log; NODE_DEBUG=http node $HOME/.output/server/index.mjs 2>&1 | tee -a ./nodeapp.log\\""
