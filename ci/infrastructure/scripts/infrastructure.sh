@@ -228,10 +228,10 @@ defaultSettings() {
   fi
   # set unique container name from JOB_NAME and VS_BRANCH_NAME - removing / characters
   if [ -z "$VS_CONTAINER_NAME" ]&&[ "$VS_BRANCH_NAME" != "branch-not-found" ]; then
-    VS_CONTAINER_NAME=$(echo $JOB_NAME | sed -e "s/\/.*//g")"_"$(basename $VS_BRANCH_NAME)
+    VS_CONTAINER_NAME=$(dirname $JOB_NAME | sed -e "s/\//_/g")"_"$(basename $VS_BRANCH_NAME)
     VS_CONTAINER_NAME_SHORT=$(basename $VS_BRANCH_NAME)
   else
-    VS_CONTAINER_NAME=$(echo $JOB_NAME | sed -e "s/\/.*//g")"_"$(basename $BRANCH_NAME)
+    VS_CONTAINER_NAME=$(dirname $JOB_NAME | sed -e "s/\//_/g")"_"$(basename $BRANCH_NAME)
     VS_CONTAINER_NAME_SHORT=$(basename $BRANCH_NAME)
   fi
   # check for VS_CONTAINER_BASE_PORT_OVERRIDE, ensure it's unset if it's not overridden
@@ -453,7 +453,7 @@ manageContainers() {
       echo "$(eval $VS_LOG_DATESTAMP) ERROR [$VS_SCRIPTNAME] CONTAINER_ID: $CONTAINER_ID was found but container status could not be determined"
     fi
   elif [ ! -z "$CONTAINER_ID" ] && [ "${VS_CONTAINER_PORT_CLASH_PREDICTED^^}" == "TRUE" ]; then
-    if [ "${VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE}" == "TRUE" ]]; then
+    if [ "${VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE}" == "TRUE" ]; then
       echo "$(eval $VS_LOG_DATESTAMP) WARN  [$VS_SCRIPTNAME] VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE is $VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE and VS_CONTAINER_PORT_CLASH_PREDICTED is $VS_CONTAINER_PORT_CLASH_PREDICTED, so existing container $CONTAINER_ID will be removed"
       deleteContainers
       unset CONTAINER_ID
