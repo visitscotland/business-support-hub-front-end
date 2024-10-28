@@ -5,6 +5,7 @@
                 <VsHeading
                     :id="props.module.anchor ? props.module.anchor : null"
                     level="2"
+                    headingStyle="heading-m"
                 >
                     {{ props.module.title }}
                 </VsHeading>
@@ -20,7 +21,7 @@
                     {{ item.heading }}
                 </template>
 
-                <div class="p-3">
+                <div class="p-075">
                     <VsBrRichText :input-content="item.copy.value" />
                 </div>
             </VsAccordionItem>
