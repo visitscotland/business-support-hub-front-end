@@ -1,32 +1,42 @@
 <template>
-    <VsStyledList
-        :anchor-link="anchor ? anchor : null"
-        :title="title"
-        :variant="variant"
+    <VsModuleWrapper
+        :anchor-id="anchor || null"
+        :heading-level="nested ? 3 : 2"
+        businessSupport
     >
         <template
-            v-if="introduction"
-            #intro
+            v-if="title"
+            #vs-module-wrapper-heading
+        >
+            {{ title }}
+        </template>
+
+        <template
+            v-if="introduction.value"
+            #vs-module-wrapper-intro
         >
             <VsBrRichText :input-content="introduction.value" />
         </template>
 
-        <VsStyledListItem
-            v-for="(item, index) in listItems"
-            :key="index"
-            :heading="item.heading"
-            :imageSrc="item.imageSrc ? item.imageSrc : null"
-            :variant="variant"
-        >
-            <VsBrRichText :input-content="item.content" />
-        </VsStyledListItem>
-    </VsStyledList>
+        <VsStyledList :variant="variant">
+            <VsStyledListItem
+                v-for="(item, index) in listItems"
+                :key="index"
+                :heading="item.heading"
+                :heading-level="nested ? 4 : 3"
+                :imageSrc="item.imageSrc ? item.imageSrc : null"
+                :variant="variant"
+            >
+                <VsBrRichText :input-content="item.content" />
+            </VsStyledListItem>
+        </VsStyledList>
+    </VsModuleWrapper>
 </template>
 
 <script setup lang="ts">
 import type { Page } from '@bloomreach/spa-sdk';
 import type { LooseObject } from '~/types/types';
-import { VsStyledList, VsStyledListItem } from '@visitscotland/component-library/components';
+import { VsModuleWrapper, VsStyledList, VsStyledListItem } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
 const props = defineProps<{
@@ -37,6 +47,7 @@ const {
     anchor,
     introduction,
     layout,
+    nested,
     sections,
     title,
 } = props.module;

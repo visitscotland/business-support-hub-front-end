@@ -1,19 +1,20 @@
 <template>
     <pre>{{ module }}</pre>
     <VsModuleWrapper
-        :anchor-id="props.module.anchor || null"
-        :heading-level="isNested ? 3 : 2"
+        :anchor-id="anchor || null"
+        :heading-level="nested ? 3 : 2"
         businessSupport
     >
         <template #vs-module-wrapper-heading>
-            {{ props.module.title }}
+            {{ title }}
         </template>
         <VsContainer>
             <VsAccordion>
                 <VsAccordionItem
-                    v-for="(item, index) in props.module.sections"
+                    v-for="(item, index) in sections"
+                    :key="index"
                     :control-id="`${props.idPrefix}${index}`"
-                    :heading-level="isNested ? 4 : 3"
+                    :heading-level="nested ? 4 : 3"
                     variant="transparent"
                 >
                     <template #title>
@@ -44,5 +45,10 @@ const props = defineProps<{
     idPrefix: string,
 }>();
 
-const isNested = computed(() => props.module.nested);
+const {
+    anchor,
+    nested,
+    sections,
+    title,
+} = props.module;
 </script>
