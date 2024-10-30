@@ -1,5 +1,4 @@
 <template>
-    <pre>{{ module }}</pre>
     <VsModuleWrapper
         :anchor-id="anchor || null"
         :heading-level="nested ? 3 : 2"
