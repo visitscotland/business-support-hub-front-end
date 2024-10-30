@@ -3,6 +3,7 @@
         :title="module.title"
         :anchor-link="module.anchor ? formatLink(module.anchor) : ''"
         businessSupport
+        :heading-level="module.nested ? 3 : 2"
     >
         <template
             #vs-article-intro
