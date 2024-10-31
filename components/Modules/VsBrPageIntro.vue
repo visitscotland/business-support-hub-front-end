@@ -53,6 +53,10 @@
             />
         </template>
 
+        <template #vs-intro-heading>
+            {{ content.title }}
+        </template>
+        
         <template
             #vs-blog-data
             v-if="blog"

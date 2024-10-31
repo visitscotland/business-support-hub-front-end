@@ -1,9 +1,5 @@
 <template>
 
-    <VsBrHeroSectionModule
-        :content="documentData"
-    />
-
     <VsBrPageIntro
         :content="documentData"
         :light-background="true"
