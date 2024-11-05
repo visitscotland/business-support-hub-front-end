@@ -52,10 +52,6 @@
                 :is-home="isHome"
             />
         </template>
-
-        <template #vs-intro-heading>
-            {{ content.title }}
-        </template>
         
         <template
             #vs-blog-data
@@ -85,9 +81,9 @@ import { inject, toRefs } from 'vue';
 
 import { VsPageIntro, VsBlogDetails } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore.ts';
-import themeCalculator from '~/composables/themeCalculator.ts';
-import extractYoutubeId from '~/composables/extractYoutubeId.ts';
+import useConfigStore from '~/stores/configStore';
+import themeCalculator from '~/composables/themeCalculator';
+import extractYoutubeId from '~/composables/extractYoutubeId';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrBreadcrumb from '~/components/Modules/VsBrBreadcrumb.vue';
