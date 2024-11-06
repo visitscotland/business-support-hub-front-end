@@ -1,8 +1,5 @@
 <template>
-    <VsModuleWrapper
-        businessSupport
-        :theme="module.theme"
-    >
+    <VsModuleWrapper business-support>
         <VsArticle
             :title="module.title"
             :anchor-link="module.anchor ? formatLink(module.anchor) : ''"

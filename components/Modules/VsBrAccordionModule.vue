@@ -1,9 +1,8 @@
 <template>
     <VsModuleWrapper
         :anchor-id="anchor || null"
-        businessSupport
+        business-support
         :heading-level="nested ? 3 : 2"
-        :theme="theme"
     >
         <template #vs-module-wrapper-heading>
             {{ title }}
