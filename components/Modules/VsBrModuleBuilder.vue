@@ -49,8 +49,8 @@
             v-else-if="item.type === 'ArticleModule' && item.layout === 'accordion'"
         >
             <VsBrAccordionModule
-                :module="item"
                 :id-prefix="`accordionItem-${index}-`"
+                :module="item"
             />
         </NuxtLazyHydrate>
         
@@ -92,8 +92,6 @@ import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue'
 // import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 
-import themeCalculator from '~/composables/themeCalculator';
-
 const props = defineProps<{
     modules: any[],
 }>();
@@ -102,35 +100,30 @@ const { modules } = props;
 
 const page: Page | undefined = inject('page');
 
-const themeCount = 3;
-let currentMegaLinkSection = -1;
 const hippoContent : any = {
 };
 
 // Article layouts that use the Styled list module.
 const styledListLayouts = ['bullet-list', 'horizontal-list', 'numbered-list', 'visual-list'];
 
+// Set module theme
+// The first module should always be light (white) and the 
+// remaining modules will alternate between grey and light.
+// Unless the module is nested, in which case it will use the 
+// same theme as the previous module.
+const themes = ['light', 'grey'];
+const currentTheme = ref(themes[0]);
+
 if (modules) {
-    for (let x = 0; x < modules.length; x++) {
-        let newThemeIndex = 1;
-
-        if (
-            modules[x].type === 'ListLinksModule'
-            || modules[x].type === 'MultiImageLinksModule'
-            || modules[x].type === 'SingleImageLinksModule'
-        ) {
-            if (modules[x].title || currentMegaLinkSection === -1) {
-                currentMegaLinkSection += 1;
-            }
-
-            newThemeIndex = currentMegaLinkSection % themeCount;
-        }
-
-        modules[x].themeIndex = newThemeIndex;
-        modules[x].themeValue = themeCalculator(newThemeIndex, modules[x]);
-
-        if (modules[x].hippoBean && page) {
-            hippoContent[x] = page.getContent(modules[x].hippoBean);
+    for (let i = 0; i < modules.length; i++) {
+        if (i === 0) {
+            modules[i].theme = themes[0];
+            currentTheme.value = themes[0];
+        } else if (modules[i].nested) {
+            modules[i].theme = currentTheme.value;
+        } else {
+            modules[i].theme = currentTheme.value === themes[0] ? themes[1] : themes[0];
+            currentTheme.value = modules[i].theme;
         }
     }
 }

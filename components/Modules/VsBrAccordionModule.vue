@@ -1,8 +1,9 @@
 <template>
     <VsModuleWrapper
         :anchor-id="anchor || null"
-        :heading-level="nested ? 3 : 2"
         businessSupport
+        :heading-level="nested ? 3 : 2"
+        :theme="theme"
     >
         <template #vs-module-wrapper-heading>
             {{ title }}
@@ -40,14 +41,15 @@ import {
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
 const props = defineProps<{
-    module: LooseObject,
     idPrefix: string,
+    module: LooseObject,
 }>();
 
 const {
     anchor,
     nested,
     sections,
+    theme,
     title,
 } = props.module;
 </script>

@@ -1,8 +1,9 @@
 <template>
     <VsModuleWrapper
         :anchor-id="anchor || null"
-        :heading-level="nested ? 3 : 2"
         businessSupport
+        :heading-level="nested ? 3 : 2"
+        :theme="theme"
     >
         <template
             v-if="title"
@@ -49,6 +50,7 @@ const {
     layout,
     nested,
     sections,
+    theme,
     title,
 } = props.module;
 const page: Page | undefined = inject('page');
