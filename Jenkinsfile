@@ -20,7 +20,6 @@ if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?feature-(business)?support.
 } else if (BRANCH_NAME ==~ "ops/(feature-environment(s)?-enhancements|pipeline-updates)" && (JOB_NAME ==~ "([^/]*/)?feature(-(businessevents|(business)?support))?.visitscotland.(com|org)(-mb)?(-frontend)?/ops%(25)?2F(feature-environment(s)?-enhancements|pipeline-updates)")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3039"
-    env.VS_CONTAINER_PRESERVE = "FALSE"
 } else {
     echo "=== No conditional environment variables found for branch $BRANCH_NAME in job $JOB_NAME, using defaults"
 }
@@ -57,7 +56,7 @@ echo "== Setting default container variables"
 if (!env.VS_CONTAINER_BASE_PORT_MIN ) { env.VS_CONTAINER_BASE_PORT_MIN = 3040 }
 if (!env.VS_CONTAINER_BASE_PORT_MAX ) { env.VS_CONTAINER_BASE_PORT_MAX = 3059 }
 if (!env.VS_CONTAINER_EXEC ) { env.VS_CONTAINER_EXEC = "/bin/bash -c \"node .output/server/index.mjs\"" }
-if (!env.VS_CONTAINER_PRESERVE) { env.VS_CONTAINER_PRESERVE = "TRUE" }
+if (!env.VS_CONTAINER_PRESERVE) { env.VS_CONTAINER_PRESERVE = "FALSE" }
 if (!env.VS_CONTAINER_MAIN_APP_PORT) { env.VS_CONTAINER_MAIN_APP_PORT = 3000 }
 echo "==/Setting default container variables"
 
