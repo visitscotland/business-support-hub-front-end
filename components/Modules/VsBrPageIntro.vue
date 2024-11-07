@@ -55,13 +55,15 @@
         
         <template
             #vs-blog-data
-            v-if="blog"
         >
-            <VsBlogDetails
-                :blog-author="blogAuthor"
-                :blog-publish-date="blogDate"
-                :blog-read-time="blogTime"
-            />
+        <!-- Temporary addition to show the publishDate and readtime unstyled for now -->
+        <p v-if="publishDate">{{ publishDate }}</p>
+        <p vif="readTime">{{ readTime }}</p>
+
+            <!-- <VsBlogDetails
+                :blog-publish-date="publishDate"
+                :blog-read-time="readTime"
+            /> -->
         </template>
 
         <!-- TODO - Share Button -->
@@ -69,7 +71,7 @@
         <template
             #vs-intro-content
         >
-            <VsBrRichText :input-content="content.introduction.value" />
+            <VsBrRichText :input-content="content.teaser" />
         </template>
 
         <!-- TODO - Itinerary Summary -->
@@ -102,42 +104,35 @@ const props = defineProps<{
     blog?: any,
 }>();
 
-const { content, lightBackground, heroImage, itinerary, blog } = toRefs(props);
+const {
+    content,
+    lightBackground,
+    heroImage,
+    itinerary
+} = toRefs(props);
 
-let breadcrumb : [];
-let isHome : boolean;
-
-let blogAuthor : any;
-let blogTime : string;
-let blogDate : string;
-
-let heroVideo : any;
-let youtubeId : string = '';
+const breadcrumb = ref<any[]>([]);
+const isHome = ref(false);
+const readTime = ref<string | null>(null);
+const publishDate = ref('');
+const heroVideo = ref<any>(undefined);
+const youtubeId = ref('');
 
 if (page) {
     const pageContent : any = page.getContent(page.model.root);
     const pageModels : any = pageContent.models;
 
     if (pageModels) {
-        isHome = pageModels.isHome;
-        breadcrumb = pageModels.breadcrumb.items;
+        isHome.value = pageModels.isHome;
+        breadcrumb.value = pageModels.breadcrumb.items;
 
-        if (blog.value) {
-            blogAuthor = page.getContent(blog.value.author);
+        // TODO - localised labels for minute/s and reading time:
+        if (content.value.readingTime > 1) {
+            readTime.value = `Reading time: ${content.value.readingTime} minutes`;
+        }
 
-            if (blogAuthor && blogAuthor.model && blogAuthor.model.data) {
-                blogAuthor = blogAuthor.model.data.displayName;
-            }
-
-            // TODO - localised labels for minute/s
-
-            if (blog.value.readingTime > 1) {
-                blogTime = `${blog.value.readingTime} minutes`;
-            } else {
-                blogTime = `${blog.value.readingTime} minute`;
-            }
-
-            blogDate = new Date(blog.value.publishDate).toLocaleString(
+        if (content.value.publishDate) {
+            publishDate.value = new Date(content.value.publishDate).toLocaleString(
                 'en-US',
                 {
                     year: 'numeric',
@@ -150,9 +145,9 @@ if (page) {
         if (content.value.heroVideo) {
             const video = page.getContent(content.value.heroVideo.videoLink);
             if (video) {
-                heroVideo = video.model.data;
+                heroVideo.value = video.model.data;
 
-                youtubeId = extractYoutubeId(heroVideo.url);
+                youtubeId.value = extractYoutubeId(heroVideo.value.url);
             }
         }
     }
