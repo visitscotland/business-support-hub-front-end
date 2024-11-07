@@ -49,8 +49,8 @@
             v-else-if="item.type === 'ArticleModule' && item.layout === 'accordion'"
         >
             <VsBrAccordionModule
-                :module="item"
                 :id-prefix="`accordionItem-${index}-`"
+                :module="item"
             />
         </NuxtLazyHydrate>
         
