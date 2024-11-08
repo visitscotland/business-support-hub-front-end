@@ -1,5 +1,6 @@
 <template>
     <div class="vs-sticky-nav" :class="{ 'has-edit-button': page.isPreview() }">
+        <VsBrSkipTo />
         <header>
             <VsGlobalMenu
              active-site=""
@@ -58,6 +59,8 @@ import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageMenuButton } from '@bloomreach/vue3-sdk';
 
 import useConfigStore from '~/stores/configStore';
+
+import VsBrSkipTo from '~/components/Base/VsBrSkipTo.vue';
 
 import {
     VsGlobalMenu,

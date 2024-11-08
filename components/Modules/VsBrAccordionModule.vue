@@ -1,34 +1,32 @@
 <template>
-    <VsContainer>
-        <VsRow>
-            <VsCol>
-                <VsHeading
-                    :id="props.module.anchor ? props.module.anchor : null"
-                    level="2"
+    <VsModuleWrapper
+        :anchor-id="anchor || null"
+        business-support
+        :heading-level="nested ? 3 : 2"
+    >
+        <template #vs-module-wrapper-heading>
+            {{ title }}
+        </template>
+        <VsContainer>
+            <VsAccordion>
+                <VsAccordionItem
+                    v-for="(item, index) in sections"
+                    :key="index"
+                    :control-id="`${props.idPrefix}${index}`"
+                    :heading-level="nested ? 4 : 3"
+                    variant="transparent"
                 >
-                    {{ props.module.title }}
-                </VsHeading>
-            </VsCol>
-        </VsRow>
-        <VsAccordion>
-            <VsAccordionItem
-                v-for="(item, index) in accordionItems"
-                :control-id="`accordionItem${index}`"
-                variant="transparent"
-            >
-                <template #title>
-                    {{ item.title }}
-                </template>
+                    <template #title>
+                        {{ item.heading }}
+                    </template>
 
-                <div class="p-3">
-                    <VsBrRichText
-                        :input-content="item.content"
-                        class="p-3"
-                    />
-                </div>
-            </VsAccordionItem>
-        </VsAccordion>
-    </VsContainer>
+                    <div class="p-075">
+                        <VsBrRichText :input-content="item.copy.value" />
+                    </div>
+                </VsAccordionItem>
+            </VsAccordion>
+        </VsContainer>
+    </VsModuleWrapper>
 </template>
 
 <script setup lang="ts">
@@ -36,22 +34,21 @@ import type { LooseObject } from '~/types/types';
 import {
     VsAccordion,
     VsAccordionItem,
-    VsCol,
     VsContainer,
-    VsHeading,
-    VsRow,
+    VsModuleWrapper,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
-import separateTitleFromContent from '~/composables/separateTitleFromContent';
 
 const props = defineProps<{
+    idPrefix: string,
     module: LooseObject,
 }>();
 
-// Set the accordionItem content by extracting the data from the sections.
-const accordionItems = computed(() => {
-    return props.module.sections.map(({ copy }: { copy: LooseObject }) => {
-        return separateTitleFromContent(copy.value);
-    });
-});
+const {
+    anchor,
+    nested,
+    sections,
+    theme,
+    title,
+} = props.module;
 </script>

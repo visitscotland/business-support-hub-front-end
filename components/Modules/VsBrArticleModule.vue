@@ -1,68 +1,71 @@
 <template>
-    <VsArticle
-        :title="module.title"
-        :anchor-link="module.anchor ? formatLink(module.anchor) : ''"
-        businessSupport
-    >
-        <template
-            #vs-article-intro
-            v-if="module.introduction"
-        >
-            <div v-html="module.introduction.value" />
-        </template>
-
-        <template
-            v-if="module.image"
-            #vs-article-img
-        >
-            <VsBrImageWithCaption
-                :image="module.image.cmsImage"
-            />
-        </template>
-
-        <template
-            v-if="module.video"
-            #vs-article-img
-        >
-            <VsVideo
-                :video-title="module.video.label"
-                :video-id="module.video.youtubeId
-                    ? module.video.youtubeId
-                    : extractYoutubeId(module.video.url)
-                "
-                :locale="configStore.locale"
-                :single-minute-descriptor="configStore.getLabel('video', 'video.minute-text')"
-                :plural-minute-descriptor="configStore.getLabel('video', 'video.minutes-text')"
-                :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
-                :no-js-message="configStore.getLabel('video', 'video.no-js')"
-                :cookie-btn-text="configStore.getLabel('essentials.global', 'cookie.link-message')"
-                :error-message="configStore.getLabel('essentials.global', 'third-party-error')"
-            />
-        </template>
-
-        <VsArticleSection
-            v-for="(section, index) in articleSections"
-            :key="index"
-            sidebar-align="right"
+    <VsModuleWrapper business-support>
+        <VsArticle
+            :title="module.title"
+            :anchor-link="module.anchor ? formatLink(module.anchor) : ''"
             businessSupport
+            :heading-level="module.nested ? 3 : 2"
         >
             <template
-                #article-sidebar
-                v-if="section.video || section.quote || section.image"
+                #vs-article-intro
+                v-if="module.introduction"
             >
-                <VsBrArticleSidebar
-                    :section="section"
-                    alignment="right"
+                <div v-html="module.introduction.value" />
+            </template>
+
+            <template
+                v-if="module.image"
+                #vs-article-img
+            >
+                <VsBrImageWithCaption
+                    :image="module.image.cmsImage"
                 />
             </template>
 
             <template
-                v-if="section.copy"
+                v-if="module.video"
+                #vs-article-img
             >
-                <VsBrRichText :input-content="section.copy.value" />
+                <VsVideo
+                    :video-title="module.video.label"
+                    :video-id="module.video.youtubeId
+                        ? module.video.youtubeId
+                        : extractYoutubeId(module.video.url)
+                    "
+                    :locale="configStore.locale"
+                    :single-minute-descriptor="configStore.getLabel('video', 'video.minute-text')"
+                    :plural-minute-descriptor="configStore.getLabel('video', 'video.minutes-text')"
+                    :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
+                    :no-js-message="configStore.getLabel('video', 'video.no-js')"
+                    :cookie-btn-text="configStore.getLabel('essentials.global', 'cookie.link-message')"
+                    :error-message="configStore.getLabel('essentials.global', 'third-party-error')"
+                />
             </template>
-        </VsArticleSection>
-    </VsArticle>
+
+            <VsArticleSection
+                v-for="(section, index) in articleSections"
+                :key="index"
+                sidebar-align="right"
+                businessSupport
+            >
+                <template
+                    #article-sidebar
+                    v-if="section.video || section.quote || section.image"
+                >
+                    <VsBrArticleSidebar
+                        :section="section"
+                        alignment="right"
+                    />
+                </template>
+
+                <template
+                    v-if="section.copy"
+                >
+                    <VsBrRichText :input-content="section.copy.value" />
+                </template>
+            </VsArticleSection>
+        </VsArticle>
+    </VsModuleWrapper>
 </template>
 
 <script lang="ts" setup>
@@ -71,6 +74,7 @@
 import {
     VsArticle,
     VsArticleSection,
+    VsModuleWrapper,
     VsVideo,
 } from '@visitscotland/component-library/components';
 
