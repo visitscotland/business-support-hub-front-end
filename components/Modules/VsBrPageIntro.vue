@@ -58,7 +58,7 @@
         >
         <!-- Temporary addition to show the publishDate and readtime unstyled for now -->
         <p v-if="publishDate">{{ publishDate }}</p>
-        <p vif="readTime">{{ readTime }}</p>
+        <p v-if="readTime">{{ readTime }}</p>
 
             <!-- <VsBlogDetails
                 :blog-publish-date="publishDate"
@@ -71,7 +71,7 @@
         <template
             #vs-intro-content
         >
-            <VsBrRichText :input-content="content.teaser" />
+            <VsBrRichText :input-content="content.introduction.value" />
         </template>
 
         <!-- TODO - Itinerary Summary -->
@@ -129,6 +129,8 @@ if (page) {
         // TODO - localised labels for minute/s and reading time:
         if (content.value.readingTime > 1) {
             readTime.value = `Reading time: ${content.value.readingTime} minutes`;
+        } else if (content.value.readingTime === 1) {
+            readTime.value = `Reading time: ${content.value.readingTime} minute`;
         }
 
         if (content.value.publishDate) {
