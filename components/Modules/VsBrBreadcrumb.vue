@@ -40,7 +40,7 @@ const rootUrl = window ? window.location.origin : '';
 
 const { breadcrumb, isHome } = toRefs(props);
 
-const definedBreadcrumb = breadcrumb.value
+const definedBreadcrumb = breadcrumb.value && !props.isHome
     ? breadcrumb.value
     : [];
 
