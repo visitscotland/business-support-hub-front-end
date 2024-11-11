@@ -260,6 +260,7 @@ defaultSettings() {
   VS_COMMIT_AUTHOR=$(git show -s --pretty="%ae" ${GIT_COMMIT})
   VS_COMMIT_ID_SHORT=$(git rev-parse --short ${GIT_COMMIT})
   VS_DATESTAMP=$(date +%Y%m%d)
+  VS_HOST_IP_ADDRESS=$(/usr/sbin/ip ad sh  | egrep "global noprefixroute" | awk '{print $2}' | sed -e "s/\/.*$//")
   VS_PARENT_JOB_NAME=$(echo $JOB_NAME | sed -e "s/\/.*//g")
   VS_SCRIPT_LOG=$VS_CI_DIR/logs/$VS_SCRIPTNAME.log
   if [ ! -z "$STAGE_NAME" ]; then VS_STAGE_NAME=$(echo ${STAGE_NAME,,} | sed -e "s/ /-/g"); fi
@@ -268,10 +269,7 @@ defaultSettings() {
   else
     VS_PROXY_QS_SSR="&vs_ssr_proxy=off"
   fi
-  #  == brXM Instance Variables ==
-  if [ -z "$VS_BRXM_HOST" ]; then echo "VS_BRXM_HOST was not set, the default host will be used"; fi
-  if [ -z "$VS_BRXM_PORT" ]; then echo "VS_BRXM_PORT was not set, the default container will be used"; fi
-  # == BRC API server settings ==
+  # VS BRC API server settings
   if [ "$VS_BRC_API_ENVIRONMENT_NAME" == "stack" ]; then
     VS_BRC_API_ENVIRONMENT_JOB_PATH=$VS_BRC_API_ENVIRONMENT_NAME
   elif [ "$VS_BRC_API_ENVIRONMENT_NAME" == "development" ]; then
@@ -936,7 +934,7 @@ containerCopyHippoArtifact() {
     if [ ! "$SAFE_TO_PROCEED" = "FALSE" ]; then
     echo ""
     echo "$(eval $VS_LOG_DATESTAMP) INFO  [$VS_SCRIPTNAME] about to copy $VS_HIPPO_LATEST to container $VS_CONTAINER_NAME:/home/hippo"
-    docker cp --user root $VS_HIPPO_LATEST $VS_CONTAINER_NAME:/home/hippo
+    docker cp $VS_HIPPO_LATEST $VS_CONTAINER_NAME:/home/hippo
     RETURN_CODE=$?; echo $RETURN_CODE
     if [ ! "$RETURN_CODE" = "0" ]; then
       SAFE_TO_PROCEED=FALSE
@@ -1047,11 +1045,7 @@ createBuildReport() {
     echo "The site instance for branch $VS_BRANCH_NAME should now be available in a few moments on $NODE_NAME - $VS_HOST_IP_ADDRESS" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
     echo "" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
     echo "To configure your browser session for this branch please follow this link:"
-    if [ "$VS_BUILD_TYPE" == "DSSR" ]; then
-      echo "  - $VS_PROXY_SERVER_SCHEME://$VS_PROXY_SERVER_FQDN/?vs_dssr_http_host=$VS_HOST_IP_ADDRESS&vs_dssr_http_port=$VS_CONTAINER_BASE_PORT&vs_brxm_host=$VS_BRXM_HOST&vs_brxm_port=$VS_BRXM_PORT&vs_brxm_http_host=$VS_BRXM_INSTANCE_HTTP_HOST&vs_ssr_http_port=$VS_CONTAINER_EXT_PORT_SSR&vs_tln_http_port=$VS_CONTAINER_EXT_PORT_TLN&vs_feature_branch=$BRANCH_NAME$VS_PROXY_QS_SSR" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-    else
-      echo "  - $VS_PROXY_SERVER_SCHEME://$VS_PROXY_SERVER_FQDN/?vs_brxm_host=$VS_HOST_IP_ADDRESS&vs_brxm_port=$VS_CONTAINER_BASE_PORT&vs_brxm_http_host=$VS_BRXM_INSTANCE_HTTP_HOST&vs_ssr_http_port=$VS_CONTAINER_EXT_PORT_SSR&vs_tln_http_port=$VS_CONTAINER_EXT_PORT_TLN&vs_feature_branch=$BRANCH_NAME$VS_PROXY_QS_SSR" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-    fi
+    echo "  - $VS_PROXY_SERVER_SCHEME://$VS_PROXY_SERVER_FQDN/?vs_brxm_host=$VS_HOST_IP_ADDRESS&vs_brxm_port=$VS_CONTAINER_BASE_PORT&vs_brxm_http_host=$VS_BRXM_INSTANCE_HTTP_HOST&vs_ssr_http_port=$VS_CONTAINER_EXT_PORT_SSR&vs_tln_http_port=$VS_CONTAINER_EXT_PORT_TLN&vs_feature_branch=$BRANCH_NAME$VS_PROXY_QS_SSR" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
     echo "" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
     echo "Thereafter, until you clear the settings, you will be able to access the environment on the following URLs" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
     echo " - site:    $VS_PROXY_SERVER_SCHEME://$VS_PROXY_SERVER_FQDN/" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
@@ -1066,18 +1060,12 @@ createBuildReport() {
     echo "  - $VS_PROXY_SERVER_SCHEME://$VS_PROXY_SERVER_FQDN/?vs_brxm_reset" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
     echo "" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
     echo "" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-    if [ "$VS_BUILD_TYPE" == "DSSR" ]; then
-      echo "Direct Node app access - available only on the Web Development LAN" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-      echo "  - http://$VS_HOST_IP_ADDRESS:$VS_CONTAINER_BASE_PORT/" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-      echo "" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-    else
-      echo "Direct Tomcat access - available only on the Web Development LAN" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-      echo "  - http://$VS_HOST_IP_ADDRESS:$VS_CONTAINER_BASE_PORT/cms/" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-      echo "  - http://$VS_HOST_IP_ADDRESS:$VS_CONTAINER_BASE_PORT/site/" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-      echo "    -  both need a HOST header of \"localhost:8080\" to be passed with the request" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-      echo "" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
-    fi
-    if [ ! -z "$VS_CONTAINER_EXT_PORT_SSR" ]&&[ ! "$VS_BUILD_TYPE"="DSSR" ]; then
+    echo "Direct Tomcat access - available only on the Web Development LAN" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
+    echo "  - http://$VS_HOST_IP_ADDRESS:$VS_CONTAINER_BASE_PORT/cms/" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
+    echo "  - http://$VS_HOST_IP_ADDRESS:$VS_CONTAINER_BASE_PORT/site/" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
+    echo "    -  both need a HOST header of \"localhost:8080\" to be passed with the request" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
+    echo "" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
+    if [ ! -z "$VS_CONTAINER_EXT_PORT_SSR" ]; then
       echo "Direct SSR access - available only on the Web Development LAN" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
       echo "  - http://$VS_HOST_IP_ADDRESS:$VS_CONTAINER_EXT_PORT_SSR/site/" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
       echo "" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
