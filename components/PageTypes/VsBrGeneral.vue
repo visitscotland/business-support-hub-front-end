@@ -1,5 +1,4 @@
 <template>
-
     <VsBrHeroSectionModule :content="documentData" />
 
     <VsBrPageIntro
@@ -10,6 +9,11 @@
     <VsBrModuleBuilder
         v-if="pageItems"
         :modules="pageItems"
+    />
+
+    <VsBrRelatedLinks
+        v-if="relatedLinks"
+        :related-links="relatedLinks"
     />
 </template>
 
@@ -22,6 +26,7 @@ import useConfigStore from '~/stores/configStore';
 import VsBrHeroSectionModule from '~/components/Modules/VsBrHeroSectionModule.vue';
 import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
 import VsBrModuleBuilder from '~/components/Modules/VsBrModuleBuilder.vue';
+import VsBrRelatedLinks from '~/components/Modules/VsBrRelatedLinks.vue';
 
 const props = defineProps<{
     component: Component,
@@ -34,7 +39,9 @@ let document : any = {
 };
 let documentData : any = {
 };
-let pageItems : any[] = [];
+let pageItems: any[] = [];
+
+const relatedLinks = ref<any[]>([]);
 
 const configStore = useConfigStore();
 
@@ -42,5 +49,7 @@ if (page.value) {
     document = page.value.getDocument();
     documentData = document.getData();
     pageItems = configStore.pageItems;
+
+    relatedLinks.value = documentData.links;
 }
 </script>
