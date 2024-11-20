@@ -1,13 +1,18 @@
 <template>
-    <VsArticleSidebar
-        :sidebar-align="alignment"
-    >
+    <VsArticleSidebar :sidebar-align="alignment">
         <template
-            #vs-article-sidebar-img
+            v-if="props.includeToc && tableOfContentsLinks"
+            v-slot:vs-article-sidebar-toc
         >
-            <template
-                v-if="section.video"
-            >
+            <VsBrLinkListModule
+                :heading="configStore.getLabel('table-contents', 'title')"
+                :links="tableOfContentsLinks"
+                toc
+            />
+        </template>
+
+        <template #vs-article-sidebar-img>
+            <template v-if="section.video">
                 <VsBrVideoModal
                     :is-video-modal="true"
                     :close-btn-text="configStore.getLabel('essentials.global', 'close')"
@@ -27,12 +32,8 @@
                     :show-toggle="false"
                 />
             </template>
-            <template
-                v-else-if="section.image"
-            >
-                <VsBrImageWithCaption
-                    :image="section.image.cmsImage"
-                />
+            <template v-else-if="section.image">
+                <VsBrImageWithCaption :image="section.image.cmsImage" />
             </template>
         </template>
 
@@ -40,9 +41,7 @@
             #vs-article-sidebar-quote
             v-if="section.quote"
         >
-            <VsBrQuote
-                :quote="section.quote"
-            />
+            <VsBrQuote :quote="section.quote" />
         </template>
     </VsArticleSidebar>
 </template>
@@ -53,10 +52,17 @@ import { VsArticleSidebar } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore';
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrQuote from '~/components/Modules/VsBrQuote.vue';
+import VsBrLinkListModule from '~/components/Modules/VsBrLinkListModule.vue';
 
 const configStore = useConfigStore();
 
-const props = defineProps<{ section: any, alignment: string }>();
+const props = defineProps<{
+    section: any,
+    alignment: string,
+    includeToc: boolean,
+}>();
 const section: any = props.section;
 const alignment: string = props.alignment;
+
+const tableOfContentsLinks: any[] | undefined = inject('tableOfContents');
 </script>

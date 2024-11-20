@@ -52,4 +52,6 @@ const tableOfContentsLinks = computed(() => {
         return { anchor, title };
     });
 });
+
+provide('tableOfContents', tableOfContentsLinks);
 </script>

@@ -41,6 +41,7 @@
         >
             <VsBrArticleModule
                 :module="item"
+                :include-toc="index === 0 ? true : false"
             />
         </NuxtLazyHydrate>
         

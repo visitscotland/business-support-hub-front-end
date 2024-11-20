@@ -1,10 +1,7 @@
 <template>
     <VsContainer>
         <VsRow>
-            <VsCol
-                cols="12"
-                lg="8"
-            >
+            <VsCol>
                 <VsLinkList :toc="toc">
                     <template
                         v-if="heading"
