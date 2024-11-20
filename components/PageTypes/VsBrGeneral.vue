@@ -15,7 +15,6 @@
     <NuxtLazyHydrate
         :when-visible="{ rootMargin: '50px' }"
     >
-    <pre>{{ documentData }}</pre>
         <VsBrNewsletterSignpost 
             v-if="!documentData.hideNewsletter && configStore.newsletterSignpost"
             :data="configStore.newsletterSignpost"
