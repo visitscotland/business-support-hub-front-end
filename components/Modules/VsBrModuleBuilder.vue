@@ -1,5 +1,4 @@
 <template>
-    <pre>{{ modules }}</pre>
     <div
         class="vs-module-wrapper__outer"
         v-for="(item, index) in modules"

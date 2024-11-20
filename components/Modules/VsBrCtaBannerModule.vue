@@ -9,9 +9,8 @@
                 >
                     <VsBrImage
                         :image="imageValue"
-                        style="max-width: 80%"
+                        style="max-width: 100%;max-height: 312px"
                     />
-
                 </VsCol>
                 <VsCol
                     cols="12"
@@ -19,17 +18,16 @@
                     class="d-flex flex-column justify-content-center text-start"
                 >
                     <VsHeading
-                        level="2"
+                        :level="nested ? '3' : '2'"
                         heading-style="heading-xl"
-                        id="test"
                     >
-                        {{ props.module.title }}
+                        {{ title }}
                     </VsHeading>    
                 
-                    <VsBrRichText :input-content="props.module.copy.value" />
+                    <VsBrRichText :input-content="copy.value" />
                     <div>
-                        <VsButton :href="props.module.cta.link">
-                            {{ props.module.cta.label}}
+                        <VsButton :href="cta.link">
+                            {{ cta.label }}
                         </VsButton>
                     </div>
                 </VsCol>
@@ -39,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Page } from '@bloomreach/spa-sdk';
 import type { LooseObject } from '~/types/types';
 import {
     VsButton,
@@ -55,8 +52,14 @@ import VsBrImage from '~/components//Utils/VsBrImage.vue';
 const props = defineProps<{
     module: LooseObject,
 }>();
-const page: Page | undefined = inject('page');
 
-const imageValue = computed(() => props.module.image.cmsImage);
-console.log('imagevalue',imageValue)
+const {
+    copy,
+    cta,
+    image,
+    nested,
+    title,
+} = props.module;
+
+const imageValue = computed(() => image.cmsImage);
 </script>
