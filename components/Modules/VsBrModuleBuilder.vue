@@ -1,4 +1,5 @@
 <template>
+    <pre>{{ modules }}</pre>
     <div
         class="vs-module-wrapper__outer"
         v-for="(item, index) in modules"
@@ -63,6 +64,15 @@
             />
         </NuxtLazyHydrate>
 
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'SignpostModule'"
+        >
+           <VsBrCtaBannerModule 
+                :module="item"
+           />
+        </NuxtLazyHydrate>
+
         <div
             v-else-if="item.type === 'ErrorModule'"
         >
@@ -91,6 +101,7 @@ import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
 // import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
+import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
 
 import themeCalculator from '~/composables/themeCalculator';
 
