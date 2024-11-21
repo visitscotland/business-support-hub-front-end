@@ -17,7 +17,7 @@
             <NuxtLazyHydrate
                 :when-visible="{ rootMargin: '50px' }"
             >
-                <VsBrMegaLinksModule
+                <VsBrMegalinksLinkListModule
                     v-if="hippoContent[index].model.data.layout === 'List'"
                     :module="item"
                     :theme="item.themeValue"
@@ -85,7 +85,7 @@ import { inject } from 'vue';
 import type { Page } from '@bloomreach/spa-sdk';
 import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
-import VsBrMegaLinksModule from '~/components/Modules/VsBrMegaLinksModule.vue';
+import VsBrMegalinksLinkListModule from '~/components/Modules/VsBrMegalinksLinkListModule.vue'
 import VsBrHorizontalLinksModule from '~/components/Modules/VsBrHorizontalLinksModule.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
 import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
