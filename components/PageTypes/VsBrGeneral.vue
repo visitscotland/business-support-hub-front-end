@@ -53,4 +53,15 @@ if (page.value) {
     documentData = document.getData();
     pageItems = configStore.pageItems;
 }
+
+// Create list of anchor links and titles for each module, excluding nested modules.
+const tableOfContentsLinks = computed(() => {
+    return pageItems.flatMap(({ anchor, title, nested }) => {
+        if (nested) return [];
+
+        return { anchor, title };
+    });
+});
+
+provide('tableOfContents', tableOfContentsLinks);
 </script>
