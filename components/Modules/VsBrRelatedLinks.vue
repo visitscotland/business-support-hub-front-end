@@ -1,6 +1,7 @@
 <template>
     <VsModuleWrapper>
         <template #vs-module-wrapper-heading>
+            <!-- TODO: Replace hardcoded title with CMS label -->
             Related links
         </template>
         <VsContainer>
@@ -12,7 +13,8 @@
                 >
                     <VsStretchedLinkCard
                         :link="link.url"
-                        type="internal"
+                        :type="link.linkType"
+                        class="text-start"
                     >
                         <template #stretched-card-header>
                             {{ link.title }}
@@ -23,18 +25,16 @@
                         </template>
 
                         <template
-                            v-if="link.readTime || link.type"
+                            v-if="link.readTime || link.contentType"
                             v-slot:stretched-card-badges
                         >
-                            <div class="text-start">
-                                <VsBadge v-if="link.readTime">
-                                    {{ link.readTime }}
-                                </VsBadge>
+                            <VsBadge v-if="link.readTime">
+                                {{ link.readTime }}
+                            </VsBadge>
 
-                                <VsBadge v-if="link.type">
-                                    {{ link.type }}
-                                </VsBadge>
-                            </div>
+                            <VsBadge v-if="link.contentType">
+                                {{ link.contentType }}
+                            </VsBadge>
                         </template>
                     </VsStretchedLinkCard>
                 </VsCol>
@@ -65,7 +65,6 @@ const page: Page | undefined = inject('page');
 // Temporary to see all available related link content.
 const allContent = ref<any[]>([]);
 
-
 const relatedLinksContent = computed(() => {
     return props.relatedLinks.map((link) => {
         const content = page?.getContent(link.$ref);
@@ -73,12 +72,32 @@ const relatedLinksContent = computed(() => {
 
         allContent.value.push(content);
 
+        // Set the link type (internal/external/download).
+        // Set the content type and url depending on the link type.
+        let contentType,
+        linkType,
+        url;
+
+        if (contentModel.data.linkType && contentModel.data.linkType.contentType === 'visitscotland:FileLink') {
+            linkType = 'download';
+            url = contentModel.data.linkType.link;
+        } else if (contentModel.data.linkType && contentModel.data.linkType.contentType === 'visitscotland:ExternalLink') {
+            contentType = 'Partner website';
+            linkType = 'external';
+            url = contentModel.data.linkType.link;
+        } else {
+            contentType = captialiseFirstCharacter(contentModel.data.type);
+            linkType = 'internal';
+            url = contentModel.links.site.href;
+        }
+
         return {
+            contentType,
+            linkType,
             readTime: displayReadTime(contentModel.data.readingTime),
             teaser: contentModel.data.teaser,
             title: contentModel.data.title,
-            type: captialiseFirstCharacter(contentModel.data.type),
-            url: contentModel.links.site.href,
+            url,
         };
     });
 });
@@ -88,11 +107,12 @@ const captialiseFirstCharacter = (string: string) => {
 };
 
 const displayReadTime = (time: number) => {
-    if (time === 0) return;
+    if (!time || time === 0) return null;
 
     // TODO: replace hardcoded text with CMS labels.
     const unit = (time > 1) ? 'minutes' : 'minute';
 
+    // TODO: replace hardcoded text with CMS labels.
     return `Reading time: ${time} ${unit}`;
 };
 </script>
