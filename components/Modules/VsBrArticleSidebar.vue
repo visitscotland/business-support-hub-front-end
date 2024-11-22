@@ -1,16 +1,5 @@
 <template>
     <VsArticleSidebar :sidebar-align="alignment">
-        <template
-            v-if="props.includeToc && tableOfContentsLinks"
-            v-slot:vs-article-sidebar-toc
-        >
-            <VsBrLinkListModule
-                :heading="configStore.getLabel('table-contents', 'title')"
-                :links="tableOfContentsLinks"
-                toc
-            />
-        </template>
-
         <template #vs-article-sidebar-img>
             <template v-if="section.video">
                 <VsBrVideoModal
@@ -52,17 +41,13 @@ import { VsArticleSidebar } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore';
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrQuote from '~/components/Modules/VsBrQuote.vue';
-import VsBrLinkListModule from '~/components/Modules/VsBrLinkListModule.vue';
 
 const configStore = useConfigStore();
 
 const props = defineProps<{
     section: any,
     alignment: string,
-    includeToc: boolean,
 }>();
 const section: any = props.section;
 const alignment: string = props.alignment;
-
-const tableOfContentsLinks: any[] | undefined = inject('tableOfContents');
 </script>

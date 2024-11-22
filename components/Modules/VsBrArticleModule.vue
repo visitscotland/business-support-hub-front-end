@@ -50,19 +50,15 @@
             >
                 <template
                     #article-sidebar
-                    v-if="section.video || section.quote || section.image ||
-                        (index === 0 && props.includeToc)"
+                     v-if="section.video || section.quote || section.image"
                 >
                     <VsBrArticleSidebar
                         :section="section"
                         alignment="right"
-                        :include-toc="index === 0 && props.includeToc ? true : false"
                     />
                 </template>
 
-                <template
-                    v-if="section.copy"
-                >
+                <template v-if="section.copy">
                     <VsBrRichText :input-content="section.copy.value" />
                 </template>
             </VsArticleSection>
@@ -90,7 +86,6 @@ const configStore = useConfigStore();
 
 const props = defineProps<{
     module: Object,
-    includeToc: boolean,
 }>();
 const module: any = props.module;
 
