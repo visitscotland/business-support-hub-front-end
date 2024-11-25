@@ -1,23 +1,22 @@
 <template>
     <VsModuleWrapper>
         <template #vs-module-wrapper-heading>
-            <!-- TODO: Replace hardcoded title with CMS label -->
-            Related links
+            {{ module.title }}
         </template>
         <VsContainer>
             <VsRow>
                 <VsCol
                     cols="12"
                     md="3"
-                    v-for="link in relatedLinksContent"
+                    v-for="link in props.module.links"
                 >
                     <VsStretchedLinkCard
-                        :link="link.url"
-                        :type="link.linkType"
+                        :link="formatLink(link.link)"
+                        :type="link.type.toLowerCase()"
                         class="text-start"
                     >
                         <template #stretched-card-header>
-                            {{ link.title }}
+                            {{ link.label }}
                         </template>
 
                         <template #stretched-card-content>
@@ -41,13 +40,9 @@
             </VsRow>
         </VsContainer>
     </VsModuleWrapper>
-    <!-- TODO: Remove before PR -->
-    <pre>{{ allContent }}</pre>
-    <!-- TODO: Remove before PR -->
 </template>
 
 <script setup lang="ts">
-import type { Page } from '@bloomreach/spa-sdk';
 import {
     VsBadge,
     VsCol,
@@ -58,61 +53,6 @@ import {
 } from '@visitscotland/component-library/components';
 
 const props = defineProps<{
-    relatedLinks: any[],
+    module: any,
 }>();
-const page: Page | undefined = inject('page');
-
-// Temporary to see all available related link content.
-const allContent = ref<any[]>([]);
-
-const relatedLinksContent = computed(() => {
-    return props.relatedLinks.map((link) => {
-        const content = page?.getContent(link.$ref);
-        const contentModel = content?.model;
-
-        allContent.value.push(content);
-
-        // Set the link type (internal/external/download).
-        // Set the content type and url depending on the link type.
-        let contentType,
-        linkType,
-        url;
-
-        if (contentModel.data.linkType && contentModel.data.linkType.contentType === 'visitscotland:FileLink') {
-            linkType = 'download';
-            url = contentModel.data.linkType.link;
-        } else if (contentModel.data.linkType && contentModel.data.linkType.contentType === 'visitscotland:ExternalLink') {
-            contentType = 'Partner website';
-            linkType = 'external';
-            url = contentModel.data.linkType.link;
-        } else {
-            contentType = captialiseFirstCharacter(contentModel.data.type);
-            linkType = 'internal';
-            url = contentModel.links.site.href;
-        }
-
-        return {
-            contentType,
-            linkType,
-            readTime: displayReadTime(contentModel.data.readingTime),
-            teaser: contentModel.data.teaser,
-            title: contentModel.data.title,
-            url,
-        };
-    });
-});
-
-const captialiseFirstCharacter = (string: string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLocaleLowerCase();
-};
-
-const displayReadTime = (time: number) => {
-    if (!time || time === 0) return null;
-
-    // TODO: replace hardcoded text with CMS labels.
-    const unit = (time > 1) ? 'minutes' : 'minute';
-
-    // TODO: replace hardcoded text with CMS labels.
-    return `Reading time: ${time} ${unit}`;
-};
 </script>

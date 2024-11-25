@@ -12,8 +12,8 @@
     />
 
     <VsBrRelatedLinks
-        v-if="relatedLinks"
-        :related-links="relatedLinks"
+        v-if="otyml"
+        :module="otyml"
     />
 </template>
 
@@ -40,6 +40,7 @@ let document : any = {
 let documentData : any = {
 };
 let pageItems: any[] = [];
+const otyml = ref<any>(null);
 
 const relatedLinks = ref<any[]>([]);
 
@@ -50,6 +51,8 @@ if (page.value) {
     documentData = document.getData();
     pageItems = configStore.pageItems;
 
-    relatedLinks.value = documentData.links;
+    if (configStore.otyml) {
+        otyml.value = configStore.otyml;
+    }
 }
 </script>
