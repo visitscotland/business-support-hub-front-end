@@ -11,10 +11,23 @@
         :modules="pageItems"
     />
 
-    <VsBrRelatedLinks
-        v-if="otyml"
-        :module="otyml"
-    />
+    <NuxtLazyHydrate
+        :when-visible="{ rootMargin: '50px' }"
+    >
+        <VsBrRelatedLinks
+            v-if="otyml"
+            :module="otyml"
+        />
+    </NuxtLazyHydrate>
+
+    <NuxtLazyHydrate
+        :when-visible="{ rootMargin: '50px' }"
+    >
+        <VsBrNewsletterSignpost 
+            v-if="!documentData.hideNewsletter && configStore.newsletterSignpost"
+            :data="configStore.newsletterSignpost"
+        />
+    </NuxtLazyHydrate>
 </template>
 
 <script lang="ts" setup>
@@ -27,6 +40,7 @@ import VsBrHeroSectionModule from '~/components/Modules/VsBrHeroSectionModule.vu
 import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
 import VsBrModuleBuilder from '~/components/Modules/VsBrModuleBuilder.vue';
 import VsBrRelatedLinks from '~/components/Modules/VsBrRelatedLinks.vue';
+import VsBrNewsletterSignpost from '../Modules/VsBrNewsletterSignpost.vue';
 
 const props = defineProps<{
     component: Component,
@@ -55,4 +69,15 @@ if (page.value) {
         otyml.value = configStore.otyml;
     }
 }
+
+// Create list of anchor links and titles for each module, excluding nested modules.
+const tableOfContentsLinks = computed(() => {
+    return pageItems.flatMap(({ anchor, title, nested }) => {
+        if (nested) return [];
+
+        return { anchor, title };
+    });
+});
+
+provide('tableOfContents', tableOfContentsLinks);
 </script>

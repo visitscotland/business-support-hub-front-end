@@ -50,11 +50,13 @@
             >
                 <template
                     #article-sidebar
-                    v-if="section.video || section.quote || section.image"
+                    v-if="section.video || section.quote || section.image ||
+                        (index === 0 && props.includeToc)"
                 >
                     <VsBrArticleSidebar
                         :section="section"
                         alignment="right"
+                        :include-toc="index === 0 && props.includeToc ? true : false"
                     />
                 </template>
 
@@ -86,7 +88,10 @@ import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import useConfigStore from '~/stores/configStore';
 const configStore = useConfigStore();
 
-const props = defineProps<{ module: Object }>();
+const props = defineProps<{
+    module: Object,
+    includeToc: boolean,
+}>();
 const module: any = props.module;
 
 const articleSections: any[] = [];
@@ -113,5 +118,4 @@ for (let x = 0; x < module.sections.length; x++) {
 
     articleSections.push(nextSection);
 }
-
 </script>
