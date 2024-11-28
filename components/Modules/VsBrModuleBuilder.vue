@@ -64,6 +64,18 @@
             />
         </NuxtLazyHydrate>
 
+        <template
+            v-if="item.type === 'SingleImageLinksModule'"
+        >
+            <NuxtLazyHydrate
+                :when-visible="{ rootMargin: '50px' }">
+                <VsBrMegalinksSingleImageModule
+                    :module="item"
+                    :theme="item.themeValue"
+                />
+            </NuxtLazyHydrate>
+        </template>
+
         <div
             v-else-if="item.type === 'ErrorModule'"
         >
@@ -93,7 +105,10 @@ import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue'
 // import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 
+import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
+
 import themeCalculator from '~/composables/themeCalculator';
+import { VsButton, VsMegalinkMultiImage } from '@visitscotland/component-library/components';
 
 const props = defineProps<{
     modules: any[],
