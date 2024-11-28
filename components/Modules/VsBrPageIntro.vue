@@ -3,6 +3,7 @@
         :background="lightBackground ? themeCalculator(1) : themeCalculator(0)"
         :hero-intro="heroImage ? true : false"
         :is-itinerary="itinerary ? true : false"
+        :has-toc="tableOfContentsLinks ? true: false"
     >
         <template
             #vs-intro-hero
@@ -75,12 +76,23 @@
         </template>
 
         <!-- TODO - Itinerary Summary -->
+
+        <template
+            v-slot:vs-intro-table-of-contents
+            v-if="tableOfContentsLinks"
+        >
+            <VsBrLinkListModule
+                :heading="configStore.getLabel('table-contents', 'title')"
+                :links="tableOfContentsLinks"
+                toc
+            />
+        </template>
     </VsPageIntro>
 </template>
 
 <script lang="ts" setup>
 import { inject, toRefs } from 'vue';
-
+import type { TableOfContentLink } from '~/types/types';
 import { VsPageIntro, VsBlogDetails } from '@visitscotland/component-library/components';
 
 import useConfigStore from '~/stores/configStore';
@@ -91,6 +103,7 @@ import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue'
 import VsBrBreadcrumb from '~/components/Modules/VsBrBreadcrumb.vue';
 import VsBrVideoModal from '~/components/Modules/VsBrVideoModal.vue';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
+import VsBrLinkListModule from './VsBrLinkListModule.vue';
 
 const configStore = useConfigStore();
 
@@ -99,6 +112,7 @@ const page: any = inject('page');
 const props = defineProps<{
     content: any,
     lightBackground: boolean,
+    tableOfContentsLinks?: TableOfContentLink[] | undefined,
     heroImage?: any,
     itinerary?: any,
     blog?: any,
