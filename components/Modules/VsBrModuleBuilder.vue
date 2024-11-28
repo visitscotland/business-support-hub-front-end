@@ -111,36 +111,56 @@ const { modules } = props;
 
 const page: Page | undefined = inject('page');
 
-const themeCount = 3;
-let currentMegaLinkSection = -1;
+// const themeCount = 3;
+// let currentMegaLinkSection = -1;
 const hippoContent : any = {
 };
 
 // Article layouts that use the Styled list module.
 const styledListLayouts = ['bullet-list', 'horizontal-list', 'numbered-list', 'visual-list'];
 
+const themes = ['light', 'grey'];
+const currentTheme = ref(themes[0]);
+
 if (modules) {
     for (let x = 0; x < modules.length; x++) {
-        let newThemeIndex = 1;
-
-        if (
-            modules[x].type === 'ListLinksModule'
-            || modules[x].type === 'MultiImageLinksModule'
-            || modules[x].type === 'SingleImageLinksModule'
-        ) {
-            if (modules[x].title || currentMegaLinkSection === -1) {
-                currentMegaLinkSection += 1;
-            }
-
-            newThemeIndex = currentMegaLinkSection % themeCount;
+        if (x === 0) {
+            modules[x].themeIndex = 0;
+            modules[x].themeValue = themes[0];
+            currentTheme.value = themes[0];
+        } else if (modules[x].nested) {
+            modules[x].themeValue = currentTheme.value;
+        } else {
+            modules[x].themeValue = currentTheme.value === themes[0] ? themes[1] : themes[0];
+            currentTheme.value = modules[x].theme;
         }
-
-        modules[x].themeIndex = newThemeIndex;
-        modules[x].themeValue = themeCalculator(newThemeIndex, modules[x]);
 
         if (modules[x].hippoBean && page) {
             hippoContent[x] = page.getContent(modules[x].hippoBean);
         }
     }
 }
+
+// if (modules) {
+//     for (let x = 0; x < modules.length; x++) {
+//         let newThemeIndex = 1;
+
+//         if (
+//             modules[x].type === 'ListLinksModule'
+//             || modules[x].type === 'MultiImageLinksModule'
+//             || modules[x].type === 'SingleImageLinksModule'
+//         ) {
+//             if (modules[x].title || currentMegaLinkSection === -1) {
+//                 currentMegaLinkSection += 1;
+//             }
+
+//             newThemeIndex = currentMegaLinkSection % themeCount;
+//         }
+
+//         modules[x].themeIndex = newThemeIndex;
+//         modules[x].themeValue = themeCalculator(newThemeIndex, modules[x]);
+
+        
+//     }
+// }
 </script>
