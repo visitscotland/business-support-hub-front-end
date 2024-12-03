@@ -20,6 +20,7 @@
                     <VsHeading
                         :level="nested ? '3' : '2'"
                         heading-style="heading-xl"
+                        :id="anchor"
                     >
                         {{ title }}
                     </VsHeading>    
@@ -54,6 +55,7 @@ const props = defineProps<{
 }>();
 
 const {
+    anchor,
     copy,
     cta,
     image,
