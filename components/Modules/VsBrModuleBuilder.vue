@@ -17,7 +17,7 @@
             <NuxtLazyHydrate
                 :when-visible="{ rootMargin: '50px' }"
             >
-                <VsBrListLinksModule
+                <VsBrMegalinksLinkListModule
                     v-if="hippoContent[index].model.data.layout === 'List'"
                     :module="item"
                     :theme="item.themeValue"
@@ -71,6 +71,15 @@
                 :module="item"
            />
         </NuxtLazyHydrate>
+        
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'FormModule'"
+        >
+            <VsBrForm
+                :module="item"
+            />
+        </NuxtLazyHydrate>
 
         <div
             v-else-if="item.type === 'ErrorModule'"
@@ -93,12 +102,12 @@ import { inject } from 'vue';
 import type { Page } from '@bloomreach/spa-sdk';
 import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
-import VsBrListLinksModule from '~/components/Modules/VsBrListLinksModule.vue';
+import VsBrMegalinksLinkListModule from '~/components/Modules/VsBrMegalinksLinkListModule.vue'
 import VsBrHorizontalLinksModule from '~/components/Modules/VsBrHorizontalLinksModule.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
 import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
-// import VsBrForm from '~/components/Modules/VsBrForm.vue';
+import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
 
