@@ -1,5 +1,5 @@
 <template>
-    <VsModuleWrapper>
+    <VsModuleWrapper :theme="themeValue">
         <VsContainer>
             <VsRow>
                 <VsCol
@@ -59,6 +59,7 @@ const {
     copy,
     cta,
     image,
+    themeValue,
     nested,
     title,
 } = props.module;
