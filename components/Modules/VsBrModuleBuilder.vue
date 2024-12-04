@@ -71,7 +71,7 @@
                 :module="item"
            />
         </NuxtLazyHydrate>
-
+        
         <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'FormModule'"
