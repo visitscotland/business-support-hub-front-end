@@ -17,7 +17,7 @@
             <NuxtLazyHydrate
                 :when-visible="{ rootMargin: '50px' }"
             >
-                <VsBrListLinksModule
+                <VsBrMegalinksLinkListModule
                     v-if="hippoContent[index].model.data.layout === 'List'"
                     :module="item"
                     :theme="item.themeValue"
@@ -72,6 +72,15 @@
            />
         </NuxtLazyHydrate>
 
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'FormModule'"
+        >
+            <VsBrForm
+                :module="item"
+            />
+        </NuxtLazyHydrate>
+
         <div
             v-else-if="item.type === 'ErrorModule'"
         >
@@ -93,16 +102,14 @@ import { inject } from 'vue';
 import type { Page } from '@bloomreach/spa-sdk';
 import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
-import VsBrListLinksModule from '~/components/Modules/VsBrListLinksModule.vue';
+import VsBrMegalinksLinkListModule from '~/components/Modules/VsBrMegalinksLinkListModule.vue'
 import VsBrHorizontalLinksModule from '~/components/Modules/VsBrHorizontalLinksModule.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
 import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
-// import VsBrForm from '~/components/Modules/VsBrForm.vue';
+import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
-
-import themeCalculator from '~/composables/themeCalculator';
 
 const props = defineProps<{
     modules: any[],
@@ -112,32 +119,31 @@ const { modules } = props;
 
 const page: Page | undefined = inject('page');
 
-const themeCount = 3;
-let currentMegaLinkSection = -1;
 const hippoContent : any = {
 };
 
 // Article layouts that use the Styled list module.
 const styledListLayouts = ['bullet-list', 'horizontal-list', 'numbered-list', 'visual-list'];
 
+const themes = ['light', 'grey'];
+const currentTheme = ref(themes[0]);
+
+// Set the background colour (theme) for each module.
 if (modules) {
     for (let x = 0; x < modules.length; x++) {
-        let newThemeIndex = 1;
 
-        if (
-            modules[x].type === 'ListLinksModule'
-            || modules[x].type === 'MultiImageLinksModule'
-            || modules[x].type === 'SingleImageLinksModule'
-        ) {
-            if (modules[x].title || currentMegaLinkSection === -1) {
-                currentMegaLinkSection += 1;
-            }
-
-            newThemeIndex = currentMegaLinkSection % themeCount;
+        // The first module will always be light.
+        if (x === 0) {
+            modules[x].themeIndex = 0;
+            modules[x].themeValue = themes[0];
+            currentTheme.value = themes[0];
+        // If the module is nested then use the previous module's theme.
+        } else if (modules[x].nested) {
+            modules[x].themeValue = currentTheme.value;
+        } else {
+            modules[x].themeValue = currentTheme.value === themes[0] ? themes[1] : themes[0];
+            currentTheme.value = modules[x].theme;
         }
-
-        modules[x].themeIndex = newThemeIndex;
-        modules[x].themeValue = themeCalculator(newThemeIndex, modules[x]);
 
         if (modules[x].hippoBean && page) {
             hippoContent[x] = page.getContent(modules[x].hippoBean);

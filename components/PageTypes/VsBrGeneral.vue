@@ -1,27 +1,35 @@
 <template>
-
     <VsBrHeroSectionModule :content="documentData" />
-
     <VsBrPageIntro
         :content="documentData"
         :light-background="true"
+        :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
     />
 
     <VsBrModuleBuilder
         v-if="pageItems"
         :modules="pageItems"
     />
+
+    <NuxtLazyHydrate
+        :when-visible="{ rootMargin: '50px' }"
+    >
+        <VsBrNewsletterSignpost 
+            v-if="!documentData.hideNewsletter && configStore.newsletterSignpost"
+            :data="configStore.newsletterSignpost"
+        />
+    </NuxtLazyHydrate>
 </template>
 
 <script lang="ts" setup>
 import { toRefs } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
-
+import type { TableOfContentLink } from '~/types/types';
 import useConfigStore from '~/stores/configStore';
-
 import VsBrHeroSectionModule from '~/components/Modules/VsBrHeroSectionModule.vue';
 import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
 import VsBrModuleBuilder from '~/components/Modules/VsBrModuleBuilder.vue';
+import VsBrNewsletterSignpost from '../Modules/VsBrNewsletterSignpost.vue';
 
 const props = defineProps<{
     component: Component,
@@ -43,4 +51,13 @@ if (page.value) {
     documentData = document.getData();
     pageItems = configStore.pageItems;
 }
+
+// Create list of anchor links and titles for each module, excluding nested modules.
+const tableOfContentsLinks= computed((): TableOfContentLink[] => {
+    return pageItems.flatMap(({ anchor, title, nested }: { anchor: string, title: string, nested: boolean }) => {
+        if (nested) return [];
+
+        return { anchor, title };
+    });
+});
 </script>

@@ -1,5 +1,8 @@
 <template>
-    <VsModuleWrapper business-support>
+    <VsModuleWrapper
+        business-support
+        :theme="module.themeValue"
+    >
         <VsArticle
             :title="module.title"
             :anchor-link="module.anchor ? formatLink(module.anchor) : ''"
@@ -50,7 +53,7 @@
             >
                 <template
                     #article-sidebar
-                    v-if="section.video || section.quote || section.image"
+                     v-if="section.video || section.quote || section.image"
                 >
                     <VsBrArticleSidebar
                         :section="section"
@@ -58,9 +61,7 @@
                     />
                 </template>
 
-                <template
-                    v-if="section.copy"
-                >
+                <template v-if="section.copy">
                     <VsBrRichText :input-content="section.copy.value" />
                 </template>
             </VsArticleSection>
@@ -86,7 +87,9 @@ import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import useConfigStore from '~/stores/configStore';
 const configStore = useConfigStore();
 
-const props = defineProps<{ module: Object }>();
+const props = defineProps<{
+    module: Object,
+}>();
 const module: any = props.module;
 
 const articleSections: any[] = [];
@@ -113,5 +116,4 @@ for (let x = 0; x < module.sections.length; x++) {
 
     articleSections.push(nextSection);
 }
-
 </script>
