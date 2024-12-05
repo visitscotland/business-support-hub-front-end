@@ -1,6 +1,7 @@
 <template>
     <VsModuleWrapper
         business-support
+        class="py-0"
         :theme="module.themeValue"
     >
         <VsArticle
