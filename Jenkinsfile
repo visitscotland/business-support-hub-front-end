@@ -21,6 +21,7 @@ if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?feature-(business)?support.
 } else if (BRANCH_NAME ==~ "ops/(feature-environment(s)?-enhancements|pipeline-updates)" && (JOB_NAME ==~ "([^/]*/)?feature(-(businessevents|(business)?support))?.visitscotland.(com|org)(-mb)?(-frontend)?/ops%(25)?2F(feature-environment(s)?-enhancements|pipeline-updates)")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3039"
+    env.VS_CONTAINER_PRESERVE = "FALSE"
 } else {
     echo "=== No conditional environment variables found for branch $BRANCH_NAME in job $JOB_NAME, using defaults"
 }
@@ -71,8 +72,8 @@ pipeline {
     agent {label thisAgent}
 
     environment {
-            //GITHUB_PAT_JENKINS_CI = credentials('github-pat-jenkins-ci')
-	    GITHUB_PAT_JENKINS_CI = "not-in-use"
+		//GITHUB_PAT_JENKINS_CI = credentials('github-pat-jenkins-ci')
+		GITHUB_PAT_JENKINS_CI = "not-in-use"
     }
 
     stages {
@@ -121,9 +122,9 @@ pipeline {
         stage ('SCM checkout') {
             agent {
                 docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
+                    image 'vs/vs-brxm15-builder:node18'
+                    label thisAgent
+                    reuseNode true
                 }
             }
             steps {
@@ -146,9 +147,9 @@ pipeline {
         stage ('Install Dependencies') {
             agent {
                 docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
+                	image 'vs/vs-brxm15-builder:node18'
+                	label thisAgent
+                	reuseNode true
                 }
             }
             steps {
@@ -166,9 +167,9 @@ pipeline {
         stage ('Run Tests') {
             agent {
                 docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
+                    image 'vs/vs-brxm15-builder:node18'
+                    label thisAgent
+                    reuseNode true
                 }
             }
             steps {
@@ -188,9 +189,9 @@ pipeline {
         stage ('NPM Build') {
             agent {
                 docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
+                    image 'vs/vs-brxm15-builder:node18'
+                    label thisAgent
+                    reuseNode true
                 }
             }
             steps {
