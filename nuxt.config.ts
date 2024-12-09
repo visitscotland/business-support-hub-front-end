@@ -22,9 +22,6 @@ export default defineNuxtConfig({
             COMP_LIBRARY_VERSION: clVersion,
         },
     },
-    header: {
-        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.svg' }]
-    },
     vite: {
         resolve: {
             preserveSymlinks: true,
