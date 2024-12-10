@@ -1,5 +1,8 @@
 <template>
-    <VsModuleWrapper :theme="themeValue">
+    <VsModuleWrapper
+        :class="nested ? 'pt-0': null"    
+        :theme="themeValue"
+    >
         <VsContainer>
             <VsRow>
                 <VsCol
