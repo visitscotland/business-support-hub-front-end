@@ -1,7 +1,7 @@
 <template>
     <VsModuleWrapper
         business-support
-        class="py-0"
+        :class="module.nested ? 'py-0 mt-n500' : 'py-0'"
         :theme="module.themeValue"
     >
         <VsArticle
