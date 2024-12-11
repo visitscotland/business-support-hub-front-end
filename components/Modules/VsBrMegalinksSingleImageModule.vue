@@ -39,7 +39,7 @@
                     #vs-single-image-content
                     v-if="module.innerIntroduction"
                 >
-                    <VsBrRichText :input-content="module.introduction.value" />
+                    <VsBrRichText :input-content="module.innerIntroduction.value" />
                 </template>
 
                 <template

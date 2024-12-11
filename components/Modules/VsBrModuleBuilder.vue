@@ -67,9 +67,9 @@
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'SignpostModule'"
         >
-           <VsBrCtaBannerModule 
+            <VsBrCtaBannerModule 
                 :module="item"
-           />
+            />
         </NuxtLazyHydrate>
         
         <NuxtLazyHydrate
@@ -78,6 +78,16 @@
         >
             <VsBrForm
                 :module="item"
+            />
+        </NuxtLazyHydrate>
+
+        <NuxtLazyHydrate
+            v-if="item.type === 'SingleImageLinksModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrMegalinksSingleImageModule
+                :module="item"
+                :theme="item.themeValue"
             />
         </NuxtLazyHydrate>
 
@@ -109,6 +119,7 @@ import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
+import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
 
 const props = defineProps<{
