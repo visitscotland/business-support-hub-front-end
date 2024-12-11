@@ -3,7 +3,7 @@
         v-bind="$attrs"
         v-if="imageValue"
         :src="imageValue.getOriginal().getUrl()"
-        :alt="imageValue.altText"
+        :alt="imageValue.altText || ''"
     >
 </template>
 

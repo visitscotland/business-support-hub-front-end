@@ -2,7 +2,9 @@
     <VsModuleWrapper
         :anchor-id="anchor || null"
         business-support
+        :class="nested ? 'pt-0': null"
         :heading-level="nested ? 3 : 2"
+        :theme="themeValue"
     >
         <template #vs-module-wrapper-heading>
             {{ title }}
@@ -48,7 +50,7 @@ const {
     anchor,
     nested,
     sections,
-    theme,
+    themeValue,
     title,
 } = props.module;
 </script>

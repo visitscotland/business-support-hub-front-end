@@ -2093,9 +2093,9 @@
     resolve-from "^5.0.0"
 
 "@visitscotland/component-library@^4.2.2":
-  version "4.3.8"
-  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-4.3.8.tgz#726335fa7146393f525e4e0ca053ecb3e97a07f4"
-  integrity sha512-OYOjWeJYMRD9B/LR4/58YilpM+3d3hdxJqiibfTcM0ca7/07FV1XCF4h0END85J+nLxbeWCKXcnvBvuCzQzDtQ==
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-4.2.2.tgz#6bc7b8c7c876dba8064e160932b2fec430495189"
+  integrity sha512-DAZMxTnDY+ur1Gv+RLkwAG4ir5E2ImT2c+/pwp3UvXQKR1zC3waeK5L0yP2HWEZNK9DsC12Piz6pj+ypNh8E1A==
   dependencies:
     "@mapbox/geojson-extent" "^1.0.1"
     "@pinia/testing" "^0.1.3"
