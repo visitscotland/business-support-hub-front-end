@@ -81,17 +81,14 @@
             />
         </NuxtLazyHydrate>
 
-        <template
+        <NuxtLazyHydrate
             v-if="item.type === 'SingleImageLinksModule'"
-        >
-            <NuxtLazyHydrate
                 :when-visible="{ rootMargin: '50px' }">
                 <VsBrMegalinksSingleImageModule
                     :module="item"
                     :theme="item.themeValue"
                 />
             </NuxtLazyHydrate>
-        </template>
 
         <div
             v-else-if="item.type === 'ErrorModule'"
