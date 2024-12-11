@@ -83,12 +83,13 @@
 
         <NuxtLazyHydrate
             v-if="item.type === 'SingleImageLinksModule'"
-                :when-visible="{ rootMargin: '50px' }">
-                <VsBrMegalinksSingleImageModule
-                    :module="item"
-                    :theme="item.themeValue"
-                />
-            </NuxtLazyHydrate>
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrMegalinksSingleImageModule
+                :module="item"
+                :theme="item.themeValue"
+            />
+        </NuxtLazyHydrate>
 
         <div
             v-else-if="item.type === 'ErrorModule'"
@@ -118,7 +119,6 @@ import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
-
 import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
 
