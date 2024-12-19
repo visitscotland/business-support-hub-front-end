@@ -82,6 +82,7 @@ if (page.value) {
 
     configStore.pageMetaData = componentModels.metadata;
 
+    configStore.activeSite = componentModels['site-id'];
     configStore.productSearch = componentModels.psrWidget;
     if (componentModels.otyml) {
         configStore.otyml = componentModels.otyml;
