@@ -1,5 +1,6 @@
 <template>
     <!-- TODO - error-message, itinerary, themes -->
+    <pre>{{module}}</pre>
     <VsMegalinks
         :title="module.title"
         variant="link-list"
@@ -15,13 +16,14 @@
             <VsBrRichText :input-content="module.introduction.value" />
         </template>
 
-        <VsRow>
+        <VsRow><pre>{{ isHomePage }}</pre>
             <VsCol
                 v-for="(link, index) in links"
                 :key="index"
                 cols="12"
                 md="6"
             >
+            
                 <VsMegalinkLinkList
                     :img-src="link.image ? link.image : ''"
                     :theme="theme"
@@ -43,7 +45,9 @@
                         v-if="module.teaserVisible"
                     >
                         <p>{{ link.teaser }}</p>
+                        <pre>{{ link.type }}</pre>
                     </template>
+                    
                 </VsMegalinkLinkList>
 
                 <VsBrVideoModal
@@ -86,7 +90,10 @@ const module: any = props.module;
 const theme: string = props.theme;
 
 const page: Page | undefined = inject('page');
+const route = useRoute();
 const links: any[] = [];
+
+const isHomePage = computed(() => route.path === '/');
 
 if (page && module.links) {
     for (let x = 0; x < module.links.length; x++) {
@@ -107,6 +114,21 @@ if (page && module.links) {
     }
 }
 
+const badges = computed(() => {
+
+    let toReturn = [];
+
+    if(module.links.category != null){
+        toReturn.push(module.links.category)
+    }
+
+    if(module.links.type != null){
+        toReturn.push(module.links.type)
+    }
+
+
+    return toReturn
+})
 </script>
 
 <style>
@@ -115,4 +137,5 @@ if (page && module.links) {
             display: block;
         }
     }
+    
 </style>
