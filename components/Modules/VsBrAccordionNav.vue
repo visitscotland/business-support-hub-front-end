@@ -2,10 +2,10 @@
     <VsAccordion>
         <template
             v-for="(menuItem, index) in links"
-                :key="index"
+            :key="index"
         >
             <VsMegaNavAccordionItem
-                v-if="index === 0"
+                v-if="menuItem.children && menuItem.children.length"
                 :title="menuItem.model.title"
                 level="1"
                 :control-id="index"
