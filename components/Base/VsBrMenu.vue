@@ -20,33 +20,15 @@
                 :is-static="true"
             >
                 <template #mega-nav-top-menu-items>
-                    <template
-                        v-for="(menuItem, index) in menuItems"
-                        :key="index"
-                    >
-                        <VsMegaNavStaticLink
-                            :href="`/${menuItem.getUrl() ? menuItem.getUrl() : menuItem.model.name}`"
-                        >
-                            {{ menuItem.model.title }}
-                        </VsMegaNavStaticLink>
-                    </template>
+                    <VsBrMegaNav
+                        :links="menuItems"
+                    />
                 </template>
 
                 <template #mega-nav-accordion-items>
-                    <VsAccordion>
-                        <template
-                            v-for="(menuItem, index) in menuItems"
-                            :key="index"
-                        >
-                            <VsMegaNavStaticLink
-                                class="vs-mega-nav-mobile"
-                                :href="menuItem.getUrl() ? menuItem.getUrl() : menuItem.model.name"
-                                :is-full-width="true"
-                            >
-                                {{ menuItem.model.title }}
-                            </VsMegaNavStaticLink>
-                        </template>
-                    </VsAccordion>
+                    <VsBrAccordionNav
+                        :links="menuItems"
+                    />
                 </template>
             </VsMeganav>
         </header>
@@ -65,9 +47,10 @@ import VsBrSkipTo from '~/components/Base/VsBrSkipTo.vue';
 import {
     VsGlobalMenu,
     VsMeganav,
-    VsMegaNavStaticLink,
-    VsAccordion,
 } from '@visitscotland/component-library/components';
+
+import VsBrMegaNav from '~/components/Modules/VsBrMegaNav.vue';
+import VsBrAccordionNav from '~/components/Modules/VsBrAccordionNav.vue';
 
 const props = defineProps<{ component: Component, page: Page }>();
 
