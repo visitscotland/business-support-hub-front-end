@@ -22,7 +22,7 @@
                         <VsMegaNavListItem
                             v-for="(gChildItem, gChildIndex) in childItem.children"
                             :key="gChildIndex"
-                            v-show="gChildItem.title"
+                            v-show="gChildItem.model.title"
                             :href="`${gChildItem.getUrl() ? gChildItem.getUrl() : gChildItem.model.name}`"
                         >
                             {{ gChildItem.model.title }}
