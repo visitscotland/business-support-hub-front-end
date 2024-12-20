@@ -5,7 +5,7 @@
     >
         <VsMegaNavDropdownContainer
             v-if="menuItem.children && menuItem.children.length"
-            :href="`/${menuItem.getUrl() ? menuItem.getUrl() : menuItem.model.name}`"
+            :href="`${menuItem.getUrl() ? menuItem.getUrl() : menuItem.model.name}`"
             :cta-text="menuItem.model.cta ? menuItem.model.cta : ''"
         >
             <template #button-content>
@@ -23,7 +23,7 @@
                             v-for="(gChildItem, gChildIndex) in childItem.children"
                             :key="gChildIndex"
                             v-show="gChildItem.title"
-                            :href="`/${gChildItem.getUrl() ? gChildItem.getUrl() : gChildItem.model.name}`"
+                            :href="`${gChildItem.getUrl() ? gChildItem.getUrl() : gChildItem.model.name}`"
                         >
                             {{ gChildItem.model.title }}
                         </VsMegaNavListItem>
@@ -34,7 +34,7 @@
                         v-if="childItem.model.cta"
                     >
                         <VsMegaNavListItem
-                            :href="`/${childItem.getUrl() ? childItem.getUrl() : childItem.model.name}`"
+                            :href="`${childItem.getUrl() ? childItem.getUrl() : childItem.model.name}`"
                             subheading-link
                         >
                             {{ childItem.model.cta }}
@@ -74,7 +74,7 @@
 
         <VsMegaNavStaticLink
             v-else
-            :href="`/${menuItem.getUrl() ? menuItem.getUrl() : menuItem.model.name}`"
+            :href="`${menuItem.getUrl() ? menuItem.getUrl() : menuItem.model.name}`"
         >
             {{ menuItem.model.title }}
         </VsMegaNavStaticLink>
