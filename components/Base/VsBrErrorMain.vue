@@ -97,7 +97,7 @@ if (page.value) {
             },
             {
                 rel: 'icon',
-                href: '/icons/favicon.svg',
+                href: '/favicon.svg',
                 type: 'image/svg+xml',
             },
             {
