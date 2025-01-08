@@ -1,14 +1,14 @@
 <template>
     <VsModuleWrapper>
         <template #vs-module-wrapper-heading>
-            {{ module.title }}
+            {{ title }}
         </template>
         <VsContainer>
             <VsRow>
                 <VsCol
                     cols="12"
                     md="3"
-                    v-for="link in props.module.links"
+                    v-for="link in links"
                 >
                     <VsStretchedLinkCard
                         :link="formatLink(link.link)"
@@ -24,7 +24,7 @@
                         </template>
 
                         <template
-                            v-if="link.readTime || link.contentType"
+                            v-if="link.readTime || link.contentType || link.type === 'EXTERNAL'"
                             v-slot:stretched-card-badges
                         >
                             <VsBadge v-if="link.readTime">
@@ -33,6 +33,11 @@
 
                             <VsBadge v-if="link.contentType">
                                 {{ link.contentType }}
+                            </VsBadge>
+
+                            <VsBadge v-if="link.type === 'EXTERNAL'">
+                                <!-- TODO: Add label -->
+                                Partner website
                             </VsBadge>
                         </template>
                     </VsStretchedLinkCard>
@@ -55,4 +60,9 @@ import {
 const props = defineProps<{
     module: any,
 }>();
+
+const {
+    title,
+    links,
+} = props.module;
 </script>
