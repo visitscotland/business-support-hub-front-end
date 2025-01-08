@@ -9,6 +9,14 @@
         <template #vs-module-wrapper-heading>
             {{ title }}
         </template>
+
+        <template
+            #vs-module-wrapper-intro
+            v-if="introduction.value"
+        >
+            <VsBrRichText :input-content="introduction.value" />
+        </template>
+
         <VsContainer>
             <VsAccordion>
                 <VsAccordionItem
@@ -48,6 +56,7 @@ const props = defineProps<{
 
 const {
     anchor,
+    introduction,
     nested,
     sections,
     themeValue,
