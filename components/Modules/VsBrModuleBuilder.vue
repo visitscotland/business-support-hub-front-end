@@ -91,6 +91,16 @@
             />
         </NuxtLazyHydrate>
 
+        <NuxtLazyHydrate
+            v-if="item.type === 'SimpleDevModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrDevModule
+                :module="hippoContent[index].model.data"
+                :theme="item.themeValue"
+            />
+        </NuxtLazyHydrate>
+
         <div
             v-else-if="item.type === 'ErrorModule'"
         >
