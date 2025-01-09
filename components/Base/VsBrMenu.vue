@@ -11,12 +11,12 @@
             <VsMeganav
                 href="/"
                 :menu-toggle-alt-text="configStore.getLabel('navigation.static', 'meganav-toggle-btn-alt-text')"
-                search-button-text=""
-                search-label-text=""
-                search-clear-button-text=""
-                search-close-button-text=""
+                search-button-text="Search"
+                search-label-text="What are you looking for?"
+                search-clear-button-text="Clear"
+                search-close-button-text="Close"
                 :logo-alt-text="configStore.getLabel('navigation.static', 'meganav.logo-alt-text')"
-                :no-search="true"
+                :no-search="false"
                 :is-static="true"
             >
                 <template #mega-nav-top-menu-items>
