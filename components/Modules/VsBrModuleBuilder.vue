@@ -65,10 +65,29 @@
 
         <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'SignpostModule'"
+        >
+            <VsBrCtaBannerModule 
+                :module="item"
+            />
+        </NuxtLazyHydrate>
+        
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'FormModule'"
         >
             <VsBrForm
                 :module="item"
+            />
+        </NuxtLazyHydrate>
+
+        <NuxtLazyHydrate
+            v-if="item.type === 'SingleImageLinksModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrMegalinksSingleImageModule
+                :module="item"
+                :theme="item.themeValue"
             />
         </NuxtLazyHydrate>
 
@@ -100,8 +119,8 @@ import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
-
-import themeCalculator from '~/composables/themeCalculator';
+import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
+import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
 
 const props = defineProps<{
     modules: any[],
@@ -124,18 +143,23 @@ const currentTheme = ref(themes[0]);
 if (modules) {
     for (let x = 0; x < modules.length; x++) {
 
-        // The first module will always be light.
+        // Set the default theme value to the opposite of the previous value.
+        let themeValue = currentTheme.value === themes[0] ? themes[1] : themes[0];
+        
+        // Set the first module to be light.
         if (x === 0) {
-            modules[x].themeIndex = 0;
-            modules[x].themeValue = themes[0];
-            currentTheme.value = themes[0];
+            themeValue = themes[0];
         // If the module is nested then use the previous module's theme.
         } else if (modules[x].nested) {
-            modules[x].themeValue = currentTheme.value;
-        } else {
-            modules[x].themeValue = currentTheme.value === themes[0] ? themes[1] : themes[0];
-            currentTheme.value = modules[x].theme;
+            themeValue = currentTheme.value;
         }
+        
+        // Add the theme properties to the module object.
+        modules[x].themeValue = themeValue;
+        modules[x].themeIndex = themeValue === themes[0] ? 0 : 1;
+        
+        // Update the current theme.
+        currentTheme.value = themeValue;
 
         if (modules[x].hippoBean && page) {
             hippoContent[x] = page.getContent(modules[x].hippoBean);
