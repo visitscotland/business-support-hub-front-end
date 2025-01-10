@@ -146,6 +146,10 @@ if (page.value) {
                 name: 'cludo:skill',
                 content: document.model.data.skill, 
             },
+            {
+                name: 'cludo:topic',
+                content: document.model.data.topic, 
+            },
         ],
         htmlAttrs: {
             lang: langString,
