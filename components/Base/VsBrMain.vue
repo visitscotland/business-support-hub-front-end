@@ -150,6 +150,10 @@ if (page.value) {
                 name: 'cludo:topic',
                 content: document.model.data.topic, 
             },
+            {
+                name: 'cludo:sectors',
+                content: document.model.data.sectors, 
+            },
         ],
         htmlAttrs: {
             lang: langString,
