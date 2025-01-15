@@ -140,19 +140,19 @@ if (page.value) {
             },
             {
                 name: 'cludo:type',
-                content: document.model.data.type, 
+                content: document.model.data.type.value, 
             },
             {
                 name: 'cludo:skill',
-                content: document.model.data.skill, 
+                content: document.model.data.skill.value, 
             },
             {
                 name: 'cludo:topic',
-                content: document.model.data.topic, 
+                content: document.model.data.topic.value, 
             },
             {
                 name: 'cludo:sectors',
-                content: document.model.data.sectors, 
+                content: document.model.data.sectors.value, 
             },
         ],
         htmlAttrs: {
