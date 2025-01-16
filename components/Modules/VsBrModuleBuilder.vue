@@ -142,7 +142,6 @@ import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
 import VsBrMegalinksMultiImageModule from './VsBrMegalinksMultiImageModule.vue';
-import { NuxtLazyHydrate } from '#build/components';
 
 const props = defineProps<{
     modules: any[],
