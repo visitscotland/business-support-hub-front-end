@@ -33,7 +33,7 @@
                         : ''
                     "
                     :video-btn-text="configStore.getLabel('video', 'video.play-btn')"
-                    business-support="true"
+                    business-support
                     :is-home-page="isHomePage"
                 >
                     <template #vs-link-list-heading>
