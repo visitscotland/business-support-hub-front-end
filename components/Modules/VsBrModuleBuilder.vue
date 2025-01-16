@@ -91,16 +91,6 @@
             />
         </NuxtLazyHydrate>
 
-        <!-- <NuxtLazyHydrate
-            v-if="item.type === 'SingleImageLinksModule'"
-            :when-visible="{ rootMargin: '50px' }"
-        >
-            <VsBrMegalinksLinkListModule
-                :module="item"
-                :theme="item.themeValue"
-            />
-        </NuxtLazyHydrate> -->
-
         <NuxtLazyHydrate
             v-if="item.type === 'SimpleDevModule'"
             :when-visible="{ rootMargin: '50px' }"

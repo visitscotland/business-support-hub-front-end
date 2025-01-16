@@ -1,6 +1,5 @@
 <template>
     <!-- TODO - error-message, itinerary, themes -->
-    <pre>{{module}}</pre>
     <VsMegalinks
         :title="module.title"
         variant="link-list"
@@ -16,14 +15,13 @@
             <VsBrRichText :input-content="module.introduction.value" />
         </template>
 
-        <VsRow><pre>{{ isHomePage }}</pre>
+        <VsRow>
             <VsCol
                 v-for="(link, index) in links"
                 :key="index"
                 cols="12"
                 md="6"
             >
-            
                 <VsMegalinkLinkList
                     :img-src="link.image ? link.image : ''"
                     :theme="theme"
@@ -35,6 +33,9 @@
                         : ''
                     "
                     :video-btn-text="configStore.getLabel('video', 'video.play-btn')"
+                    business-support="true"
+                    :is-home-page="isHomePage"
+                    :badges="link.badges"
                 >
                     <template #vs-link-list-heading>
                         {{ link.label }}
@@ -45,7 +46,18 @@
                         v-if="module.teaserVisible"
                     >
                         <p>{{ link.teaser }}</p>
-                        <pre>{{ link.type }}</pre>
+                    </template>
+
+                    <template
+                        #vs-link-list-badges
+                    >
+                        <VsBadge 
+                            v-for="(badge, badgeIndex) in link.badges"
+                            :key="badgeIndex"
+                            class="text-capitalize"
+                        >
+                            {{ badge }}
+                        </VsBadge>
                     </template>
                     
                 </VsMegalinkLinkList>
@@ -69,13 +81,14 @@
 /* eslint-disable import/no-import-module-exports */
 import { inject } from 'vue';
 
-import type { Page } from '@bloomreach/spa-sdk';
+import { TYPE_LINK_EXTERNAL, type Page } from '@bloomreach/spa-sdk';
 
 import {
     VsMegalinks,
     VsMegalinkLinkList,
     VsRow,
     VsCol,
+    VsBadge,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
@@ -103,6 +116,26 @@ if (page && module.links) {
             ? page.getContent(nextLink.image.cmsImage.$ref)
             : page.getContent(nextLink.image.externalImage.$ref);
 
+        console.log(nextLink);
+
+        let badgesArray: Array<string> = [];
+
+        if(nextLink.type === "EXTERNAL") {
+            badgesArray.push('External website');
+        }
+
+        if(nextLink.readTime) {
+            badgesArray.push(nextLink.readTime)
+        }
+
+        if(nextLink.contentType) {
+            badgesArray.push(nextLink.contentType);
+        }
+
+        if(nextLink.type === 'VIDEO') {
+            //add video badge
+        }
+
         links.push({
             image: image?.getOriginal().getUrl(),
             type: nextLink.type.toLowerCase(),
@@ -110,25 +143,10 @@ if (page && module.links) {
             'error-message': '',
             label: nextLink.label,
             teaser: nextLink.teaser,
+            badges: badgesArray,
         });
     }
 }
-
-const badges = computed(() => {
-
-    let toReturn = [];
-
-    if(module.links.category != null){
-        toReturn.push(module.links.category)
-    }
-
-    if(module.links.type != null){
-        toReturn.push(module.links.type)
-    }
-
-
-    return toReturn
-})
 </script>
 
 <style>
