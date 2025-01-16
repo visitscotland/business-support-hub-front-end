@@ -101,6 +101,16 @@
             />
         </NuxtLazyHydrate>
 
+        <NuxtLazyHydrate
+            v-if="item.type === 'SimpleDevModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrDevModule
+                :module="hippoContent[index].model.data"
+                :theme="item.themeValue"
+            />
+        </NuxtLazyHydrate>
+
         <div
             v-else-if="item.type === 'ErrorModule'"
         >
@@ -132,6 +142,7 @@ import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
 import VsBrMegalinksMultiImageModule from './VsBrMegalinksMultiImageModule.vue';
+import { NuxtLazyHydrate } from '#build/components';
 
 const props = defineProps<{
     modules: any[],

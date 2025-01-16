@@ -138,6 +138,22 @@ if (page.value) {
                 name: 'robots',
                 content: document.model.data.noIndex ? 'noindex': '', 
             },
+            {
+                name: 'cludo:type',
+                content: document.model.data.type, 
+            },
+            {
+                name: 'cludo:skill',
+                content: document.model.data.skill, 
+            },
+            {
+                name: 'cludo:topic',
+                content: document.model.data.topic, 
+            },
+            {
+                name: 'cludo:sectors',
+                content: document.model.data.sectors, 
+            },
         ],
         htmlAttrs: {
             lang: langString,
