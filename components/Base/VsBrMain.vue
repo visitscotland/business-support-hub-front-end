@@ -82,6 +82,7 @@ if (page.value) {
 
     configStore.pageMetaData = componentModels.metadata;
 
+    configStore.activeSite = componentModels['site-id'];
     configStore.productSearch = componentModels.psrWidget;
     if (componentModels.otyml) {
         configStore.otyml = componentModels.otyml;
@@ -137,6 +138,22 @@ if (page.value) {
                 name: 'robots',
                 content: document.model.data.noIndex ? 'noindex': '', 
             },
+            {
+                name: 'cludo:type',
+                content: document.model.data.type, 
+            },
+            {
+                name: 'cludo:skill',
+                content: document.model.data.skill, 
+            },
+            {
+                name: 'cludo:topic',
+                content: document.model.data.topic, 
+            },
+            {
+                name: 'cludo:sectors',
+                content: document.model.data.sectors, 
+            },
         ],
         htmlAttrs: {
             lang: langString,
@@ -151,7 +168,7 @@ if (page.value) {
             },
             {
                 rel: 'icon',
-                href: '/icons/favicon.svg',
+                href: '/favicon.svg',
                 type: 'image/svg+xml',
             },
             {
