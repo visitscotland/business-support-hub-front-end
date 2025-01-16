@@ -24,7 +24,7 @@
                         </template>
 
                         <template
-                            v-if="link.readTime || link.contentType || link.type === 'EXTERNAL'"
+                            v-if="link.readTime || link.contentType"
                             v-slot:stretched-card-badges
                         >
                             <VsBadge v-if="link.readTime">
@@ -33,11 +33,6 @@
 
                             <VsBadge v-if="link.contentType">
                                 {{ link.contentType }}
-                            </VsBadge>
-
-                            <VsBadge v-if="link.type === 'EXTERNAL'">
-                                <!-- TODO: Add label -->
-                                Partner website
                             </VsBadge>
                         </template>
                     </VsStretchedLinkCard>
