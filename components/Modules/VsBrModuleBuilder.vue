@@ -92,6 +92,16 @@
         </NuxtLazyHydrate>
 
         <NuxtLazyHydrate
+            v-if="item.type === 'MultiImageLinksModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrMegalinksMultiImageModule
+                :module="item"
+                :theme="item.themeValue"
+            />
+        </NuxtLazyHydrate>
+
+        <NuxtLazyHydrate
             v-if="item.type === 'SimpleDevModule'"
             :when-visible="{ rootMargin: '50px' }"
         >
@@ -131,6 +141,7 @@ import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
+import VsBrMegalinksMultiImageModule from './VsBrMegalinksMultiImageModule.vue';
 
 const props = defineProps<{
     modules: any[],
