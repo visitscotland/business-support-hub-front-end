@@ -21,11 +21,11 @@
         />
 
         <VsBrGeneral
-        v-else-if="pageName === 'bsh-page'"
-        :page="page"
-        :component="component"
+            v-else-if="pageName === 'bsh-page'"
+            :page="page"
+            :component="component"
         />
-        
+
         <VsBr404
             v-else-if="pageName === 'pagenotfound'"
             :page="page"
@@ -37,18 +37,16 @@
             :page="page"
             :component="component"
         />
-
     </div>
 </template>
 
 <script lang="ts" setup>
 /* eslint no-undef: 0 */
-import { ref, useScriptTriggerElement } from '#imports';
 import { toRefs, provide } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
 import VsBrGeneral from '~/components/PageTypes/VsBrGeneral.vue';
 import VsBr404 from '~/components/PageTypes/VsBr404.vue';
@@ -70,8 +68,6 @@ let pageName : string = '';
 let document : any = {
 };
 
-const isSearchResults : boolean = false;
-
 const configStore = useConfigStore();
 
 if (page.value) {
@@ -79,7 +75,6 @@ if (page.value) {
     pageName = pageComponent.model.name;
 
     const event = useRequestEvent();
-
 
     if (pageName === 'pagenotfound') {
         setResponseStatus(event, 404, 'Page Not Found');
@@ -147,23 +142,23 @@ if (page.value) {
             },
             {
                 name: 'robots',
-                content: document.model.data.noIndex ? 'noindex': '', 
+                content: document.model.data.noIndex ? 'noindex' : '',
             },
             {
                 name: 'cludo:type',
-                content: document.model.data.type, 
+                content: document.model.data.type,
             },
             {
                 name: 'cludo:skill',
-                content: document.model.data.skill, 
+                content: document.model.data.skill,
             },
             {
                 name: 'cludo:topic',
-                content: document.model.data.topic, 
+                content: document.model.data.topic,
             },
             {
                 name: 'cludo:sectors',
-                content: document.model.data.sectors, 
+                content: document.model.data.sectors,
             },
         ],
         htmlAttrs: {
@@ -203,15 +198,15 @@ provide('page', page.value);
 </script>
 
 <style lang="scss">
-.vs-main-container {
-    min-height: calc(100vh - 27rem);
+    .vs-main-container {
+        min-height: calc(100vh - 27rem);
 
-    @media (min-width: 768px) {
-        min-height: calc(100vh - 37rem);
-    }
+        @media (min-width: 768px) {
+            min-height: calc(100vh - 37rem);
+        }
 
-    @media (min-width: 992px) {
-        min-height: calc(100vh - 28rem);
+        @media (min-width: 992px) {
+            min-height: calc(100vh - 28rem);
+        }
     }
-}
 </style>
