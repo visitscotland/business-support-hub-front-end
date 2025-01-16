@@ -80,7 +80,7 @@
 /* eslint-disable import/no-import-module-exports */
 import { inject } from 'vue';
 
-import { TYPE_LINK_EXTERNAL, type Page } from '@bloomreach/spa-sdk';
+import { type Page } from '@bloomreach/spa-sdk';
 
 import {
     VsMegalinks,
@@ -114,8 +114,6 @@ if (page && module.links) {
         const image: any = nextLink.image.cmsImage
             ? page.getContent(nextLink.image.cmsImage.$ref)
             : page.getContent(nextLink.image.externalImage.$ref);
-
-        console.log(nextLink);
 
         let badgesArray: Array<string> = [];
 
