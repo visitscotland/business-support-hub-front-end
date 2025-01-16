@@ -35,7 +35,6 @@
                     :video-btn-text="configStore.getLabel('video', 'video.play-btn')"
                     business-support="true"
                     :is-home-page="isHomePage"
-                    :badges="link.badges"
                 >
                     <template #vs-link-list-heading>
                         {{ link.label }}
@@ -124,16 +123,16 @@ if (page && module.links) {
             badgesArray.push('External website');
         }
 
-        if(nextLink.readTime) {
-            badgesArray.push(nextLink.readTime)
+        if(nextLink.type === "DOWNLOAD") {
+            badgesArray.push('Download');
         }
 
         if(nextLink.contentType) {
             badgesArray.push(nextLink.contentType);
         }
 
-        if(nextLink.type === 'VIDEO') {
-            //add video badge
+        if(nextLink.readTime) {
+            badgesArray.push(nextLink.readTime)
         }
 
         links.push({
