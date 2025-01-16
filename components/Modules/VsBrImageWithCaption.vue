@@ -18,7 +18,6 @@
                 ? configStore.getLabel('essentials.global', 'default.alt-text')
                 : imageData.altText"
         :use-lazy-loading="useLazyLoading"
-            
     >
         <template #video-title>
             {{ videoTitle }}
