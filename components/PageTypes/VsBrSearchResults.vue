@@ -32,12 +32,12 @@
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-    }
 
-    .vs-cludo-custom-result__link {
-        text-decoration: none;
-        display: inline-flex;
-        align-items: baseline;
+            &__link {
+                text-decoration: none;
+                display: inline-flex;
+                align-items: baseline;
+            }
     }
 
     .vs-cludo-custom-result__link:hover .vs-cludo-custom-result__heading {
@@ -81,7 +81,6 @@
                 content: '';
             }
         }
-
     }
 
     .vs-details-facet-wrapper:not(:last-child) {
@@ -99,11 +98,11 @@
     }
 
     @font-face {
-    font-family: 'icon';
-    font-style: normal;
-    font-weight: 900;
-    font-display: block;
-    src: url("/fonts/fa-regular-400.woff2");
+        font-family: 'icon';
+        font-style: normal;
+        font-weight: 900;
+        font-display: block;
+        src: url("/fonts/fa-regular-400.woff2");
     }
 
     .vs-summary {
@@ -232,5 +231,10 @@
         background-color: #1f49d6;
         color: white;
         border-radius: 100px;
+    }
+
+    .cludo-clear-all-facets {
+        width: 100%;
+        padding: 1.5rem;
     }
 </style>
