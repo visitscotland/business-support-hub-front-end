@@ -1,10 +1,25 @@
 <template>
-    <div class="container-lg">
-        <h1 class="vs-heading vs-heading--display-s mt-250 mb-250">
-            Search results
-        </h1>
-        <div class="row">
-            <div class="col-12 col-md-8 offset-md-2 col-lg-3 offset-lg-0">
+    <VsContainer>
+        <div class="my-250">
+            <VsRow>
+                <VsCol
+                    cols="12"
+                    sm="10"
+                    md="9"
+                    lg="7"
+                >
+                    <VsHeading
+                        class="vs-hero-section__heading m-lg-0"
+                        level="1"
+                        heading-style="display-xs"
+                    >
+                        Search results
+                    </VsHeading>
+                </VsCol>
+            </VsRow>
+        </div>
+        <VsRow>
+            <div class="col-12 col-lg-3 offset-lg-0 mb-200">
                 <fieldset class="vs-control-group">
                     <legend class="vs-control-group__legend">
                         Filter results
@@ -15,18 +30,26 @@
             <div class="main-content col-12 col-lg-8  offset-lg-1">
                 <div class="cludo-search-results" />
             </div>
-        </div>
-    </div>
+        </VsRow>
+    </VsContainer>
 </template>
+
+<script lang="ts" setup>
+import {
+    VsContainer,
+    VsHeading,
+    VsRow,
+} from '@visitscotland/component-library/components';
+</script>
 
 <style lang="scss">
     .cludo-search-results nav {
         padding: 40px;
     }
 
-    .cludo_result {
-        position: relative;
-    }
+    // .cludo_result {
+    //     position: relative;
+    // }
 
     .vs-cludo-custom-result {
         display: flex;
