@@ -47,9 +47,9 @@ import {
         padding: 40px;
     }
 
-    // .cludo_result {
-    //     position: relative;
-    // }
+    .cludo_result {
+        position: relative;
+    }
 
     .vs-cludo-custom-result {
         display: flex;

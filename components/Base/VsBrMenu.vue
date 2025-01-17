@@ -12,10 +12,10 @@
                 <VsMeganav
                     href="/"
                     :menu-toggle-alt-text="configStore.getLabel('navigation.static', 'meganav-toggle-btn-alt-text')"
-                    search-button-text="Search"
-                    search-label-text="What are you looking for?"
-                    search-clear-button-text="Clear"
-                    search-close-button-text="Close"
+                    :search-button-text="configStore.getLabel('search', 'search')"
+                    :search-label-text="configStore.getLabel('search', 'search-label')"
+                    :search-clear-button-text="configStore.getLabel('search', 'clear-form')"
+                    :search-close-button-text="configStore.getLabel('search', 'close-form')"
                     :logo-alt-text="configStore.getLabel('navigation.static', 'meganav.logo-alt-text')"
                     :no-search="false"
                     :is-static="true"
@@ -102,4 +102,6 @@ if (page.value) {
         banner.ctaLink.link = banner.ctaLink.link.replace('/site/resourceapi', '');
     }
 }
+
+
 </script>
