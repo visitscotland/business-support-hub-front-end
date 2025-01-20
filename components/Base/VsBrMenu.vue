@@ -1,58 +1,56 @@
 <template>
-    <div>
-        <div class="vs-sticky-nav" :class="{ 'has-edit-button': page && page.isPreview() }">
-            <VsBrSkipTo />
-            <header>
-                <VsGlobalMenu
-                 active-site=""
-                />
+    <div class="vs-sticky-nav" :class="{ 'has-edit-button': page && page.isPreview() }">
+        <VsBrSkipTo />
+        <header>
+            <VsGlobalMenu
+                active-site=""
+            />
 
-                <BrManageMenuButton :menu="menuData" />
+            <BrManageMenuButton :menu="menuData" />
 
-                <VsMeganav
-                    href="/"
-                    :menu-toggle-alt-text="configStore.getLabel('navigation.static', 'meganav-toggle-btn-alt-text')"
-                    search-button-text=""
-                    search-label-text=""
-                    search-clear-button-text=""
-                    search-close-button-text=""
-                    :logo-alt-text="configStore.getLabel('navigation.static', 'meganav.logo-alt-text')"
-                    :no-search="true"
-                    :is-static="true"
-                >
-                    <template #mega-nav-top-menu-items>
-                        <VsBrMegaNav
-                            :links="menuItems"
-                        />
-                    </template>
+            <VsMeganav
+                href="/"
+                :menu-toggle-alt-text="configStore.getLabel('navigation.static', 'meganav-toggle-btn-alt-text')"
+                search-button-text=""
+                search-label-text=""
+                search-clear-button-text=""
+                search-close-button-text=""
+                :logo-alt-text="configStore.getLabel('navigation.static', 'meganav.logo-alt-text')"
+                :no-search="true"
+                :is-static="true"
+            >
+                <template #mega-nav-top-menu-items>
+                    <VsBrMegaNav
+                        :links="menuItems"
+                    />
+                </template>
 
-                    <template #mega-nav-accordion-items>
-                        <VsBrAccordionNav
-                            :links="menuItems"
-                        />
-                    </template>
-                </VsMeganav>
-            </header>
-        </div>
-
-        <VsBanner
-            v-if="banner"
-            :close-btn-text="configStore.getLabel('essentials.global', 'close')"
-        >
-            <template v-slot:banner-text>
-                <div v-html="banner.copy.value" />
-            </template>
-
-            <template v-slot:banner-cta>
-                <vs-link
-                    :href="banner.ctaLink.link"
-                    :type="banner.ctaLink.type"
-                >
-                    {{ banner.ctaLink.label }}
-                </vs-link>
-            </template>
-        </VsBanner>
+                <template #mega-nav-accordion-items>
+                    <VsBrAccordionNav
+                        :links="menuItems"
+                    />
+                </template>
+            </VsMeganav>
+        </header>
     </div>
+
+    <VsBanner
+        v-if="banner"
+        :close-btn-text="configStore.getLabel('essentials.global', 'close')"
+    >
+        <template v-slot:banner-text>
+            <div v-html="banner.copy.value" />
+        </template>
+
+        <template v-slot:banner-cta>
+            <vs-link
+                :href="banner.ctaLink.link"
+                :type="banner.ctaLink.type.toLowerCase()"
+            >
+                {{ banner.ctaLink.label }}
+            </vs-link>
+        </template>
+    </VsBanner>
 </template>
 
 <script lang="ts" setup>
