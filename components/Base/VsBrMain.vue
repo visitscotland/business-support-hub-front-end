@@ -8,14 +8,20 @@
         />
 
         <VsBrGtm />
-        
+
         <VsBrPageViewEvent
             :data="document.model.data"
             :page-type="pageName"
         />
 
+        <VsBrSearchResults
+            v-if="pageName === 'bsh-page' && document.model.data.title === 'Search results'"
+            :page="page"
+            :component="component"
+        />
+
         <VsBrGeneral
-            v-if="pageName === 'bsh-page'"
+            v-else-if="pageName === 'bsh-page'"
             :page="page"
             :component="component"
         />
@@ -36,16 +42,16 @@
 
 <script lang="ts" setup>
 /* eslint no-undef: 0 */
-
 import { toRefs, provide } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
 import VsBrGeneral from '~/components/PageTypes/VsBrGeneral.vue';
 import VsBr404 from '~/components/PageTypes/VsBr404.vue';
 import VsBr500 from '~/components/PageTypes/VsBr500.vue';
+import VsBrSearchResults from '~/components/PageTypes/VsBrSearchResults.vue';
 
 import VsBrGtm from '~/components/Modules/VsBrGtm.vue';
 
@@ -136,23 +142,23 @@ if (page.value) {
             },
             {
                 name: 'robots',
-                content: document.model.data.noIndex ? 'noindex': '', 
+                content: document.model.data.noIndex ? 'noindex' : '',
             },
             {
                 name: 'cludo:type',
-                content: document.model.data.type, 
+                content: document.model.data.type,
             },
             {
                 name: 'cludo:skill',
-                content: document.model.data.skill, 
+                content: document.model.data.skill,
             },
             {
                 name: 'cludo:topic',
-                content: document.model.data.topic, 
+                content: document.model.data.topic,
             },
             {
                 name: 'cludo:sectors',
-                content: document.model.data.sectors, 
+                content: document.model.data.sectors,
             },
         ],
         htmlAttrs: {

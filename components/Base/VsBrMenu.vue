@@ -4,7 +4,7 @@
             <VsBrSkipTo />
             <header>
                 <VsGlobalMenu
-                 active-site=""
+                    active-site=""
                 />
 
                 <BrManageMenuButton :menu="menuData" />
@@ -12,12 +12,12 @@
                 <VsMeganav
                     href="/"
                     :menu-toggle-alt-text="configStore.getLabel('navigation.static', 'meganav-toggle-btn-alt-text')"
-                    search-button-text=""
-                    search-label-text=""
-                    search-clear-button-text=""
-                    search-close-button-text=""
+                    :search-button-text="configStore.getLabel('search', 'search')"
+                    :search-label-text="configStore.getLabel('search', 'search-label')"
+                    :search-clear-button-text="configStore.getLabel('search', 'clear-form')"
+                    :search-close-button-text="configStore.getLabel('search', 'close-form')"
                     :logo-alt-text="configStore.getLabel('navigation.static', 'meganav.logo-alt-text')"
-                    :no-search="true"
+                    :no-search="false"
                     :is-static="true"
                 >
                     <template #mega-nav-top-menu-items>
@@ -60,7 +60,7 @@ import { toRefs } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageMenuButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
 import VsBrSkipTo from '~/components/Base/VsBrSkipTo.vue';
 
@@ -96,10 +96,11 @@ if (page.value) {
     menu = component.value.getModels().menu;
     menuData = page.value.getContent(menu.$ref);
     menuItems = menuData.items;
-    banner  = component.value.getModels().banner;
+    banner = component.value.getModels().banner;
 
     if (banner && banner.ctaLink) {
         banner.ctaLink.link = banner.ctaLink.link.replace('/site/resourceapi', '');
     }
 }
+
 </script>
