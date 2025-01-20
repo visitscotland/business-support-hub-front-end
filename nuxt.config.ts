@@ -72,5 +72,5 @@ export default defineNuxtConfig({
         transpile: ['bootstrap-vue-next', '@visitscotland/component-library'],
     },
 
-    compatibilityDate: '2024-12-10',
+    compatibilityDate: '2025-01-16',
 });
