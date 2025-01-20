@@ -13,6 +13,13 @@ const clVersion = bufferFile('.clversion');
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    scripts: {
+        globals: {
+            search: 'https://customer.cludo.com/scripts/bundles/search-script.min.js',
+            results: '/scripts/cludo-search-results.js',
+        },
+    },
+
     runtimeConfig: {
         BR_RESOURCE_API_ENDPOINT: process.env.BR_RESOURCE_API_ENDPOINT,
         BR_X_FORWARDED_HOST: process.env.BR_X_FORWARDED_HOST,
@@ -22,6 +29,7 @@ export default defineNuxtConfig({
             COMP_LIBRARY_VERSION: clVersion,
         },
     },
+
     vite: {
         resolve: {
             preserveSymlinks: true,
@@ -30,34 +38,39 @@ export default defineNuxtConfig({
             cssCodeSplit: true,
         },
     },
+
     vue: {
         runtimeCompiler: true,
     },
+
     components: [
         {
             path: '~/components',
             pathPrefix: false,
         },
     ],
-    buildModules: [
-        '@nuxtjs/dotenv',
-    ],
+
+    buildModules: ['@nuxtjs/dotenv'],
+
     modules: [
         '@pinia/nuxt',
         'nuxt-jsonld',
         'nuxt-lazy-hydrate',
+        '@nuxt/scripts',
     ],
+
     'nuxt-jsonld': {
         disableOptionsAPI: true,
     },
+
     css: [
         '@visitscotland/component-library/components/style.css',
         '@visitscotland/component-library/components/fonts.css',
     ],
+
     build: {
-        transpile: [
-            'bootstrap-vue-next',
-            '@visitscotland/component-library',
-        ],
+        transpile: ['bootstrap-vue-next', '@visitscotland/component-library'],
     },
+
+    compatibilityDate: '2025-01-16',
 });
