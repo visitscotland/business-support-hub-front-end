@@ -13,7 +13,7 @@
                     :is-marketo="module.config.type === 'marketo'"
                     :marketo-instance="module.config.marketoInstance ? module.config.marketoInstance : ''"
                     :munchkin-id="module.config.munchkinId ? module.config.munchkinId : ''"
-                    :submit-url="module.config.submitURL"
+                    :submit-url="module.config.submitUrl"
                     :data-url="module.config.jsonUrl"
                     :messaging-url="configStore.getLabel('forms', 'form.messaging-url')"
                     :country-list-url="configStore.getLabel('forms', 'form.country-url')"
@@ -23,7 +23,7 @@
                     :recaptcha-textarea-label="configStore.getLabel('forms', 'form.recaptcha-textarea-label')"
                 >
                     <template #no-js>
-                        {{ configStore.getLabel('forms', 'form.no-js') }}
+                        {{ noJsMessage }}
                     </template>
 
                     <template #submit-error>
@@ -32,6 +32,46 @@
 
                     <template #submitting>
                         {{ configStore.getLabel('forms', 'form.submitting') }}
+                    </template>
+
+                    <template
+                        #hidden-fields
+                        v-if="module.config.type === 'breg'"
+                    >
+                        <input
+                            v-if="module.config.activityCode"
+                            type="hidden"
+                            name="activity_code"
+                            :value="module.config.activityCode"
+                        >
+
+                        <input
+                            v-if="module.config.activityDescription"
+                            type="hidden"
+                            name="activity_description"
+                            :value="module.config.activityDescription"
+                        >
+
+                        <input
+                            v-if="module.config.activitySource"
+                            type="hidden"
+                            name="activity_source"
+                            :value="module.config.activitySource"
+                        >
+
+                        <input
+                            v-if="module.config.consents"
+                            type="hidden"
+                            name="consents"
+                            :value="module.config.consents"
+                        >
+
+                        <input
+                            v-if="module.config.legalBasis"
+                            type="hidden"
+                            name="legalBasis"
+                            :value="module.config.legalBasis"
+                        >
                     </template>
                 </VsForm>
             </VsCol>
@@ -53,4 +93,6 @@ const configStore = useConfigStore();
 
 const props = defineProps<{ module: Object }>();
 const module: any = props.module;
+
+const noJsMessage = module.noJavaScriptMessage || configStore.getLabel('forms', 'form.no-js');
 </script>

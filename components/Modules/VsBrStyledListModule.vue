@@ -2,7 +2,9 @@
     <VsModuleWrapper
         :anchor-id="anchor || null"
         business-support
+        :class="nested ? 'pt-0': null"
         :heading-level="nested ? 3 : 2"
+        :theme="themeValue"
     >
         <template
             v-if="title"
@@ -12,13 +14,16 @@
         </template>
 
         <template
-            v-if="introduction.value"
+            v-if="introduction.value && layout !== 'horizontal-list'"
             #vs-module-wrapper-intro
         >
             <VsBrRichText :input-content="introduction.value" />
         </template>
 
-        <VsStyledList :variant="variant">
+        <VsStyledList
+            :source="layout === 'horizontal-list' ? introduction.value : null"
+            :variant="variant"
+        >
             <VsStyledListItem
                 v-for="(item, index) in listItems"
                 :key="index"
@@ -29,6 +34,13 @@
             >
                 <VsBrRichText :input-content="item.content" />
             </VsStyledListItem>
+
+            <template
+                v-if="introduction.value && layout === 'horizontal-list'"
+                #list-source
+            >
+                <VsBrRichText :input-content="introduction.value" />
+            </template>
         </VsStyledList>
     </VsModuleWrapper>
 </template>
@@ -49,7 +61,7 @@ const {
     layout,
     nested,
     sections,
-    theme,
+    themeValue,
     title,
 } = props.module;
 const page: Page | undefined = inject('page');

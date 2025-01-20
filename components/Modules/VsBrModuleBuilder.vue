@@ -41,7 +41,6 @@
         >
             <VsBrArticleModule
                 :module="item"
-                :include-toc="index === 0 ? true : false"
             />
         </NuxtLazyHydrate>
         
@@ -61,6 +60,54 @@
         >
             <VsBrStyledListModule
                 :module="item"
+            />
+        </NuxtLazyHydrate>
+
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'SignpostModule'"
+        >
+            <VsBrCtaBannerModule 
+                :module="item"
+            />
+        </NuxtLazyHydrate>
+        
+        <NuxtLazyHydrate
+            :when-visible="{ rootMargin: '50px' }"
+            v-else-if="item.type === 'FormModule'"
+        >
+            <VsBrForm
+                :module="item"
+            />
+        </NuxtLazyHydrate>
+
+        <NuxtLazyHydrate
+            v-if="item.type === 'SingleImageLinksModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrMegalinksSingleImageModule
+                :module="item"
+                :theme="item.themeValue"
+            />
+        </NuxtLazyHydrate>
+
+        <NuxtLazyHydrate
+            v-if="item.type === 'MultiImageLinksModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrMegalinksMultiImageModule
+                :module="item"
+                :theme="item.themeValue"
+            />
+        </NuxtLazyHydrate>
+
+        <NuxtLazyHydrate
+            v-if="item.type === 'SimpleDevModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrDevModule
+                :module="hippoContent[index].model.data"
+                :theme="item.themeValue"
             />
         </NuxtLazyHydrate>
 
@@ -90,10 +137,11 @@ import VsBrHorizontalLinksModule from '~/components/Modules/VsBrHorizontalLinksM
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
 import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
-// import VsBrForm from '~/components/Modules/VsBrForm.vue';
+import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
-
-import themeCalculator from '~/composables/themeCalculator';
+import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
+import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
+import VsBrMegalinksMultiImageModule from './VsBrMegalinksMultiImageModule.vue';
 
 const props = defineProps<{
     modules: any[],
@@ -103,32 +151,36 @@ const { modules } = props;
 
 const page: Page | undefined = inject('page');
 
-const themeCount = 3;
-let currentMegaLinkSection = -1;
 const hippoContent : any = {
 };
 
 // Article layouts that use the Styled list module.
 const styledListLayouts = ['bullet-list', 'horizontal-list', 'numbered-list', 'visual-list'];
 
+const themes = ['light', 'grey'];
+const currentTheme = ref(themes[0]);
+
+// Set the background colour (theme) for each module.
 if (modules) {
     for (let x = 0; x < modules.length; x++) {
-        let newThemeIndex = 1;
 
-        if (
-            modules[x].type === 'ListLinksModule'
-            || modules[x].type === 'MultiImageLinksModule'
-            || modules[x].type === 'SingleImageLinksModule'
-        ) {
-            if (modules[x].title || currentMegaLinkSection === -1) {
-                currentMegaLinkSection += 1;
-            }
-
-            newThemeIndex = currentMegaLinkSection % themeCount;
+        // Set the default theme value to the opposite of the previous value.
+        let themeValue = currentTheme.value === themes[0] ? themes[1] : themes[0];
+        
+        // Set the first module to be light.
+        if (x === 0) {
+            themeValue = themes[0];
+        // If the module is nested then use the previous module's theme.
+        } else if (modules[x].nested) {
+            themeValue = currentTheme.value;
         }
-
-        modules[x].themeIndex = newThemeIndex;
-        modules[x].themeValue = themeCalculator(newThemeIndex, modules[x]);
+        
+        // Add the theme properties to the module object.
+        modules[x].themeValue = themeValue;
+        modules[x].themeIndex = themeValue === themes[0] ? 0 : 1;
+        
+        // Update the current theme.
+        currentTheme.value = themeValue;
 
         if (modules[x].hippoBean && page) {
             hippoContent[x] = page.getContent(modules[x].hippoBean);

@@ -50,6 +50,19 @@
                             >
                                 <p>{{ featuredLinks[0].teaser }}</p>
                             </template>
+
+                            <template
+                                #vs-multi-image-badges
+                                v-if="featuredLinks[1].badges.length"
+                            >
+                                <VsBadge
+                                    v-for="(badge, badgeIndex) in featuredLinks[0].badges"
+                                    :key="badgeIndex"
+                                    class="mb-050 text-capitalize"
+                                >
+                                    {{ badge }}
+                                </VsBadge>
+                            </template>
                         </VsMegalinkMultiImage>
 
                         <VsBrVideoModal
@@ -89,6 +102,19 @@
                                 v-if="module.teaserVisible"
                             >
                                 <p>{{ link.teaser }}</p>
+                            </template>
+
+                            <template
+                                #vs-multi-image-badges
+                                v-if="link.badges.length"
+                            >
+                                <VsBadge
+                                    v-for="(badge, badgeIndex) in link.badges"
+                                    :key="badgeIndex"
+                                    class="mb-050 text-capitalize"
+                                >
+                                    {{ badge }}
+                                </VsBadge>
                             </template>
                         </VsMegalinkMultiImage>
 
@@ -131,6 +157,19 @@
                             >
                                 <p>{{ featuredLinks[1].teaser }}</p>
                             </template>
+
+                            <template
+                                #vs-multi-image-badges
+                                v-if="featuredLinks[1].badges.length"
+                            >
+                                <VsBadge
+                                    v-for="(badge, badgeIndex) in featuredLinks[1].badges"
+                                    :key="badgeIndex"
+                                    class="mb-050 text-capitalize"
+                                >
+                                    {{ badge }}
+                                </VsBadge>
+                            </template>
                         </VsMegalinkMultiImage>
 
                         <VsBrVideoModal
@@ -160,6 +199,7 @@ import {
     VsCol,
     VsContainer,
     VsRow,
+    VsBadge,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
@@ -185,14 +225,25 @@ if (page && module.links) {
             ? page.getContent(nextLink.image.cmsImage.$ref)
             : page.getContent(nextLink.image.externalImage.$ref);
 
-        links.push({
+        const newLink = {
             image: image?.getOriginal().getUrl(),
             type: nextLink.type.toLowerCase(),
             url: formatLink(nextLink.link),
             'error-message': configStore.getLabel('essentials.global', 'third-party-error'),
             label: nextLink.label,
             teaser: nextLink.teaser,
-        });
+            badges: [],
+        };
+
+        if (nextLink.contentType) {
+            newLink.badges.push(nextLink.contentType);
+        }
+
+        if (nextLink.readTime) {
+            newLink.badges.push(nextLink.readTime);
+        }
+
+        links.push(newLink);
     }
 }
 
@@ -204,14 +255,25 @@ if (page && module.featuredLinks) {
             ? page.getContent(nextLink.image.cmsImage.$ref)
             : page.getContent(nextLink.image.externalImage.$ref);
 
-        featuredLinks.push({
+        const newLink = {
             image: image?.getOriginal().getUrl(),
             type: nextLink.type.toLowerCase(),
             url: formatLink(nextLink.link),
             'error-message': configStore.getLabel('essentials.global', 'third-party-error'),
             label: nextLink.label,
             teaser: nextLink.teaser,
-        });
+            badges: [],
+        };
+
+        if (nextLink.contentType) {
+            newLink.badges.push(nextLink.contentType);
+        }
+
+        if (nextLink.readTime) {
+            newLink.badges.push(nextLink.readTime);
+        }
+
+        featuredLinks.push(newLink);
     }
 }
 

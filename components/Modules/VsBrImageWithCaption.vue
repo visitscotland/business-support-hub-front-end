@@ -13,18 +13,15 @@
         :video-id="videoId"
         :small-play-button="smallPlayButton"
         :play-button-text="videoBtn ? videoBtn : configStore.getLabel('video', 'video.play-btn')"
+        :image-src="imageValue.getOriginal().getUrl()"
+        :alt-text="noAltText
+                ? configStore.getLabel('essentials.global', 'default.alt-text')
+                : imageData.altText"
+        :use-lazy-loading="useLazyLoading"
     >
         <template #video-title>
             {{ videoTitle }}
         </template>
-
-        <VsImg
-            :src="imageValue.getOriginal().getUrl()"
-            :alt="noAltText
-                ? configStore.getLabel('essentials.global', 'default.alt-text')
-                : imageData.altText"
-            :use-lazy-loading="useLazyLoading"
-        />
 
         <template
             #img-caption
@@ -146,10 +143,15 @@ const {
 const page: Page | undefined = inject('page');
 let imageValue: any;
 let imageData: any;
+const imageSrc = ref('');
 
 if (page) {
     imageValue = page.getContent(image.value.$ref);
     imageData = imageValue.model.data;
+    imageSrc.value = imageValue.getOriginal().getUrl();
 }
 
+const isImageSvg = computed(() => {
+    return imageSrc.value.endsWith('.svg');
+});
 </script>

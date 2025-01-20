@@ -33,6 +33,8 @@
                         : ''
                     "
                     :video-btn-text="configStore.getLabel('video', 'video.play-btn')"
+                    business-support
+                    :is-home-page="isHomePage"
                 >
                     <template #vs-link-list-heading>
                         {{ link.label }}
@@ -44,6 +46,19 @@
                     >
                         <p>{{ link.teaser }}</p>
                     </template>
+
+                    <template
+                        #vs-link-list-badges
+                    >
+                        <VsBadge 
+                            v-for="(badge, badgeIndex) in link.badges"
+                            :key="badgeIndex"
+                            class="text-capitalize"
+                        >
+                            {{ badge }}
+                        </VsBadge>
+                    </template>
+                    
                 </VsMegalinkLinkList>
 
                 <VsBrVideoModal
@@ -65,13 +80,14 @@
 /* eslint-disable import/no-import-module-exports */
 import { inject } from 'vue';
 
-import type { Page } from '@bloomreach/spa-sdk';
+import { type Page } from '@bloomreach/spa-sdk';
 
 import {
     VsMegalinks,
     VsMegalinkLinkList,
     VsRow,
     VsCol,
+    VsBadge,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
@@ -86,7 +102,10 @@ const module: any = props.module;
 const theme: string = props.theme;
 
 const page: Page | undefined = inject('page');
+const route = useRoute();
 const links: any[] = [];
+
+const isHomePage = computed(() => route.path === '/');
 
 if (page && module.links) {
     for (let x = 0; x < module.links.length; x++) {
@@ -96,6 +115,24 @@ if (page && module.links) {
             ? page.getContent(nextLink.image.cmsImage.$ref)
             : page.getContent(nextLink.image.externalImage.$ref);
 
+        let badgesArray: Array<string> = [];
+
+        if(nextLink.type === "EXTERNAL") {
+            badgesArray.push('External website');
+        }
+
+        if(nextLink.type === "DOWNLOAD") {
+            badgesArray.push('Download');
+        }
+
+        if(nextLink.contentType) {
+            badgesArray.push(nextLink.contentType);
+        }
+
+        if(nextLink.readTime) {
+            badgesArray.push(nextLink.readTime)
+        }
+
         links.push({
             image: image?.getOriginal().getUrl(),
             type: nextLink.type.toLowerCase(),
@@ -103,10 +140,10 @@ if (page && module.links) {
             'error-message': '',
             label: nextLink.label,
             teaser: nextLink.teaser,
+            badges: badgesArray,
         });
     }
 }
-
 </script>
 
 <style>
@@ -115,4 +152,5 @@ if (page && module.links) {
             display: block;
         }
     }
+    
 </style>
