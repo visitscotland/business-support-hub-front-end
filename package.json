@@ -34,7 +34,6 @@
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "mitt": "^3.0.0",
-    "nuxt-bloomreach-headless-white-label": "file:",
     "nuxt-jsonld": "^2.0.8",
     "pinia": "^2.2.0",
     "sass": "^1.77.4",
