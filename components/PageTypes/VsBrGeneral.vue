@@ -14,6 +14,15 @@
     <NuxtLazyHydrate
         :when-visible="{ rootMargin: '50px' }"
     >
+        <VsBrRelatedLinks
+            v-if="otyml"
+            :module="otyml"
+        />
+    </NuxtLazyHydrate>
+
+    <NuxtLazyHydrate
+        :when-visible="{ rootMargin: '50px' }"
+    >
         <VsBrNewsletterSignpost 
             v-if="!documentData.hideNewsletter && configStore.newsletterSignpost"
             :data="configStore.newsletterSignpost"
@@ -29,6 +38,7 @@ import useConfigStore from '~/stores/configStore';
 import VsBrHeroSectionModule from '~/components/Modules/VsBrHeroSectionModule.vue';
 import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
 import VsBrModuleBuilder from '~/components/Modules/VsBrModuleBuilder.vue';
+import VsBrRelatedLinks from '~/components/Modules/VsBrRelatedLinks.vue';
 import VsBrNewsletterSignpost from '../Modules/VsBrNewsletterSignpost.vue';
 
 const props = defineProps<{
@@ -42,7 +52,10 @@ let document : any = {
 };
 let documentData : any = {
 };
-let pageItems : any[] = [];
+let pageItems: any[] = [];
+const otyml = ref<any>(null);
+
+const relatedLinks = ref<any[]>([]);
 
 const configStore = useConfigStore();
 
@@ -50,6 +63,10 @@ if (page.value) {
     document = page.value.getDocument();
     documentData = document.getData();
     pageItems = configStore.pageItems;
+
+    if (configStore.otyml) {
+        otyml.value = configStore.otyml;
+    }
 }
 
 // Create list of anchor links and titles for each module, excluding nested modules.
