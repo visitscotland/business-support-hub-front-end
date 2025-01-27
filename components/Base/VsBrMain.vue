@@ -190,11 +190,6 @@ if (page.value) {
                 rel: 'canonical',
                 href: useRequestURL().toString(),
             },
-            {
-                rel: "stylesheet",
-                type: "text/css",
-                href: "styles/cludo-search-results.css",
-            },
         ],
     });
 }
