@@ -190,6 +190,11 @@ if (page.value) {
                 rel: 'canonical',
                 href: useRequestURL().toString(),
             },
+            {
+                rel: "stylesheet",
+                type: "text/css",
+                href: "styles/cludo-search-results.css",
+            },
         ],
     });
 }
@@ -209,4 +214,22 @@ provide('page', page.value);
             min-height: calc(100vh - 28rem);
         }
     }
+
+    // Cludo autocomplete results attaches to the VsMeganav's input field, but there's an inconsistency in the markup or styles that cause the icons to be positioned wrongly. This is a BSH-specific workaround.
+    
+    .vs-site-search-form__label  {
+        top: 26px;
+    }
+        
+    @media (min-width: 992px) {
+        .vs-site-search-form__label  {
+            top: 35px;
+        }
+    }
+
+    .vs-input__clear-button {
+        top: 32px;
+    }
+
+
 </style>

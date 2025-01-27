@@ -43,6 +43,12 @@ useHead({
             type: "text/css",
             href: "styles/cludo-search-results.css",
         }
+    ],
+    script: [
+        {
+            src: "https://kit.fontawesome.com/01f07a4485.js",
+            crossorigin: "anonymous",
+        }
     ]
 });
 </script>
