@@ -1,5 +1,4 @@
 <template>
-    <pre>{{ configStore.labels }}</pre>
     <VsBackToTop button-text="Back to top" />
     <VsFooter :class="{ 'has-edit-button': page.isPreview() }">
         <template #accordion-items>
