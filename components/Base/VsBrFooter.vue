@@ -1,5 +1,5 @@
 <template>
-    <VsBackToTop button-text="Back to top" />
+    <VsBackToTop :button-text="configStore.getLabel('essentials.global', 'back-to-top')" />
     <VsFooter :class="{ 'has-edit-button': page.isPreview() }">
         <template #accordion-items>
             <VsCol
