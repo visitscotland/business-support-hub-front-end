@@ -188,3 +188,10 @@ if (modules) {
     }
 }
 </script>
+
+<style lang="scss">
+    .vs-module-wrapper {
+        padding-top: 3rem !important;
+        padding-bottom: 3.5rem !important;
+    }
+</style>
