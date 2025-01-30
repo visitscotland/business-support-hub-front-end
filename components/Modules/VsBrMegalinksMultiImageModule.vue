@@ -53,7 +53,7 @@
 
                             <template
                                 #vs-multi-image-badges
-                                v-if="featuredLinks[1].badges.length"
+                                v-if="featuredLinks[0].badges.length"
                             >
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in featuredLinks[0].badges"

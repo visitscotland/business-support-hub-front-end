@@ -21,6 +21,7 @@ if (BRANCH_NAME == "main" && (JOB_NAME ==~ "([^/]*/)?feature-(business)?support.
 } else if (BRANCH_NAME ==~ "ops/(feature-environment(s)?-enhancements|pipeline-updates)" && (JOB_NAME ==~ "([^/]*/)?feature(-(businessevents|(business)?support))?.visitscotland.(com|org)(-mb)?(-frontend)?/ops%(25)?2F(feature-environment(s)?-enhancements|pipeline-updates)")) {
     echo "=== Setting conditional environment variables for branch $BRANCH_NAME in job $JOB_NAME"
     env.VS_CONTAINER_BASE_PORT_OVERRIDE = "3039"
+    env.VS_CONTAINER_PRESERVE = "FALSE"
 } else {
     echo "=== No conditional environment variables found for branch $BRANCH_NAME in job $JOB_NAME, using defaults"
 }
@@ -32,7 +33,6 @@ echo "==/Setting conditional environment variables"
 echo "== Setting default pipeline environment variables"
 if (!env.VS_CI_DIR) { env.VS_CI_DIR = "ci" }
 if (!env.VS_BRANCH_PROPERTIES_DIR) { env.VS_BRANCH_PROPERTIES_DIR = env.VS_CI_DIR + "/properties" }
-if (!env.VS_BRANCH_PROPERTIES_FILE) { env.VS_BRANCH_PROPERTIES_FILE = env.BRANCH_NAME.substring(env.BRANCH_NAME.lastIndexOf('/') + 1) + ".properties" }
 if (!env.VS_BRC_STACK_URI) { env.VS_BRC_STACK_URI = "visitscotland" }
 if (!env.VS_BRC_ENV) { env.VS_BRC_ENV = "demo" }
 if (!env.VS_BRC_STACK_URL) { env.VS_BRC_STACK_URL = "https://api.${VS_BRC_STACK_URI}.bloomreach.cloud" }
@@ -45,6 +45,11 @@ if (!env.VS_USE_DOCKER_BUILDER) { env.VS_USE_DOCKER_BUILDER = "TRUE" }
 if (!env.VS_RELEASE_SNAPSHOT) { env.VS_RELEASE_SNAPSHOT = "FALSE" }
 if (!env.VS_PROXY_SERVER_FQDN) { env.VS_PROXY_SERVER_FQDN = "feature-support.visitscotland.org" }
 if (!env.HOSTNAME) { env.HOSTNAME = env.NODE_NAME }
+if (!env.VS_BRANCH_PROPERTIES_FILE && !env.CHANGE_BRANCH) {
+	env.VS_BRANCH_PROPERTIES_FILE = env.BRANCH_NAME.substring(env.BRANCH_NAME.lastIndexOf('/') + 1) + ".properties" 
+} else if (!env.VS_BRANCH_PROPERTIES_FILE && env.CHANGE_BRANCH) {
+	env.VS_BRANCH_PROPERTIES_FILE = env.CHANGE_BRANCH.substring(env.CHANGE_BRANCH.lastIndexOf('/') + 1) + ".properties" 
+}
 echo "==/Setting default environment variables"
 
 echo "== Setting default application variables"
@@ -71,8 +76,8 @@ pipeline {
     agent {label thisAgent}
 
     environment {
-            //GITHUB_PAT_JENKINS_CI = credentials('github-pat-jenkins-ci')
-	    GITHUB_PAT_JENKINS_CI = "not-in-use"
+		//GITHUB_PAT_JENKINS_CI = credentials('github-pat-jenkins-ci')
+		GITHUB_PAT_JENKINS_CI = "not-in-use"
     }
 
     stages {
@@ -121,9 +126,9 @@ pipeline {
         stage ('SCM checkout') {
             agent {
                 docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
+                    image 'vs/vs-brxm15-builder:node18'
+                    label thisAgent
+                    reuseNode true
                 }
             }
             steps {
@@ -138,7 +143,7 @@ pipeline {
                 sh 'set +x; node --version; exit 0'
                 sh 'set +x; npm --version; exit 0'
                 sh 'set +x; yarn --version; exit 0'
-                sh 'set +x; echo "==== TOOLS CHECK ====="; echo'
+                sh 'set +x; echo "====/TOOLS CHECK ====="; echo'
                 checkout scm
             }
         } //end stage
@@ -146,9 +151,9 @@ pipeline {
         stage ('Install Dependencies') {
             agent {
                 docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
+                	image 'vs/vs-brxm15-builder:node18'
+                	label thisAgent
+                	reuseNode true
                 }
             }
             steps {
@@ -166,9 +171,9 @@ pipeline {
         stage ('Run Tests') {
             agent {
                 docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
+                    image 'vs/vs-brxm15-builder:node18'
+                    label thisAgent
+                    reuseNode true
                 }
             }
             steps {
@@ -188,9 +193,9 @@ pipeline {
         stage ('NPM Build') {
             agent {
                 docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
+                    image 'vs/vs-brxm15-builder:node18'
+                    label thisAgent
+                    reuseNode true
                 }
             }
             steps {
