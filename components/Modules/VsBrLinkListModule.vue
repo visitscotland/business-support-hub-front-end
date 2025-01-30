@@ -24,8 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { VsContainer, VsRow, VsCol } from '@visitscotland/component-library/components';
-import { VsLinkList, VsLinkListItem } from '@visitscotland/component-library/components';
+import { VsCol, VsContainer, VsLinkList, VsLinkListItem, VsRow, } from '@visitscotland/component-library/components';
 
 defineProps<{
     heading?: string,
