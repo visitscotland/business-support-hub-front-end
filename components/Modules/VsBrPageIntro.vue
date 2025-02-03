@@ -169,3 +169,12 @@ if (page) {
     }
 }
 </script>
+
+<style lang="scss">
+    .vs-page-intro__wrapper {
+
+        >.container {
+            padding-bottom: 0;
+        }
+    }
+</style>

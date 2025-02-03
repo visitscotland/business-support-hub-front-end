@@ -118,3 +118,20 @@ for (let x = 0; x < module.sections.length; x++) {
     articleSections.push(nextSection);
 }
 </script>
+
+<style lang="scss">
+    .vs-article {
+        &__header {
+            margin-top: 0 !important;
+        }
+
+        &__wrapper {
+            margin-bottom: 0 !important;
+        }
+
+        &-section {
+            margin-bottom: 0 !important;
+        }
+    }
+
+</style>
