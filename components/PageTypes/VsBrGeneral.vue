@@ -1,6 +1,7 @@
 <template>
     <VsBrHeroSectionModule :content="documentData" />
     <VsBrPageIntro
+        v-if="!isHomePage"
         :content="documentData"
         :light-background="true"
         :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
@@ -58,6 +59,10 @@ const otyml = ref<any>(null);
 const relatedLinks = ref<any[]>([]);
 
 const configStore = useConfigStore();
+
+const route = useRoute();
+
+const isHomePage = computed(() => route.path === '/');
 
 if (page.value) {
     document = page.value.getDocument();
