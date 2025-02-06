@@ -2,11 +2,12 @@
     <!-- TODO - itinerary, themes -->
     <VsMegalinks
         :title="module.title"
-        variant="single-image"
+        variant="multi-image"
         :theme="theme"
         :cookie-link-text="configStore.getLabel('essentials.global', 'cookie.link-message')"
         :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
         :no-js-message="configStore.getLabel('video', 'video.no-js')"
+        :buttonLink="module.cta ? module.cta.link : null"
     >
         <template
             v-if="module.introduction"
@@ -183,6 +184,9 @@
                 </VsRow>
             </VsContainer>
         </VsCol>
+        <template #vs-megalinks-button>
+            {{ module.cta.label }}
+        </template>
     </VsMegalinks>
 </template>
 
