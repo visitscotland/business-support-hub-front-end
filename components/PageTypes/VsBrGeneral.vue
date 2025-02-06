@@ -85,8 +85,6 @@ if (page.value) {
     }
 
     if (documentData.theme === 'top-level') {
-        console.log(documentData.heroImage);
-
         topLevelArticleModule = {
             title: '',
             sections: [{
