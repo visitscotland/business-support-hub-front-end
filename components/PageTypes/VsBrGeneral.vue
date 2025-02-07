@@ -18,19 +18,21 @@
 
     <VsBrHeroSectionModule :content="documentData" />
 
-    <VsBrPageIntro
-        v-if="!isHomePage && documentData.theme !== 'top-level'"
-        :content="documentData"
-        :light-background="true"
-        :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
-    />
-
-    <div class="my-n300">
-        <VsBrArticleModule
-            v-if="documentData.theme === 'top-level'"
-            :module="topLevelArticleModule"
+    <template v-if="!isHomePage">
+        <VsBrPageIntro
+            v-if="documentData.theme !== 'top-level'"
+            :content="documentData"
+            :light-background="true"
+            :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
         />
-    </div>
+
+        <div class="my-n300">
+            <VsBrArticleModule
+                v-if="documentData.theme === 'top-level'"
+                :module="topLevelArticleModule"
+            />
+        </div>
+    </template>
 
     <VsBrModuleBuilder
         v-if="pageItems"
