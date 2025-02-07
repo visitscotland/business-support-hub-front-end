@@ -30,7 +30,7 @@
                 
                     <VsBrRichText :input-content="copy.value" />
                     <div>
-                        <VsButton :href="cta.link">
+                        <VsButton :href="formatLink(cta.link)">
                             {{ cta.label }}
                         </VsButton>
                     </div>
@@ -52,6 +52,8 @@ import {
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import VsBrImage from '~/components//Utils/VsBrImage.vue';
+
+import formatLink from '~/composables/formatLink';
 
 const props = defineProps<{
     module: LooseObject,
