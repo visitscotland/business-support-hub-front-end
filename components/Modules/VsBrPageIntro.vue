@@ -58,7 +58,7 @@
             #vs-blog-data
         >
         <!-- Temporary addition to show the publishDate and readtime unstyled for now -->
-        <p v-if="publishDate">{{ publishDate }}</p>
+        <p v-if="publishDate">Last updated: {{ publishDate }}</p>
         <p v-if="readTime">{{ readTime }}</p>
 
             <!-- <VsBlogDetails
@@ -141,15 +141,11 @@ if (page) {
         breadcrumb.value = pageModels.breadcrumb.items;
 
         // TODO - localised labels for minute/s and reading time:
-        if (content.value.readingTime > 1) {
-            readTime.value = `Reading time: ${content.value.readingTime} minutes`;
-        } else if (content.value.readingTime === 1) {
-            readTime.value = `Reading time: ${content.value.readingTime} minute`;
-        }
+        readTime.value = `${content.value.readingTime} minute read`;
 
         if (content.value.publishDate) {
             publishDate.value = new Date(content.value.publishDate).toLocaleString(
-                'en-US',
+                'en-GB',
                 {
                     year: 'numeric',
                     day: 'numeric',
