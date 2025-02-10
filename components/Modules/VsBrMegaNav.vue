@@ -83,6 +83,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useScript } from '#imports';
 
 import {
     VsMegaNavDropdownContainer,
@@ -97,6 +98,10 @@ import VsBrMegaNavFeaturedItem from '~/components/Modules/VsBrMegaNavFeaturedIte
 const props = defineProps<{ links: any[] }>();
 const links: any = props.links;
 
+const { load } = useScript('https://customer.cludo.com/scripts/bundles/search-script.min.js', {
+  trigger: 'manual'
+});
+load();
 </script>
 
 <style lang="scss">

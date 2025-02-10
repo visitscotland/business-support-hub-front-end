@@ -15,7 +15,6 @@ const clVersion = bufferFile('.clversion');
 export default defineNuxtConfig({
     scripts: {
         globals: {
-            search: 'https://customer.cludo.com/scripts/bundles/search-script.min.js',
             results: '/scripts/cludo-search-results.js',
         },
     },
