@@ -1,10 +1,38 @@
 <template>
+    <VsContainer
+        v-if="!isHomePage && documentData.theme === 'top-level'"
+        class="mt-075 mt-lg-200"
+    >
+        <VsRow>
+            <VsCol
+                cols="10"
+                lg="8"
+            >
+                <VsBrBreadcrumb
+                    :breadcrumb="breadcrumb"
+                    :is-home="false"
+                />
+            </VsCol>
+        </VsRow>
+    </VsContainer>
+
     <VsBrHeroSectionModule :content="documentData" />
-    <VsBrPageIntro
-        :content="documentData"
-        :light-background="true"
-        :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
-    />
+
+    <template v-if="!isHomePage">
+        <VsBrPageIntro
+            v-if="documentData.theme !== 'top-level'"
+            :content="documentData"
+            :light-background="true"
+            :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
+        />
+
+        <div class="my-n300">
+            <VsBrArticleModule
+                v-if="documentData.theme === 'top-level'"
+                :module="topLevelArticleModule"
+            />
+        </div>
+    </template>
 
     <VsBrModuleBuilder
         v-if="pageItems"
@@ -40,6 +68,14 @@ import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
 import VsBrModuleBuilder from '~/components/Modules/VsBrModuleBuilder.vue';
 import VsBrRelatedLinks from '~/components/Modules/VsBrRelatedLinks.vue';
 import VsBrNewsletterSignpost from '../Modules/VsBrNewsletterSignpost.vue';
+import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
+import VsBrBreadcrumb from '~/components/Modules/VsBrBreadcrumb.vue';
+
+import {
+    VsContainer,
+    VsRow,
+    VsCol,
+} from '@visitscotland/component-library/components';
 
 const props = defineProps<{
     component: Component,
@@ -57,15 +93,43 @@ const otyml = ref<any>(null);
 
 const relatedLinks = ref<any[]>([]);
 
+let topLevelArticleModule : any = {
+};
+
 const configStore = useConfigStore();
+
+const route = useRoute();
+
+const isHomePage = computed(() => route.path === '/');
+
+const breadcrumb = ref<any[]>([]);
 
 if (page.value) {
     document = page.value.getDocument();
     documentData = document.getData();
     pageItems = configStore.pageItems;
 
+    const pageContent : any = page.value.getContent(page.value.model.root);
+    const pageModels : any = pageContent.models;
+
+    if (pageModels) {
+        breadcrumb.value = pageModels.breadcrumb.items;
+    }
+
     if (configStore.otyml) {
         otyml.value = configStore.otyml;
+    }
+
+    if (documentData.theme === 'top-level') {
+        topLevelArticleModule = {
+            title: '',
+            sections: [{
+                copy: documentData.introduction,
+                image: {
+                    cmsImage: documentData.heroImage,
+                }
+            }],
+        }
     }
 }
 

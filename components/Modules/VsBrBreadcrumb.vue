@@ -72,3 +72,9 @@ useJsonld({
     itemListElement: itemList,
 });
 </script>
+
+<style lang="scss">
+    .vs-page-intro__breadcrumb {
+        margin-top: 0 !important;
+    }
+</style>

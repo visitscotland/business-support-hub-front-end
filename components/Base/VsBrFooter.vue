@@ -1,4 +1,5 @@
 <template>
+    <VsBackToTop :button-text="configStore.getLabel('essentials.global', 'back-to-top')" />
     <VsFooter :class="{ 'has-edit-button': page.isPreview() }">
         <template #accordion-items>
             <VsCol
@@ -131,6 +132,7 @@ import {
     VsIcon,
     VsCol,
     VsCookieChecker,
+    VsBackToTop,
 } from '@visitscotland/component-library/components';
 
 const props = defineProps<{ component: Component, page: Page }>();

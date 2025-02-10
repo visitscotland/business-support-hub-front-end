@@ -7,6 +7,7 @@
         :cookie-link-text="configStore.getLabel('essentials.global', 'cookie.link-message')"
         :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
         :no-js-message="configStore.getLabel('video', 'video.no-js')"
+        :button-link="module.cta ? module.cta.link : null"
     >
         <template
             v-if="module.introduction"
@@ -73,6 +74,9 @@
                 />
             </VsCol>
         </VsRow>
+        <template #vs-megalinks-button>
+            {{ module.cta.label }}
+        </template>
     </VsMegalinks>
 </template>
 
