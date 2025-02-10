@@ -11,8 +11,8 @@
             :heading-level="module.nested ? 3 : 2"
         >
             <template
-                #vs-article-intro
-                v-if="module.introduction"
+                v-if="module.introduction.value"
+                v-slot:vs-article-intro
             >
                 <div v-html="module.introduction.value" />
             </template>
@@ -20,7 +20,7 @@
             <template
                 v-if="module.image"
                 #vs-article-img
-            >
+                >
                 <VsBrImageWithCaption
                     :image="module.image.cmsImage"
                 />
