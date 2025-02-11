@@ -15,17 +15,9 @@
             </VsCol>
         </VsRow>
     </VsContainer>
-    
-    <VsContainer v-if="documentData.theme === 'simple' || documentData.theme === 'standard'">
-        <VsHeading
-            level="1"
-            heading-style="display-m"
-            >
-            {{ documentData.title }}
-        </VsHeading>
-    </VsContainer>
+
         <VsBrHeroSectionModule
-            v-else
+            v-if="documentData.theme !== 'simple' && documentData.theme !== 'standard'"
             :content="documentData"
         />
 
@@ -86,8 +78,6 @@ import {
     VsContainer,
     VsRow,
     VsCol,
-    VsHeading,
-    VsModuleWrapper
 } from '@visitscotland/component-library/components';
 
 const props = defineProps<{

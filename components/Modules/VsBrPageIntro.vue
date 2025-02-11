@@ -48,12 +48,20 @@
         -->
 
         <template #vs-intro-breadcrumb>
+            <!-- {{ content.theme }} -->
             <VsBrBreadcrumb
                 :breadcrumb="breadcrumb"
                 :is-home="isHome"
             />
         </template>
-        
+
+        <template
+            v-if="content.theme === ('standard' || 'simple')"
+            #vs-intro-heading
+        >
+            {{ content.title }}
+        </template>
+
         <template
             #vs-blog-data
         >
