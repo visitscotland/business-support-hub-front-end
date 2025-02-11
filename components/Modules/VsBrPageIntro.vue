@@ -65,14 +65,10 @@
         <template
             #vs-blog-data
         >
-        <!-- Temporary addition to show the publishDate and readtime unstyled for now -->
-        <p v-if="publishDate">Last updated: {{ publishDate }}</p>
-        <p v-if="readTime">{{ readTime }}</p>
-
-            <!-- <VsBlogDetails
+            <VsBlogDetails
                 :blog-publish-date="publishDate"
                 :blog-read-time="readTime"
-            /> -->
+            />
         </template>
 
         <!-- TODO - Share Button -->
