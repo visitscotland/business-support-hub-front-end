@@ -11,7 +11,7 @@
             :heading-level="module.nested ? 3 : 2"
         >
             <template
-                v-if="module.introduction.value"
+                v-if="module.introduction && module.introduction.value"
                 v-slot:vs-article-intro
             >
                 <div v-html="module.introduction.value" />
