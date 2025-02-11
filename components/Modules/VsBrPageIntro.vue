@@ -48,23 +48,27 @@
         -->
 
         <template #vs-intro-breadcrumb>
+            <!-- {{ content.theme }} -->
             <VsBrBreadcrumb
                 :breadcrumb="breadcrumb"
                 :is-home="isHome"
             />
         </template>
-        
+
+        <template
+            v-if="content.theme === ('standard' || 'simple')"
+            #vs-intro-heading
+        >
+            {{ content.title }}
+        </template>
+
         <template
             #vs-blog-data
         >
-        <!-- Temporary addition to show the publishDate and readtime unstyled for now -->
-        <p v-if="publishDate">{{ publishDate }}</p>
-        <p v-if="readTime">{{ readTime }}</p>
-
-            <!-- <VsBlogDetails
+            <VsBlogDetails
                 :blog-publish-date="publishDate"
                 :blog-read-time="readTime"
-            /> -->
+            />
         </template>
 
         <!-- TODO - Share Button -->
@@ -141,15 +145,11 @@ if (page) {
         breadcrumb.value = pageModels.breadcrumb.items;
 
         // TODO - localised labels for minute/s and reading time:
-        if (content.value.readingTime > 1) {
-            readTime.value = `Reading time: ${content.value.readingTime} minutes`;
-        } else if (content.value.readingTime === 1) {
-            readTime.value = `Reading time: ${content.value.readingTime} minute`;
-        }
+        readTime.value = `${content.value.readingTime} minute read`;
 
         if (content.value.publishDate) {
             publishDate.value = new Date(content.value.publishDate).toLocaleString(
-                'en-US',
+                'en-GB',
                 {
                     year: 'numeric',
                     day: 'numeric',
