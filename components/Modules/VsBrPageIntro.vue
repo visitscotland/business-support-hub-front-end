@@ -65,9 +65,15 @@
             #vs-blog-data
         >
             <VsBlogDetails
+                v-if="content.readingTime !== 0"
                 :blog-publish-date="lastPublished"
                 :blog-read-time="readTime"
             />
+            <div v-else class="mb-150">
+                <span class="vs-blog-details vs-blog-details__date vs-blog-details--highlight">
+                    {{ lastPublished }}
+                </span>
+            </div>
         </template>
 
         <!-- TODO - Share Button -->
@@ -145,7 +151,7 @@ if (page) {
         breadcrumb.value = pageModels.breadcrumb.items;
 
         // TODO - localised labels for minute/s and reading time:
-        readTime.value = `${content.value.readingTime} minute read`;
+        readTime.value = `${content.value.readingTime} minute read`; 
 
         if (content.value.publishDate) {
             publishDate.value = new Date(content.value.publishDate).toLocaleString(
