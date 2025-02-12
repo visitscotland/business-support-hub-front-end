@@ -48,7 +48,6 @@
         -->
 
         <template #vs-intro-breadcrumb>
-            <!-- {{ content.theme }} -->
             <VsBrBreadcrumb
                 :breadcrumb="breadcrumb"
                 :is-home="isHome"
@@ -56,7 +55,7 @@
         </template>
 
         <template
-            v-if="content.theme === ('standard' || 'simple')"
+            v-if="content.theme === 'standard' || content.theme === 'simple'"
             #vs-intro-heading
         >
             {{ content.title }}
@@ -66,7 +65,7 @@
             #vs-blog-data
         >
             <VsBlogDetails
-                :blog-publish-date="publishDate"
+                :blog-publish-date="lastPublished"
                 :blog-read-time="readTime"
             />
         </template>
@@ -133,6 +132,7 @@ const breadcrumb = ref<any[]>([]);
 const isHome = ref(false);
 const readTime = ref<string | null>(null);
 const publishDate = ref('');
+const lastPublished = ref('');
 const heroVideo = ref<any>(undefined);
 const youtubeId = ref('');
 
@@ -156,6 +156,7 @@ if (page) {
                     month: 'long',
                 },
             );
+            lastPublished.value = `Last published: ${publishDate.value}`
         }
 
         if (content.value.heroVideo) {
