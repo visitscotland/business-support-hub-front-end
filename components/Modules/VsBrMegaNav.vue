@@ -85,6 +85,8 @@
 <script lang="ts" setup>
 import { useScript } from '#imports';
 
+import { onMounted, nextTick } from 'vue';
+
 import {
     VsMegaNavDropdownContainer,
     VsMegaNavList,
@@ -101,7 +103,16 @@ const links: any = props.links;
 const { load } = useScript('https://customer.cludo.com/scripts/bundles/search-script.min.js', {
   trigger: 'manual'
 });
-load();
+
+onMounted(() => {
+    nextTick(() => {
+        load();
+    });
+});
+
+    if (import.meta.client) {
+        load();
+    }
 </script>
 
 <style lang="scss">
