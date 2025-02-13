@@ -100,18 +100,9 @@ import VsBrMegaNavFeaturedItem from '~/components/Modules/VsBrMegaNavFeaturedIte
 const props = defineProps<{ links: any[] }>();
 const links: any = props.links;
 
-const { loadSearch } = useScript('https://customer.cludo.com/scripts/bundles/search-script.min.js', {
-  trigger: 'manual'
-});
+useScript('https://customer.cludo.com/scripts/bundles/search-script.min.js');
+useScript('/scripts/cludo-search-results.js');
 
-const { loadResults } = useScript('https://customer.cludo.com/scripts/bundles/search-script.min.js', {
-  trigger: 'manual'
-});
-
-onMounted(() => {
-    loadSearch();
-    loadResults();
-});
 </script>
 
 <style lang="scss">
