@@ -53,18 +53,27 @@
                 :is-home="isHome"
             />
         </template>
-        
+
+        <template
+            v-if="content.theme === 'standard' || content.theme === 'simple'"
+            #vs-intro-heading
+        >
+            {{ content.title }}
+        </template>
+
         <template
             #vs-blog-data
         >
-        <!-- Temporary addition to show the publishDate and readtime unstyled for now -->
-        <p v-if="publishDate">{{ publishDate }}</p>
-        <p v-if="readTime">{{ readTime }}</p>
-
-            <!-- <VsBlogDetails
-                :blog-publish-date="publishDate"
+            <VsBlogDetails
+                v-if="content.readingTime !== 0"
+                :blog-publish-date="lastPublished"
                 :blog-read-time="readTime"
-            /> -->
+            />
+            <div v-else class="mb-150">
+                <span class="vs-blog-details vs-blog-details__date vs-blog-details--highlight">
+                    {{ lastPublished }}
+                </span>
+            </div>
         </template>
 
         <!-- TODO - Share Button -->
@@ -129,6 +138,7 @@ const breadcrumb = ref<any[]>([]);
 const isHome = ref(false);
 const readTime = ref<string | null>(null);
 const publishDate = ref('');
+const lastPublished = ref('');
 const heroVideo = ref<any>(undefined);
 const youtubeId = ref('');
 
@@ -141,21 +151,18 @@ if (page) {
         breadcrumb.value = pageModels.breadcrumb.items;
 
         // TODO - localised labels for minute/s and reading time:
-        if (content.value.readingTime > 1) {
-            readTime.value = `Reading time: ${content.value.readingTime} minutes`;
-        } else if (content.value.readingTime === 1) {
-            readTime.value = `Reading time: ${content.value.readingTime} minute`;
-        }
+        readTime.value = `${content.value.readingTime} minute read`; 
 
         if (content.value.publishDate) {
             publishDate.value = new Date(content.value.publishDate).toLocaleString(
-                'en-US',
+                'en-GB',
                 {
                     year: 'numeric',
                     day: 'numeric',
                     month: 'long',
                 },
             );
+            lastPublished.value = `Last published: ${publishDate.value}`
         }
 
         if (content.value.heroVideo) {

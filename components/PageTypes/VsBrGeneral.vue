@@ -16,7 +16,10 @@
         </VsRow>
     </VsContainer>
 
-    <VsBrHeroSectionModule :content="documentData" />
+        <VsBrHeroSectionModule
+            v-if="documentData.theme !== 'simple' && documentData.theme !== 'standard'"
+            :content="documentData"
+        />
 
     <template v-if="!isHomePage">
         <VsBrPageIntro
