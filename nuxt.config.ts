@@ -13,12 +13,6 @@ const clVersion = bufferFile('.clversion');
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    scripts: {
-        globals: {
-            results: '/scripts/cludo-search-results.js',
-        },
-    },
-
     runtimeConfig: {
         BR_RESOURCE_API_ENDPOINT: process.env.BR_RESOURCE_API_ENDPOINT,
         BR_X_FORWARDED_HOST: process.env.BR_X_FORWARDED_HOST,
