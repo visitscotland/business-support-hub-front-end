@@ -3124,17 +3124,10 @@
     node-gyp-build "^4.2.2"
     resolve-from "^5.0.0"
 
-<<<<<<< Updated upstream
-"@visitscotland/component-library@4.10.1":
-  version "4.10.1"
-  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-4.10.1.tgz#ebb73317fdb4d802dfac6be5a4648fa67e551849"
-  integrity sha512-XNQ5UuN5IRSksMNZ1bLLowpY+PUqDLEDjHkjK3Mv1DmlcHUaR2n0vTY/Hj4Sc3nNcGij/E2+cubI4+BnW8oNgQ==
-=======
 "@visitscotland/component-library@4.10.3":
   version "4.10.3"
   resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-4.10.3.tgz#034c6328d552bca2e24ee7b1b30cf1ec0ee8a6b4"
   integrity sha512-cMCR/i5G4ltpGPikJKqrhYQJstfUfprDag8wgh5pt0l9UpyBPhHz08AWycEjb2FH+8duihNvntpxugvzIf6qKg==
->>>>>>> Stashed changes
   dependencies:
     "@mapbox/geojson-extent" "^1.0.1"
     "@pinia/testing" "^0.1.3"
