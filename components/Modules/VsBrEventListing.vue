@@ -20,7 +20,17 @@
             <template v-for="result in data.results">
                 <h3>{{ result.title }}</h3>
             </template>
-            <div class="d-flex justify-content-center">Pagination here</div>
+            <VsPagination
+                v-if="numberOfPages > 1"
+                class="mt-300"
+                of-label="Of"
+                next-button-label="Next"
+                :number-of-pages="numberOfPages"
+                page-label="Page"
+                previous-button-label="Previous"
+                @page-click="updatePageNumber"
+            />
+            <button @click="update">Update</button>
         </VsCol>
     </VsRow>
 </template>
@@ -28,7 +38,7 @@
 <script setup lang="ts">
 import {
     VsCol,
-    VsHeading,
+    VsPagination,
     VsRow,
 } from '@visitscotland/component-library/components';
 
@@ -40,17 +50,22 @@ const query = ref<any>({
     test2: 'tim',
 });
 
-const { data, status, refresh }: { data: any, status: any, refresh: any } = await useFetch(props.dataEndpoint, {
+const { data, status }: { data: any, status: any } = await useFetch(props.dataEndpoint, {
     query: query.value, 
 });
 const totalResults = computed(() => data.value.total);
 const results = computed(() => data.value.results);
+const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize))
 
 const update = () => {
-    query.value['test'] = 'bob';
+    query.value['page'] = '2';
 
     delete query.value['test2'];
 }
+
+const updatePageNumber = (page: number) => {
+    query.value.page = page;
+};
 
 // Update pagination - add to pagination to query.
 // Update sort - Add sortBy to query, remove pagination.
