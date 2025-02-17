@@ -16,10 +16,10 @@
         </VsRow>
     </VsContainer>
 
-        <VsBrHeroSectionModule
-            v-if="documentData.theme !== 'simple' && documentData.theme !== 'standard'"
-            :content="documentData"
-        />
+    <VsBrHeroSectionModule
+        v-if="documentData.theme !== 'simple' && documentData.theme !== 'standard'"
+        :content="documentData"
+    />
 
     <template v-if="!isHomePage">
         <VsBrPageIntro
@@ -29,9 +29,11 @@
             :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
         />
 
-        <div class="my-n300">
+        <div
+            class="my-n300"
+            v-if="documentData.theme === 'top-level'"
+        >
             <VsBrArticleModule
-                v-if="documentData.theme === 'top-level'"
                 :module="topLevelArticleModule"
             />
         </div>
