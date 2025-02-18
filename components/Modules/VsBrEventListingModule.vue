@@ -1,4 +1,5 @@
 <template>
+    <pre>{{module}}</pre>
     <VsTabs class="my-400">
         <VsTabItem 
             v-for="eventList in module.eventsListings"
@@ -17,7 +18,11 @@
 
                 </VsRow>
                 <!-- <VsBrEventListing :data-endpoint="eventList.baseEndPoint" /> -->
-                <VsBrEventListing data-endpoint="http://localhost:8080/site/api/bsh/events-search/training" />
+                <VsBrEventListing
+                    :event-data="eventList"
+                    data-endpoint="http://localhost:8080/site/api/bsh/events-search/training" 
+                    sort-by
+                />
 
                     <!-- <template v-if="status === 'success'">
                         <VsCol cols="12" md="4">
@@ -43,9 +48,6 @@
 /**
  * TODO: Tabs
  * Update to new variant (once ready).
- * TODO: Pagination
- *  Add component
- *  Update api query parameter when page clicked.
  * TODO: Filters
  * Add component
  * Update api query parameter when filter clicked.
@@ -53,10 +55,19 @@
  * Clear all query params when clicked
  * Remove selected filter from query when click on selected filter button
  * TODO: Sort
- * Add dropdown component
- * Update api query parameter when changed.
+ * Update variant to secondary
  * TODO: Loading spinner?
- * TODO
+ * Show loading spinner while waiting for card data.
+ * TODO: Pagination
+ * Update with fix
+ * TODO: Cards
+ * Add component
+ * Add content to cards
+ * Update with fix
+ * TODO: Tidy up
+ * Tidy code
+ * Remove unused/dev code
+ * Add comments
  */
 import {
     VsCol,
@@ -77,10 +88,6 @@ const module: any = props.module;
 
 // TODO: Replace with Endpoint from the CMS.
 const temporaryEndpoint = 'http://localhost:8080/site/api/bsh/events-search/training';
-
-module.eventsListings[0].baseEndPoint = 'http://localhost:8080/site/api/bsh/events-search/training';
-module.eventsListings[1].baseEndPoint = 'http://localhost:8080/site/api/bsh/events-search/industry';
-module.eventsListings[2].baseEndPoint = 'http://localhost:8080/site/api/bsh/events-search/travel';
 
 const { data, status }: { data: any, status: any } = await useFetch(temporaryEndpoint);
 const totalResults = computed(() => data.value.total);
