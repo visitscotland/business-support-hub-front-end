@@ -1,5 +1,5 @@
 <template>
-    <pre>{{module}}</pre>
+    <!-- <pre>{{module}}</pre> -->
     <VsTabs class="my-400">
         <VsTabItem 
             v-for="eventList in module.eventsListings"
@@ -23,20 +23,6 @@
                     data-endpoint="http://localhost:8080/site/api/bsh/events-search/training" 
                     sort-by
                 />
-
-                    <!-- <template v-if="status === 'success'">
-                        <VsCol cols="12" md="4">
-                            <p>Results ({{ data.total }})</p>
-
-                            <p>Filters here</p>
-                        </VsCol>
-
-                        <VsCol cols="12" md="8">
-                            <template v-for="result in data.results">
-                                <h3>{{ result.title }}</h3>
-                            </template>
-                        </VsCol>
-                    </template> -->
             </VsContainer>
         </VsTabItem>
     </VsTabs>
@@ -60,14 +46,18 @@
  * Show loading spinner while waiting for card data.
  * TODO: Pagination
  * Update with fix
+ * Scroll to top of list when clicked.
  * TODO: Cards
- * Add component
- * Add content to cards
  * Update with fix
+ * How to display different details (e.g. one column or two)
  * TODO: Tidy up
  * Tidy code
  * Remove unused/dev code
  * Add comments
+ * Check spacing
+ * TODO: No results message
+ * TODO: Accessibility
+ * Live region for results section
  */
 import {
     VsCol,
