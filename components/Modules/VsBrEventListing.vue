@@ -17,8 +17,10 @@
             <VsRow>
                 <VsCol cols="12" md="10">
                     <VsButton
+                        v-if="selectedFilters.length >= 0"
                         :rounded="false"
                         variant="secondary"
+                        size="sm"
                         @click="clearAllFilters"
                     >
                         Clear all
@@ -26,7 +28,7 @@
                 </VsCol>
                 <VsCol cols="12" class="d-block d-sm-none">Results ({{ data.total }})</VsCol>
                 <VsCol cols="12" md="2">
-                    <VsDropdown>
+                    <VsDropdown variant="secondary">
                         <template #button-content>
                             Sort by: {{ selectedSortBy }}
                         </template>
@@ -138,9 +140,10 @@ const props = defineProps<{
 const configStore = useConfigStore();
 const query = ref<any>({});
 const currentPage = ref<number>(1);
-const selectedSortBy = ref(props.eventData.sortBy[0].label);
+const selectedSortBy = ref();
+const selectedFilters = ref([]);
 
-const { data, status }: { data: any, status: any } = await useFetch(props.dataEndpoint, {
+const { data, status }: { data: any, status: any } = await useFetch(props.eventData.baseEndPoint, {
     query: query.value, 
 });
 const totalResults = computed(() => data.value.total);
@@ -158,6 +161,21 @@ const updateSort = (event: Event) => {
     selectedSortBy.value = label;
 };
 
+const updateSelectedFilters = () => {
+    // start-date=dd/MM/YYYY
+    // end-date=dd/MM/YYYY
+    // online=true 
+    // topic=bookkeeping-finance
+    // sector=accommodation
+
+    // query.value['start-date'] = 14/02/2025
+    // query.value['end-date'] = 14/03/2025
+    
+    // query.value.online = true
+
+    // query.value.sector = ['accommodation', 'event']
+};
+
 // Update page query parameter when the page number updates.
 watch(currentPage, (newPage, oldPage) => {
     if (newPage === 1) {
@@ -172,6 +190,7 @@ const clearAllFilters = () => {
     // Delete all parameters from the query.
     Object.keys(query.value).forEach(key => delete query.value[key]);
     currentPage.value = 1;
+    selectedSortBy.value = ''; 
 };
 
 const setIcon = (linkType: string) => {

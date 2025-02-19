@@ -40,12 +40,12 @@
  * TODO: Selected filters
  * Clear all query params when clicked
  * Remove selected filter from query when click on selected filter button
+ * Only show "clear all" if a filter has been selected.
  * TODO: Sort
- * Update variant to secondary
+ * Styling, button expands to the right.
  * TODO: Loading spinner?
  * Show loading spinner while waiting for card data.
  * TODO: Pagination
- * Update with fix
  * Scroll to top of list when clicked.
  * TODO: Cards
  * Update with fix
@@ -55,6 +55,7 @@
  * Remove unused/dev code
  * Add comments
  * Check spacing
+ * Update endpoints for feature/prod.
  * TODO: No results message
  * TODO: Accessibility
  * Live region for results section
@@ -82,6 +83,11 @@ const temporaryEndpoint = 'http://localhost:8080/site/api/bsh/events-search/trai
 const { data, status }: { data: any, status: any } = await useFetch(temporaryEndpoint);
 const totalResults = computed(() => data.value.total);
 const results = computed(() => data.value.results);
+
+// Hardcoded api endpoints.
+module.eventsListings[0].baseEndPoint = 'http://localhost:8080/site/api/bsh/events-search/training';
+module.eventsListings[1].baseEndPoint = 'http://localhost:8080/site/api/bsh/events-search/industry';
+module.eventsListings[2].baseEndPoint = 'http://localhost:8080/site/api/bsh/events-search/travel-trade';
 </script>
 
 
