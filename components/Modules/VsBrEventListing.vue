@@ -10,7 +10,12 @@
                 Results ({{ data.total }})
             </div>
             
-            <p>Filters</p>
+            <ClientOnly fallback-tag="span" fallback="Loading comments...">
+                <VsBrFilter 
+                    :filters="props.eventData.filters"
+                    @filter-updated="updateSelectedFilters"
+                />
+            </ClientOnly>
         </VsCol>
 
         <VsCol cols="12" md="9">
@@ -130,6 +135,7 @@ import {
     VsRow,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from './VsBrRichText.vue';
+import VsBrFilter from './VsBrFilter.vue';
 import useConfigStore from '~/stores/configStore';
 
 const props = defineProps<{
@@ -162,7 +168,50 @@ const updateSort = (event: Event) => {
     selectedSortBy.value = label;
 };
 
-const updateSelectedFilters = () => {
+const updateSelectedFilters = (event: Event) => {
+    if (!event.target) return;
+
+    const type = event.target.dataset.type;
+
+    let key: string,
+        value: string | boolean;
+    if (type === 'date') {
+        key = event.target.id;
+        value = event.target.value;
+
+        if (value) {
+            query.value[key] = value;
+        } else {
+            delete query.value[key];
+        }
+    } else if (type === 'boolean') {
+        key = event.target.id;
+        value = event.target.checked ? true : false;
+
+        if (value) {
+            query.value[key] = value;
+        } else {
+            delete query.value[key];
+        }
+    } else {
+        key = type;
+        value = event.target.id;
+
+        if (value && query.value[key] && !query.value[key].includes(value)) {
+            query.value[key].push(value);
+        } else if (value && !query.value[key]) {
+            query.value[key] = [value];
+        } else {
+            const index = query.value[key].indexOf(value);
+            if (index > -1) {
+                query.value[key].splice(index, 1);
+            }
+        }
+    }
+
+
+    // query.value[key] = value;
+
     // start-date=dd/MM/YYYY
     // end-date=dd/MM/YYYY
     // online=true 
