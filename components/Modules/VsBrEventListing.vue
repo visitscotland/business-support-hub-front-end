@@ -135,6 +135,7 @@ import useConfigStore from '~/stores/configStore';
 const props = defineProps<{
     dataEndpoint: string,
     eventData: any,
+    moduleId: string,
 }>();
 
 const configStore = useConfigStore();
@@ -183,6 +184,10 @@ watch(currentPage, (newPage, oldPage) => {
     } else if (oldPage !== newPage) {
         query.value.page = newPage;
     }
+
+    // Scroll to the top of the listing when the pagination changed.
+    const element = document.getElementById(props.moduleId);
+    element?.scrollIntoView({ behavior: 'smooth' });
 });
 
 // Clear all filters and remove all query parameters.

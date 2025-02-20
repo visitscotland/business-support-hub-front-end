@@ -1,6 +1,9 @@
 <template>
     <!-- <pre>{{module}}</pre> -->
-    <VsTabs class="my-400">
+    <VsTabs
+        class="my-400"
+        :id="moduleId"
+    >
         <VsTabItem 
             v-for="eventList in module.eventsListings"
             :title="eventList.title"
@@ -21,7 +24,7 @@
                 <VsBrEventListing
                     :event-data="eventList"
                     data-endpoint="http://localhost:8080/site/api/bsh/events-search/training" 
-                    sort-by
+                    :module-id="moduleId"
                 />
             </VsContainer>
         </VsTabItem>
@@ -83,6 +86,7 @@ const temporaryEndpoint = 'http://localhost:8080/site/api/bsh/events-search/trai
 const { data, status }: { data: any, status: any } = await useFetch(temporaryEndpoint);
 const totalResults = computed(() => data.value.total);
 const results = computed(() => data.value.results);
+const moduleId = computed(() => module.anchor || 'events-listing-module');
 
 // Hardcoded api endpoints.
 module.eventsListings[0].baseEndPoint = 'http://localhost:8080/site/api/bsh/events-search/training';
