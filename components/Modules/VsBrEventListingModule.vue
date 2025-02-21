@@ -34,7 +34,7 @@
 /**
  * TODO: Tabs
  * Update to new variant (once ready).
- * TODO: Filters - DONE?
+ * TODO: Filters
  * Not opening on mobile.
  * Not able to clear all (can't call methods within filter comp).
  * TODO: Selected filters
@@ -53,10 +53,8 @@
  * Remove unused/dev code
  * Add comments
  * Check spacing
- * Update endpoints for feature/prod.
  * Set min dates on datepickers.
  * labels
- * TODO: No results message
  * TODO: Accessibility
  * Live region for results section
  */
@@ -69,6 +67,7 @@ import {
     VsRow,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from './VsBrRichText.vue';
+import VsBrEventListing from './VsBrEventListing.vue';
 
 const props = defineProps<{
     module: Object,

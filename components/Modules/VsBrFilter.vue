@@ -28,6 +28,7 @@
                                 :id="filter.key"
                                 :name="filter.key"
                                 data-type="date"
+                                :data-label="filter.label"
                                 :min="getTodayDate()"
                             >
                         </div>
@@ -41,6 +42,7 @@
                         value="checked"
                         size="sm"
                         data-type="boolean"
+                        :data-label="filter.label"
                     />
                 </template>
                 <template v-else-if="getGroupType(group) === 'group'">
@@ -51,6 +53,7 @@
                         value="checked"
                         size="sm"
                         :data-type="getSectionKey(group)"
+                        :data-label="filter.label"
                     />
                 </template>
             </VsFilterSection>

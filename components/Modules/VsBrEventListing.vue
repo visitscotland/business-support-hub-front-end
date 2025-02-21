@@ -1,8 +1,8 @@
 <template>
     <VsRow>
-        <!-- <pre>{{ props.eventData }}</pre> -->
+        <pre>{{ props.eventData.filters }}</pre>
         <!-- <pre>{{ data.results }}</pre> -->
-        <pre>{{ configStore.labels }}</pre>
+        <!-- <pre>{{ configStore.labels }}</pre> -->
         <VsCol cols="12" md="3">
             <div
                 class="d-none d-lg-block"
@@ -22,13 +22,25 @@
             <VsRow>
                 <VsCol cols="12" md="10">
                     <VsButton
-                        v-if="selectedFilters.length >= 0"
+                        v-if="selectedFilters.length > 0"
                         :rounded="false"
                         variant="secondary"
                         size="sm"
                         @click="clearAllFilters"
                     >
                         {{ configStore.getLabel('events-listings-module', 'clear-all') }}
+                    </VsButton>
+
+                    <VsButton
+                        v-for="filter in selectedFilters"
+                        :rounded="false"
+                        variant="secondary"
+                        size="sm"
+                        icon="close"
+                        icon-position="right"
+                        @click="removeSelectedFilter(filter.key, filter.label)"
+                    >
+                        {{ filter.label }}
                     </VsButton>
                 </VsCol>
                 <VsCol cols="12" class="d-block d-sm-none">
@@ -155,7 +167,7 @@ const configStore = useConfigStore();
 const query = ref<any>({});
 const currentPage = ref<number>(1);
 const selectedSortBy = ref();
-const selectedFilters = ref([]);
+const selectedFilters = ref<any>([]);
 
 const { data, status }: { data: any, status: any } = await useFetch(props.eventData.baseEndPoint, {
     query: query.value, 
@@ -180,40 +192,72 @@ const updateSelectedFilters = (event: Event) => {
 
     const type = event.target.dataset.type;
 
-    let key: string,
-        value: string | boolean;
+    let key: string = event.target.id;
+    let label: string = event.target.dataset.label;
+    let value: string | boolean;
+
     if (type === 'date') {
-        key = event.target.id;
         value = event.target.value;
-
-        if (value) {
-            query.value[key] = value;
-        } else {
-            delete query.value[key];
-        }
+        label = `${label}: ${value}`;
     } else if (type === 'boolean') {
-        key = event.target.id;
         value = event.target.checked ? true : false;
-
-        if (value) {
-            query.value[key] = value;
-        } else {
-            delete query.value[key];
-        }
     } else {
         key = type;
         value = event.target.id;
+    }
 
-        if (value && query.value[key] && !query.value[key].includes(value)) {
-            query.value[key].push(value);
-        } else if (value && !query.value[key]) {
-            query.value[key] = [value];
-        } else {
-            const index = query.value[key].indexOf(value);
-            if (index > -1) {
-                query.value[key].splice(index, 1);
-            }
-        }
+    if (value && query.value[key] && !query.value[key].includes(value)) {
+        console.log('one');
+        query.value[key].push(value);
+        // Add filter to selectedFilters list.
+        selectedFilters.value.push({
+            key,
+            label,
+        });
+    } else if (value && !query.value[key]) {
+        console.log('two')
+        query.value[key] = [value];
+        // Add filter to selectedFilters list.
+        selectedFilters.value.push({
+            key,
+            label,
+        });
+    } else {
+        removeSelectedFilter(key, value);
+    }
+
+};
+
+// const addSelectedFilter = (key: string, label: string, value?: string | boolean, type: string) => {
+//     console.log('add')
+//     // Add filter to API query.
+//     if (value && query.value[key] && !query.value[key].includes(value)) {
+//         query.value[key].push(value);
+//     } else if (value && !query.value[key]) {
+//         query.value[key] = [value];
+//     }
+
+//     // Add filter to selectedFilters list.
+//     selectedFilters.value.push({
+//         key,
+//         label,
+//     });
+// };
+
+const removeSelectedFilter = (key: string, value: string | boolean) => {
+    // Remove filter from API query.
+    // delete query.value[key];
+    const queryIndex = query.value[key].indexOf(value);
+    if (queryIndex > -1) {
+        query.value[key].splice(queryIndex, 1);
+    } else {
+        delete query.value[key];
+    }
+
+    // Remove filter from selectedFilters list.
+    const index = selectedFilters.value.findIndex((el) => el.key === key);
+    if (index > -1) {
+        selectedFilters.value.splice(index, 1);
     }
 };
 
