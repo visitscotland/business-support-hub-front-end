@@ -1,7 +1,7 @@
 <template>
     <VsFilter
-        apply-button-text="Apply"
-        filter-button-text="filter"
+        :apply-button-text="configStore.getLabel('events-listings-module', 'apply')"
+        :filter-button-text="configStore.getLabel('events-listings-module', 'filter')"
         filter-id="events-list-filter"
     >
         <VsFilterPanel
@@ -61,8 +61,9 @@
 </template>
 
 <script setup lang="ts">
-import { VsFilter, VsFilterPanel, VsFilterSection, VsCheckbox } from '@visitscotland/component-library/components';
 import mitt from 'mitt';
+import { VsFilter, VsFilterPanel, VsFilterSection, VsCheckbox } from '@visitscotland/component-library/components';
+import useConfigStore from '~/stores/configStore';
 
 const emitter = mitt();
 provide('emitter', emitter);
@@ -72,6 +73,8 @@ const props = defineProps<{
 }>();
 
 defineEmits(['filter-updated']);
+
+const configStore = useConfigStore();
 
 // Group filters for use in filter sections.
 const filterGroups: any = computed(() => {

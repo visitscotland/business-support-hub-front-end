@@ -2,12 +2,12 @@
     <VsRow>
         <!-- <pre>{{ props.eventData }}</pre> -->
         <!-- <pre>{{ data.results }}</pre> -->
-        <!-- <pre>{{ configStore.labels }}</pre> -->
+        <pre>{{ configStore.labels }}</pre>
         <VsCol cols="12" md="3">
             <div
                 class="d-none d-lg-block"
             >
-                Results ({{ data.total }})
+                {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
             </div>
             
             <ClientOnly fallback-tag="span" fallback="Loading comments...">
@@ -28,14 +28,16 @@
                         size="sm"
                         @click="clearAllFilters"
                     >
-                        Clear all
+                        {{ configStore.getLabel('events-listings-module', 'clear-all') }}
                     </VsButton>
                 </VsCol>
-                <VsCol cols="12" class="d-block d-sm-none">Results ({{ data.total }})</VsCol>
+                <VsCol cols="12" class="d-block d-sm-none">
+                    {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
+                </VsCol>
                 <VsCol cols="12" md="2">
                     <VsDropdown variant="secondary">
                         <template #button-content>
-                            Sort by: {{ selectedSortBy }}
+                            {{ configStore.getLabel('events-listings-module', 'sort-by') }}: {{ selectedSortBy }}
                         </template>
 
                         <VsDropdownItem
@@ -51,8 +53,9 @@
                 </VsCol>
             </VsRow>
 
-            <template v-for="result in data.results">
+            <template v-if="data.results.length > 0">
                 <VsEventCard
+                    v-for="result in data.results"
                     :cta-icon="setIcon(result.cta.type)"
                     :cta-label="result.cta.label" 
                     :cta-href="result.cta.link"
@@ -108,14 +111,18 @@
                 </VsEventCard>
             </template>
 
+            <template v-else>
+                {{ configStore.getLabel('essentials.pagination', 'no-results-message') }}
+            </template>
+
             <VsPagination
                 v-if="numberOfPages > 1"
                 class="mt-300"
-                of-label="Of"
-                next-button-label="Next"
+                :of-label="configStore.getLabel('essentials.pagination', 'page.of')"
+                :next-button-label="configStore.getLabel('essentials.pagination', 'page.next')"
                 :number-of-pages="numberOfPages"
-                page-label="Page"
-                previous-button-label="Previous"
+                :page-label="configStore.getLabel('essentials.pagination', 'page.page')"
+                :previous-button-label="configStore.getLabel('essentials.pagination', 'page.previous')"
                 v-model="currentPage"
                 @page-click="(page: number) => currentPage = page"
             />
@@ -208,22 +215,6 @@ const updateSelectedFilters = (event: Event) => {
             }
         }
     }
-
-
-    // query.value[key] = value;
-
-    // start-date=dd/MM/YYYY
-    // end-date=dd/MM/YYYY
-    // online=true 
-    // topic=bookkeeping-finance
-    // sector=accommodation
-
-    // query.value['start-date'] = 14/02/2025
-    // query.value['end-date'] = 14/03/2025
-    
-    // query.value.online = true
-
-    // query.value.sector = ['accommodation', 'event']
 };
 
 // Update page query parameter when the page number updates.
@@ -256,7 +247,4 @@ const setIcon = (linkType: string) => {
 
     return null;
 }
-// Update pagination - add to pagination to query.
-// Update sort - Add sortBy to query, remove pagination.
-// Update filter - Add filterCat to query, remove pagination
 </script>
