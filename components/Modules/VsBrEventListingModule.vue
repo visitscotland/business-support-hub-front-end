@@ -1,5 +1,13 @@
 <template>
     <!-- <pre>{{ module }}</pre> -->
+    <!-- <div style="width: 500px; margin-top: 200px;">
+        <VsBrFilter class="my-500" ref="filter" />
+
+        <button @click="resetAll">Outside reset all</button>
+        <button @click="resetOne">Outside reset one</button>
+    </div> -->
+
+
     <VsTabs
         class="my-400"
         :id="moduleId"
@@ -35,8 +43,7 @@
  * TODO: Tabs
  * Update to new variant (once ready).
  * TODO: Filters
- * Not opening on mobile.
- * Not able to clear all (can't call methods within filter comp).
+ * Update to new version.
  * TODO: Selected filters
  * Clear all query params when clicked
  * Remove selected filter from query when click on selected filter button
@@ -68,6 +75,7 @@ import {
 } from '@visitscotland/component-library/components';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrEventListing from './VsBrEventListing.vue';
+// import VsBrFilter from './VsBrFilter.vue';
 
 const props = defineProps<{
     module: Object,
@@ -76,6 +84,16 @@ const props = defineProps<{
 const module: any = props.module;
 
 const moduleId = computed(() => module.anchor || 'events-listing-module');
+
+const filter = ref();
+
+const resetAll = () => {
+    filter.value.resetAll();
+};
+
+const resetOne = () => {
+    filter.value.resetOne();
+};
 </script>
 
 <style lang="scss">

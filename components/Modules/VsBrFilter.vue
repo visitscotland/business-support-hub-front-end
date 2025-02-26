@@ -1,94 +1,84 @@
 <template>
     <VsFilter
-        :apply-button-text="configStore.getLabel('events-listings-module', 'apply')"
-        :filter-button-text="configStore.getLabel('events-listings-module', 'filter')"
-        filter-id="events-list-filter"
+        :filter-id="props.filterId"
+        :filter-label="configStore.getLabel('events-listings-module', 'filter')"
+        @filter-updated="handleUpdate"
+        ref="filter"
     >
-        <VsFilterPanel
-            filter-label="Filter"
-            @filter-updated="(event) => $emit('filter-updated', event)"
-        >
         <VsFilterSection
-                v-for="group in filterGroups"
-                :key="group"
-                :section-title="getSectionLabel(group)"
-                :type="getGroupType(group)"
-            >
-                <template v-if="getGroupType(group) === 'inline'">             
-                    <div
-                        v-for="filter in group"
-                        class="date-picker"
-                    >
-                        <label for="filter.key">
-                            {{ filter.label }}
-                        </label>
-                        <div>
-                            <input
-                                type="date"
-                                :id="filter.key"
-                                :name="filter.key"
-                                data-type="date"
-                                :data-label="filter.label"
-                                :min="getTodayDate()"
-                            >
-                        </div>
+            v-for="group in filterGroups"
+            :key="group"
+            :section-title="getSectionLabel(group)"
+            :type="getGroupType(group)"
+        >
+            <template v-if="getGroupType(group) === 'inline'">             
+                <div
+                    v-for="filter in group"
+                    class="date-picker"
+                >
+                    <label :for="`${props.filterId}-${filter.key}`">
+                        {{ filter.label }}
+                    </label>
+                    <div>
+                        <input
+                            type="date"
+                            :id="`${props.filterId}-${filter.key}`"
+                            :name="`${props.filterId}-${filter.key}`"
+                            data-type="date"
+                            :data-label="filter.label"
+                        >
                     </div>
-                </template>
-                <template v-else-if="getGroupType(group) === 'list'">
-                    <VsCheckbox
-                        v-for="filter in group"
-                        :field-name="filter.key"
-                        :label="filter.label"
-                        value="checked"
-                        size="sm"
-                        data-type="boolean"
-                        :data-label="filter.label"
-                    />
-                </template>
-                <template v-else-if="getGroupType(group) === 'group'">
-                    <VsCheckbox
-                        v-for="filter in group[0].values"
-                        :field-name="filter.key"
-                        :label="filter.label"
-                        value="checked"
-                        size="sm"
-                        :data-type="getSectionKey(group)"
-                        :data-label="filter.label"
-                    />
-                </template>
-            </VsFilterSection>
-
-            <!-- <pre>{{ filterGroups }}</pre> -->
-        </VsFilterPanel>
+                </div>
+            </template>
+            <template v-else-if="getGroupType(group) === 'list'">
+                <VsCheckbox
+                    v-for="filter in group"
+                    :field-name="`${props.filterId}-${filter.key}`"
+                    :label="filter.label"
+                    value="checked"
+                    size="sm"
+                    data-type="boolean"
+                    :data-label="filter.label"
+                />
+            </template>
+            <template v-else-if="getGroupType(group) === 'group'">
+                <VsCheckbox
+                    v-for="filter in group[0].values"
+                    :field-name="`${props.filterId}-${filter.key}`"
+                    :label="filter.label"
+                    value="checked"
+                    size="sm"
+                    :data-type="getSectionKey(group)"
+                    :data-label="filter.label"
+                />
+            </template>
+        </VsFilterSection>
     </VsFilter>
+    <!-- <pre>{{ filterGroups }}</pre> -->
 </template>
 
 <script setup lang="ts">
-import mitt from 'mitt';
-import { VsFilter, VsFilterPanel, VsFilterSection, VsCheckbox } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore';
-
-const emitter = mitt();
-provide('emitter', emitter);
+import { VsFilter, VsFilterSection, VsCheckbox } from '@visitscotland/component-library/components';
 
 const props = defineProps<{
     filters: any,
+    filterId: string,
 }>();
 
-defineEmits(['filter-updated']);
+const emit = defineEmits(['filter-updated']);
 
 const configStore = useConfigStore();
+const filter = ref();
 
-// Group filters for use in filter sections.
-const filterGroups: any = computed(() => {
-    if (props.filters) {
-        return Object.values(
-            Object.groupBy(props.filters, ({ group }: { group: any }) => group)
-        );
-    } else {
-        return [];
-    }
-});
+const filterGroups = ref<any>();
+
+watch(filter, () => {
+    // Group filters for use in filter sections.
+    filterGroups.value = Object.values(
+        Object.groupBy(props.filters, ({ group }: { group: any }) => group)
+    );   
+}, { once: true });
 
 // Determine the group type.
 const getGroupType = (group: any) => {
@@ -119,10 +109,49 @@ const getSectionKey = (group: any) => {
     }
 };
 
-const getTodayDate = () => {
-    let todayDate = new Date();
-    const offset = todayDate.getTimezoneOffset();
-    todayDate = new Date(todayDate.getTime() - (offset * 60 * 1000));
-    return todayDate.toISOString().split('T')[0];
+const resetAll = () => {
+    filter.value.resetAll();
+}
+
+const resetOne = (id: string) => {
+    filter.value.resetOne(id);
 };
+
+defineExpose({
+    resetAll,
+    resetOne,
+});
+
+const handleUpdate = (event: Event) => {
+    if (!event.target) return;
+
+    const type: string = event.target.dataset.type;
+    const fieldId: string = event.target.id;
+
+    let key: string = cleanKey(event.target.id);
+    let label: string = event.target.dataset.label;
+    let value: string | boolean;
+
+    if (type === 'date') {
+        value = event.target.value;
+        label = `${label}: ${value}`;
+    } else if (type === 'boolean') {
+        value = event.target.checked ? true : false;
+    } else {
+        key = type;
+        value = cleanKey(event.target.id);
+    }
+
+    // console.log({ type, key, label, value, filterId: props.filterId, fieldId });
+    emit('filter-updated', {
+        fieldId, 
+        key,
+        label,
+        value,
+    });
+};
+
+const cleanKey = (key: string) => {
+    return key.slice(props.filterId.length + 1);
+}
 </script>

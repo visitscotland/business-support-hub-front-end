@@ -1,6 +1,7 @@
 <template>
     <VsRow>
-        <pre>{{ props.eventData.filters }}</pre>
+        <!-- <pre>{{ filterId }}</pre> -->
+        <!-- <pre>{{ props.eventData }}</pre> -->
         <!-- <pre>{{ data.results }}</pre> -->
         <!-- <pre>{{ configStore.labels }}</pre> -->
         <VsCol cols="12" md="3">
@@ -10,16 +11,18 @@
                 {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
             </div>
             
-            <ClientOnly fallback-tag="span" fallback="Loading comments...">
-                <VsBrFilter 
+            <!-- <ClientOnly> -->
+                <VsBrFilter
                     :filters="props.eventData.filters"
+                    :filter-id="filterId"
+                    ref="filter"
                     @filter-updated="updateSelectedFilters"
                 />
-            </ClientOnly>
+            <!-- </ClientOnly> -->
         </VsCol>
 
         <VsCol cols="12" md="9">
-            <VsRow>
+            <!-- <VsRow>
                 <VsCol cols="12" md="10">
                     <VsButton
                         v-if="selectedFilters.length > 0"
@@ -63,7 +66,52 @@
 
                     </VsDropdown>
                 </VsCol>
-            </VsRow>
+            </VsRow> -->
+
+            <div class="events-controls">
+                <div class="col1">
+                    <VsButton
+                        v-if="selectedFilters.length > 0"
+                        :rounded="false"
+                        variant="secondary"
+                        size="sm"
+                        @click="clearAllFilters"
+                    >
+                        {{ configStore.getLabel('events-listings-module', 'clear-all') }}
+                    </VsButton>
+
+                    <VsButton
+                        v-for="filter in selectedFilters"
+                        :rounded="false"
+                        variant="secondary"
+                        size="sm"
+                        icon="close"
+                        icon-position="right"
+                        @click="removeSelectedFilter(filter.fieldId, filter.key, filter.value)"
+                    >
+                        {{ filter.label }}
+                    </VsButton>
+                </div>
+                <div class="col2">
+                    {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
+                </div>
+                <div class="col3">
+                    <VsDropdown variant="secondary">
+                        <template #button-content>
+                            {{ configStore.getLabel('events-listings-module', 'sort-by') }}: {{ selectedSortBy }}
+                        </template>
+
+                        <VsDropdownItem
+                            v-for="item in props.eventData.sortBy"
+                            :key="item.key"
+                            :data-key="item.key"
+                            @click="updateSort"
+                        >
+                            {{ item.label }}
+                        </VsDropdownItem>
+                    </VsDropdown>
+                </div>
+            </div>
 
             <template v-if="data.results.length > 0">
                 <VsEventCard
@@ -164,10 +212,14 @@ const props = defineProps<{
 }>();
 
 const configStore = useConfigStore();
-const query = ref<any>({});
+const query = ref<any>({
+    sort: 'date',
+});
 const currentPage = ref<number>(1);
-const selectedSortBy = ref();
+const selectedSortBy = ref(props.eventData.sortBy[0].label);
 const selectedFilters = ref<any>([]);
+const filterId = props.eventData.title.split(' ')[0].toLowerCase();
+const filter = ref();
 
 const { data, status }: { data: any, status: any } = await useFetch(props.eventData.baseEndPoint, {
     query: query.value, 
@@ -175,6 +227,7 @@ const { data, status }: { data: any, status: any } = await useFetch(props.eventD
 const totalResults = computed(() => data.value.total);
 const results = computed(() => data.value.results);
 const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize))
+
 
 // Update the sort query parameter.
 const updateSort = (event: Event) => {
@@ -187,67 +240,44 @@ const updateSort = (event: Event) => {
     selectedSortBy.value = label;
 };
 
-const updateSelectedFilters = (event: Event) => {
-    if (!event.target) return;
-
-    const type = event.target.dataset.type;
-
-    let key: string = event.target.id;
-    let label: string = event.target.dataset.label;
-    let value: string | boolean;
-
-    if (type === 'date') {
-        value = event.target.value;
-        label = `${label}: ${value}`;
-    } else if (type === 'boolean') {
-        value = event.target.checked ? true : false;
-    } else {
-        key = type;
-        value = event.target.id;
-    }
+const updateSelectedFilters = (payload: any) => {
+    const {
+        fieldId,
+        key,
+        label,
+        value,
+    } = payload;
 
     if (value && query.value[key] && !query.value[key].includes(value)) {
-        console.log('one');
         query.value[key].push(value);
         // Add filter to selectedFilters list.
         selectedFilters.value.push({
+            fieldId,
             key,
             label,
+            value,
         });
     } else if (value && !query.value[key]) {
-        console.log('two')
         query.value[key] = [value];
         // Add filter to selectedFilters list.
         selectedFilters.value.push({
+            fieldId,
             key,
             label,
+            value,
         });
     } else {
-        removeSelectedFilter(key, value);
+        removeSelectedFilter(fieldId, key, value);
     }
 
+    // Reset pagination.
+    currentPage.value = 1;
 };
 
-// const addSelectedFilter = (key: string, label: string, value?: string | boolean, type: string) => {
-//     console.log('add')
-//     // Add filter to API query.
-//     if (value && query.value[key] && !query.value[key].includes(value)) {
-//         query.value[key].push(value);
-//     } else if (value && !query.value[key]) {
-//         query.value[key] = [value];
-//     }
-
-//     // Add filter to selectedFilters list.
-//     selectedFilters.value.push({
-//         key,
-//         label,
-//     });
-// };
-
-const removeSelectedFilter = (key: string, value: string | boolean) => {
+const removeSelectedFilter = (fieldId: string, key: string, value: string | boolean) => {
     // Remove filter from API query.
-    // delete query.value[key];
     const queryIndex = query.value[key].indexOf(value);
+    
     if (queryIndex > -1) {
         query.value[key].splice(queryIndex, 1);
     } else {
@@ -259,6 +289,11 @@ const removeSelectedFilter = (key: string, value: string | boolean) => {
     if (index > -1) {
         selectedFilters.value.splice(index, 1);
     }
+
+    filter.value.resetOne(fieldId);
+
+    // Reset pagination.
+    currentPage.value = 1;
 };
 
 // Update page query parameter when the page number updates.
@@ -277,9 +312,20 @@ watch(currentPage, (newPage, oldPage) => {
 // Clear all filters and remove all query parameters.
 const clearAllFilters = () => {
     // Delete all parameters from the query.
-    Object.keys(query.value).forEach(key => delete query.value[key]);
+    Object.keys(query.value).forEach(key => {
+        if (key !== 'sort') {
+            delete query.value[key];
+        } else {
+            query.value[key] = 'date';
+        }
+    });
+
+    // Reset pagination, sort by and selected filters to defaults.
     currentPage.value = 1;
-    selectedSortBy.value = ''; 
+    selectedSortBy.value = props.eventData.sortBy[0].label;
+    selectedFilters.value = [];
+
+    filter.value.resetAll();
 };
 
 const setIcon = (linkType: string) => {
@@ -291,4 +337,37 @@ const setIcon = (linkType: string) => {
 
     return null;
 }
+
+// const filterGroups: any = computed(() => {
+//     console.log('fg', props.eventData.filters);
+//     const groups = Object.groupBy(props.eventData.filters, ({ group }: { group: any }) => group)
+//     console.log('fg', props.eventData.filters, groups);
+
+//     // if (props.eventData.filters) {
+//     //     const groups = Object.values(
+//     //         Object.groupBy(props.eventData.filters, ({ group }: { group: any }) => group)
+//     //     );
+//     //     return groups;
+//     // } else {
+//     //     return [];
+//     // }
+// });
 </script>
+
+<style lang="scss">
+.events-controls {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-gap: 10px;
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: 1fr;
+    }
+
+    .col2 {
+        @media (min-width: 991.98px) {
+            display: none;
+        }
+    }
+}
+</style>
