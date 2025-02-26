@@ -33,17 +33,9 @@
 /**
  * TODO: Tabs
  * Update to new variant (once ready).
- * TODO: Cards
- * How to display different details (e.g. one column or two)
- * TODO: Tidy up
- * Tidy code
- * Remove unused/dev code
- * Add comments
- * Check spacing and font sizes.
+ * TODO:
  * Set min dates on datepickers.
  * labels
- * TODO: Accessibility
- * Live region for results section
  */
 import {
     VsCol,

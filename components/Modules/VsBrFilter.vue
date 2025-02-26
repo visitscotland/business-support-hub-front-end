@@ -122,6 +122,17 @@ defineExpose({
     resetOne,
 });
 
+// Remove the filter id from the input id.
+// This is needed for updating the api query parameter.
+const cleanKey = (key: string) => {
+    return key.slice(props.filterId.length + 1);
+}
+
+// Format date from 'YYYY-mm-dd' to 'dd/mm/YYYY'.
+const formatDate = (value: string) => {
+    return value.split('-').reverse().join('/');
+};
+
 // set and emit a payload when a filter input has change.
 // This payload will be used by the parent to set the 
 // selected filters list and api query parameters.
@@ -136,7 +147,7 @@ const handleUpdate = (event: Event) => {
     let value: string | boolean;
 
     if (type === 'date') {
-        value = event.target.value;
+        value = formatDate(event.target.value);
         label = `${label}: ${value}`;
     } else if (type === 'boolean') {
         value = event.target.checked ? true : false;
@@ -153,10 +164,4 @@ const handleUpdate = (event: Event) => {
         value,
     });
 };
-
-// Remove the filter id from the input id.
-// This is needed for updating the api query parameter.
-const cleanKey = (key: string) => {
-    return key.slice(props.filterId.length + 1);
-}
 </script>
