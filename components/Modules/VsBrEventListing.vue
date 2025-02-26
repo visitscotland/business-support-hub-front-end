@@ -1,79 +1,27 @@
 <template>
     <VsRow>
-        <!-- <pre>{{ filterId }}</pre> -->
-        <!-- <pre>{{ props.eventData }}</pre> -->
-        <!-- <pre>{{ data.results }}</pre> -->
-        <!-- <pre>{{ configStore.labels }}</pre> -->
         <VsCol cols="12" md="3">
             <div
-                class="d-none d-lg-block"
+                class="d-none d-lg-block event__results"
             >
                 {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
             </div>
             
-            <!-- <ClientOnly> -->
-                <VsBrFilter
-                    :filters="props.eventData.filters"
-                    :filter-id="filterId"
-                    ref="filter"
-                    @filter-updated="updateSelectedFilters"
-                />
-            <!-- </ClientOnly> -->
+            <VsBrFilter
+                :filters="props.eventData.filters"
+                :filter-id="filterId"
+                ref="filter"
+                @filter-updated="updateSelectedFilters"
+            />
         </VsCol>
 
         <VsCol cols="12" md="9">
-            <!-- <VsRow>
-                <VsCol cols="12" md="10">
-                    <VsButton
-                        v-if="selectedFilters.length > 0"
-                        :rounded="false"
-                        variant="secondary"
-                        size="sm"
-                        @click="clearAllFilters"
-                    >
-                        {{ configStore.getLabel('events-listings-module', 'clear-all') }}
-                    </VsButton>
-
-                    <VsButton
-                        v-for="filter in selectedFilters"
-                        :rounded="false"
-                        variant="secondary"
-                        size="sm"
-                        icon="close"
-                        icon-position="right"
-                        @click="removeSelectedFilter(filter.key, filter.label)"
-                    >
-                        {{ filter.label }}
-                    </VsButton>
-                </VsCol>
-                <VsCol cols="12" class="d-block d-sm-none">
-                    {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
-                </VsCol>
-                <VsCol cols="12" md="2">
-                    <VsDropdown variant="secondary">
-                        <template #button-content>
-                            {{ configStore.getLabel('events-listings-module', 'sort-by') }}: {{ selectedSortBy }}
-                        </template>
-
-                        <VsDropdownItem
-                            v-for="item in props.eventData.sortBy"
-                            :key="item.key"
-                            :data-key="item.key"
-                            @click="updateSort"
-                        >
-                            {{ item.label }}
-                        </VsDropdownItem>
-
-                    </VsDropdown>
-                </VsCol>
-            </VsRow> -->
-
             <div class="events-controls">
                 <div class="col1">
                     <VsButton
                         v-if="selectedFilters.length > 0"
                         :rounded="false"
-                        variant="secondary"
+                        variant="primary"
                         size="sm"
                         @click="clearAllFilters"
                     >
@@ -92,7 +40,7 @@
                         {{ filter.label }}
                     </VsButton>
                 </div>
-                <div class="col2">
+                <div class="col2 event__results">
                     {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
                 </div>
                 <div class="col3">
@@ -172,7 +120,11 @@
             </template>
 
             <template v-else>
-                {{ configStore.getLabel('essentials.pagination', 'no-results-message') }}
+                <VsEventCard>
+                    <template #event-card-content>
+                        {{ configStore.getLabel('essentials.pagination', 'no-results-message') }}
+                    </template>
+                </VsEventCard>
             </template>
 
             <VsPagination
@@ -221,13 +173,13 @@ const selectedFilters = ref<any>([]);
 const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
 
+// Call the api to get the event card data.
 const { data, status }: { data: any, status: any } = await useFetch(props.eventData.baseEndPoint, {
     query: query.value, 
 });
 const totalResults = computed(() => data.value.total);
 const results = computed(() => data.value.results);
 const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize))
-
 
 // Update the sort query parameter.
 const updateSort = (event: Event) => {
@@ -240,15 +192,17 @@ const updateSort = (event: Event) => {
     selectedSortBy.value = label;
 };
 
+// Update the selected filters when a filter input is changed.
 const updateSelectedFilters = (payload: any) => {
     const {
         fieldId,
         key,
         label,
+        type,
         value,
     } = payload;
 
-    if (value && query.value[key] && !query.value[key].includes(value)) {
+    if (value && query.value[key] && !query.value[key].includes(value) && type !== 'date') {
         query.value[key].push(value);
         // Add filter to selectedFilters list.
         selectedFilters.value.push({
@@ -257,8 +211,17 @@ const updateSelectedFilters = (payload: any) => {
             label,
             value,
         });
-    } else if (value && !query.value[key]) {
+    } else if (value && (!query.value[key] || type === 'date')) {
         query.value[key] = [value];
+
+        // If date input then remove any previous from or to filters before adding a new one.
+        if (type === 'date') {
+            const index = selectedFilters.value.findIndex((el) => el.key === key);
+            if (index > -1) {
+                selectedFilters.value.splice(index, 1);
+            }
+        }
+        
         // Add filter to selectedFilters list.
         selectedFilters.value.push({
             fieldId,
@@ -274,6 +237,7 @@ const updateSelectedFilters = (payload: any) => {
     currentPage.value = 1;
 };
 
+// Remove a filter from the selected filters and api query parameters.
 const removeSelectedFilter = (fieldId: string, key: string, value: string | boolean) => {
     // Remove filter from API query.
     const queryIndex = query.value[key].indexOf(value);
@@ -290,6 +254,7 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
         selectedFilters.value.splice(index, 1);
     }
 
+    // Clear the filter input field.
     filter.value.resetOne(fieldId);
 
     // Reset pagination.
@@ -325,9 +290,11 @@ const clearAllFilters = () => {
     selectedSortBy.value = props.eventData.sortBy[0].label;
     selectedFilters.value = [];
 
+    // Clear all filter input fields.
     filter.value.resetAll();
 };
 
+// Map the linkType to an icon name;
 const setIcon = (linkType: string) => {
     if (linkType === 'EXTERNAL') {
         return 'external-link';
@@ -337,37 +304,46 @@ const setIcon = (linkType: string) => {
 
     return null;
 }
-
-// const filterGroups: any = computed(() => {
-//     console.log('fg', props.eventData.filters);
-//     const groups = Object.groupBy(props.eventData.filters, ({ group }: { group: any }) => group)
-//     console.log('fg', props.eventData.filters, groups);
-
-//     // if (props.eventData.filters) {
-//     //     const groups = Object.values(
-//     //         Object.groupBy(props.eventData.filters, ({ group }: { group: any }) => group)
-//     //     );
-//     //     return groups;
-//     // } else {
-//     //     return [];
-//     // }
-// });
 </script>
 
 <style lang="scss">
+.event__results {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0.25rem 0 1.75rem;
+
+    @media (max-width: 991.98px) {
+        margin: 1rem 0;
+    }
+}
+
 .events-controls {
     display: grid;
     grid-template-columns: 1fr auto;
     grid-gap: 10px;
+    padding: 0 1rem;
 
     @media (max-width: 991.98px) {
         grid-template-columns: 1fr;
+        margin-top: 2rem;
+    }
+
+    .col1 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .col2 {
         @media (min-width: 991.98px) {
             display: none;
         }
+    }
+}
+
+.vs-filter {
+    @media (max-width: 991.98px) {
+        padding: 0 0.5rem;
     }
 }
 </style>

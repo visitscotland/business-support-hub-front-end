@@ -54,7 +54,6 @@
             </template>
         </VsFilterSection>
     </VsFilter>
-    <!-- <pre>{{ filterGroups }}</pre> -->
 </template>
 
 <script setup lang="ts">
@@ -70,7 +69,6 @@ const emit = defineEmits(['filter-updated']);
 
 const configStore = useConfigStore();
 const filter = ref();
-
 const filterGroups = ref<any>();
 
 watch(filter, () => {
@@ -109,10 +107,12 @@ const getSectionKey = (group: any) => {
     }
 };
 
+// Reset all input fields.
 const resetAll = () => {
     filter.value.resetAll();
 }
 
+// Reset one input field.
 const resetOne = (id: string) => {
     filter.value.resetOne(id);
 };
@@ -122,6 +122,9 @@ defineExpose({
     resetOne,
 });
 
+// set and emit a payload when a filter input has change.
+// This payload will be used by the parent to set the 
+// selected filters list and api query parameters.
 const handleUpdate = (event: Event) => {
     if (!event.target) return;
 
@@ -142,15 +145,17 @@ const handleUpdate = (event: Event) => {
         value = cleanKey(event.target.id);
     }
 
-    // console.log({ type, key, label, value, filterId: props.filterId, fieldId });
     emit('filter-updated', {
         fieldId, 
         key,
         label,
+        type,
         value,
     });
 };
 
+// Remove the filter id from the input id.
+// This is needed for updating the api query parameter.
 const cleanKey = (key: string) => {
     return key.slice(props.filterId.length + 1);
 }
