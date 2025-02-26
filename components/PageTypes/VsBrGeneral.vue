@@ -140,8 +140,10 @@ if (page.value) {
 
 // Create list of anchor links and titles for each module, excluding nested modules.
 const tableOfContentsLinks= computed((): TableOfContentLink[] => {
-    return pageItems.flatMap(({ anchor, title, nested }: { anchor: string, title: string, nested: boolean }) => {
+    return pageItems.flatMap(({ anchor, title, nested, type }: { anchor: string, title: string, nested: boolean }) => {
         if (nested) return [];
+
+        if (type === 'SignpostModule') return [];
 
         return { anchor, title };
     });
