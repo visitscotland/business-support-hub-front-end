@@ -1,4 +1,5 @@
 <template>
+    <!--cludooff: index-->
     <VsModuleWrapper theme="neutral">
         <template #vs-module-wrapper-heading>
             {{ data.title }}
@@ -46,6 +47,7 @@
             </VsRow>
         </VsContainer>
     </VsModuleWrapper>
+    <!--cludoon: index-->
 </template>
 
 <script lang="ts" setup>
