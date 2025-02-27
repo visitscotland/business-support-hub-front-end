@@ -1,4 +1,5 @@
 <template>
+    <pre>{{ configStore.labels }}</pre>
     <VsRow>
         <VsCol cols="12" md="3">
             <div
@@ -86,16 +87,16 @@
                                 md="4"
                             >
                                 <li v-if="result.times">
-                                    <strong>Time:</strong> {{ result.times }}
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'time') }}:</strong> {{ result.times }}
                                 </li>
                                 <li v-if="result.price">
-                                    <strong>Price:</strong> {{ result.price }}
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'price') }}:</strong> {{ result.price }}
                                 </li>
                                 <li v-if="result.location">
-                                    <strong>Location:</strong> {{ result.location }}
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'location') }}:</strong> {{ result.location }}
                                 </li>
                                 <li v-if="result.organizer">
-                                    <strong>Organiser:</strong> {{ result.organizer }}
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organizer }}
                                 </li>
                             </VsCol>
 
@@ -104,13 +105,13 @@
                                 md="4"
                             >
                                 <li v-if="result.registrationDeadline">
-                                    <strong>Registration deadline: </strong> {{ result.registrationDeadline }}
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'registration') }}: </strong> {{ result.registrationDeadline }}
                                 </li>
                                 <li v-if="result.organizer">
-                                    <strong>Organiser:</strong> {{ result.organizer }}
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organizer }}
                                 </li>
                                 <li v-if="result.contact">
-                                    <strong>Contact:</strong> {{ result.contact }}
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'contact') }}:</strong> {{ result.contact }}
                                 </li>
                             </VsCol>
                             </VsRow>
