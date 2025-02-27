@@ -1,5 +1,4 @@
 <template>
-    <pre>{{ configStore.labels }}</pre>
     <VsRow>
         <VsCol cols="12" md="3">
             <div
@@ -179,7 +178,6 @@ const { data, status }: { data: any, status: any } = await useFetch(props.eventD
     query: query.value, 
 });
 const totalResults = computed(() => data.value.total);
-const results = computed(() => data.value.results);
 const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize))
 
 // Update the sort query parameter.

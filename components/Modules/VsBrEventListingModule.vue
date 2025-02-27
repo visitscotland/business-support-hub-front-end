@@ -31,15 +31,7 @@
 </template>
 
 <script setup lang="ts">
-/**
- * TODO: Tabs
- * Update to new variant (once ready).
- * TODO:
- * Set min dates on datepickers.
- * labels
- */
 import {
-    VsCol,
     VsContainer,
     VsHeading,
     VsTabs,
