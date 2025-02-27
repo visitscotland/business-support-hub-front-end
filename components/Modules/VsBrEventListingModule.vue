@@ -2,6 +2,7 @@
     <VsTabs
         class="my-400"
         :id="moduleId"
+        no-container
     >
         <VsTabItem 
             v-for="eventList in module.eventsListings"
@@ -58,7 +59,7 @@ const moduleId = computed(() => module.anchor || 'events-listing-module');
 </script>
 
 <style lang="scss">
-.vs-tabs .tab-pane .vs-heading {
+.vs-tabs--no-container .tab-pane .vs-heading {
     display: block !important;
 
     &.vs-tab__item__heading {
