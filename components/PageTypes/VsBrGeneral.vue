@@ -16,10 +16,10 @@
         </VsRow>
     </VsContainer>
 
-        <VsBrHeroSectionModule
-            v-if="documentData.theme !== 'simple' && documentData.theme !== 'standard'"
-            :content="documentData"
-        />
+    <VsBrHeroSectionModule
+        v-if="documentData.theme !== 'simple' && documentData.theme !== 'standard'"
+        :content="documentData"
+    />
 
     <template v-if="!isHomePage">
         <VsBrPageIntro
@@ -29,9 +29,11 @@
             :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
         />
 
-        <div class="my-n300">
+        <div
+            class="my-n300"
+            v-if="documentData.theme === 'top-level'"
+        >
             <VsBrArticleModule
-                v-if="documentData.theme === 'top-level'"
                 :module="topLevelArticleModule"
             />
         </div>
@@ -138,8 +140,10 @@ if (page.value) {
 
 // Create list of anchor links and titles for each module, excluding nested modules.
 const tableOfContentsLinks= computed((): TableOfContentLink[] => {
-    return pageItems.flatMap(({ anchor, title, nested }: { anchor: string, title: string, nested: boolean }) => {
+    return pageItems.flatMap(({ anchor, title, nested, type }: { anchor: string, title: string, nested: boolean }) => {
         if (nested) return [];
+
+        if (type === 'SignpostModule') return [];
 
         return { anchor, title };
     });
