@@ -39,8 +39,8 @@
                 >
                     <VsImg
                         src="/illustrations/newsletter.svg"
-                        class="mt-400 mt-sm-050 w-75 h-auto mx-auto"
-                        style="aspect-ratio:1/1"
+                        class="mt-400 mt-sm-050 w-100 h-auto"
+                        style="aspect-ratio:1.56/1"
                     />
                 </VsCol>
             </VsRow>
