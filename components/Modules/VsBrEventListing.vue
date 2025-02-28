@@ -1,5 +1,5 @@
 <template>
-    <VsRow>
+    <VsRow v-if="data">
         <VsCol cols="12" md="3">
             <div
                 class="d-none d-lg-block event__results"
