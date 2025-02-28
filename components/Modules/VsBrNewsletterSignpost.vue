@@ -1,4 +1,4 @@
-<template>
+<template comments>
     <!--cludooff: index-->
     <VsModuleWrapper theme="neutral">
         <template #vs-module-wrapper-heading>
