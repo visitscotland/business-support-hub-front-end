@@ -73,6 +73,7 @@ const filterGroups = ref<any>();
 
 onMounted(() => {
     // Group filters for use in filter sections.
+    console.log('check groupBy', typeof Object.groupBy);
     filterGroups.value = Object.values(
         Object.groupBy(props.filters, ({ group }: { group: any }) => group)
     );   
