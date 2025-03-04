@@ -178,7 +178,7 @@ const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
 
 // Call the api to get the event card data.
-const { data, status }: { data: any, status: any } = await useFetch('https://beta-support.visitscotland.org/' + props.eventData.baseEndPoint, {
+const { data, status }: { data: any, status: any } = await useFetch(props.eventData.baseEndPoint, {
     query: query.value, 
 });
 const totalResults = computed(() => data.value.total);
