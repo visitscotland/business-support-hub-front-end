@@ -34,6 +34,9 @@ export default defineNuxtConfig({
 
     vue: {
         runtimeCompiler: true,
+        compilerOptions: {
+            comments: true,
+        },
     },
 
     components: [
