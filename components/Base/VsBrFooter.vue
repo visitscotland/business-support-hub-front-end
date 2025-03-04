@@ -69,7 +69,7 @@
                     :href="link"
                     :icon="key === 'twitter' ? 'x-twitter' : key"
                 />
-            </vsfootersocialmenu>
+            </VsFooterSocialMenu>
         </template>
 
         <template
