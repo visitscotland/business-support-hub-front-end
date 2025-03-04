@@ -66,10 +66,11 @@
 
             <template v-if="data.results.length > 0">
                 <VsEventCard
-                    v-for="result in data.results"
+                    v-for="(result, index) in data.results"
                     :cta-icon="setIcon(result.cta.type)"
                     :cta-label="result.cta.label" 
                     :cta-href="result.cta.link"
+                    :key="result.title + index"
                 >
                     <template #event-card-header>
                         {{ result.title }}
@@ -177,7 +178,7 @@ const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
 
 // Call the api to get the event card data.
-const { data, status }: { data: any, status: any } = await useFetch(props.eventData.baseEndPoint, {
+const { data, status }: { data: any, status: any } = await useFetch('https://beta-support.visitscotland.org/' + props.eventData.baseEndPoint, {
     query: query.value, 
 });
 const totalResults = computed(() => data.value.total);
