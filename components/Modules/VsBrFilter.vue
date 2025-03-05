@@ -74,9 +74,16 @@ const filterGroups = ref<any>();
 onMounted(() => {
     // Group filters for use in filter sections.
     console.log('check groupBy', typeof Object.groupBy);
+    // filterGroups.value = Object.values(
+    //     Object.groupBy(props.filters, ({ group }: { group: any }) => group)
+    // );   
     filterGroups.value = Object.values(
-        Object.groupBy(props.filters, ({ group }: { group: any }) => group)
-    );   
+        props.filters.reduce((r, a) => {
+            r[a.group] = r[a.group] || [];
+            r[a.group].push(a);
+            return r;
+        }, Object.create(null))
+    );
 });
 
 // watch(filter, () => {
