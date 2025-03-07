@@ -1,7 +1,6 @@
 <template>
-    <div
+    <main
         class="vs-main-container"
-        role="main"
         :class="{ 'has-edit-button': page.isPreview() }"
     >
         <BrManageContentButton
@@ -38,7 +37,7 @@
             :page="page"
             :component="component"
         />
-    </div>
+    </main>
 </template>
 
 <script lang="ts" setup>
