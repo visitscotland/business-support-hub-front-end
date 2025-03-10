@@ -43,7 +43,10 @@
                 <div class="col2 event__results">
                     {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
                 </div>
-                <div class="col3">
+                <!-- Temporarily hide the "sort by" dropdown while waiting for a backend
+                    bug to be fixed. Adding a div with set height to maintain the gap. -->
+                    <div class="col3" style="height: 2rem;" />
+                <!-- <div class="col3">
                     <VsDropdown variant="secondary">
                         <template #button-content>
                             {{ configStore.getLabel('events-listings-module', 'sort-by') }}: {{ selectedSortBy }}
@@ -58,15 +61,16 @@
                             {{ item.label }}
                         </VsDropdownItem>
                     </VsDropdown>
-                </div>
+                </div> -->
             </div>
 
             <template v-if="data.results.length > 0">
                 <VsEventCard
-                    v-for="result in data.results"
+                    v-for="(result, index) in data.results"
                     :cta-icon="setIcon(result.cta.type)"
                     :cta-label="result.cta.label" 
                     :cta-href="result.cta.link"
+                    :key="result.title + index"
                 >
                     <template #event-card-header>
                         {{ result.title }}

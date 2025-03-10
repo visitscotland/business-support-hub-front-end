@@ -162,7 +162,7 @@ if (page) {
                     month: 'long',
                 },
             );
-            lastPublished.value = `Last published: ${publishDate.value}`
+            lastPublished.value = `${configStore.getLabel('essentials.global', 'last-update')} ${publishDate.value}`;
         }
 
         if (content.value.heroVideo) {
