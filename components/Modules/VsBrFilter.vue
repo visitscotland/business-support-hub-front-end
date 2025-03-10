@@ -73,25 +73,14 @@ const filterGroups = ref<any>();
 
 onMounted(() => {
     // Group filters for use in filter sections.
-    console.log('check groupBy', typeof Object.groupBy);
-    // filterGroups.value = Object.values(
-    //     Object.groupBy(props.filters, ({ group }: { group: any }) => group)
-    // );   
     filterGroups.value = Object.values(
-        props.filters.reduce((r, a) => {
-            r[a.group] = r[a.group] || [];
-            r[a.group].push(a);
-            return r;
+        props.filters.reduce((acc: any, value: any) => {
+            acc[value.group] = acc[value.group] || [];
+            acc[value.group].push(value);
+            return acc;
         }, Object.create(null))
     );
 });
-
-// watch(filter, () => {
-//     // Group filters for use in filter sections.
-//     filterGroups.value = Object.values(
-//         Object.groupBy(props.filters, ({ group }: { group: any }) => group)
-//     );   
-// }, { once: true });
 
 // Determine the group type.
 const getGroupType = (group: any) => {
