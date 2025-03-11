@@ -75,8 +75,10 @@ const imageValue = computed(() => image.cmsImage);
 
 <style lang="scss">
 .vs-cta-banner-module {
-    .vs-heading {
-        margin-top: -0.5rem;
+    @media (min-width: 768px) {
+        .vs-heading {
+            margin-top: -0.5rem;
+        }
     }
 }
 </style>
