@@ -37,9 +37,13 @@
     <VsBanner
         v-if="banner"
         :close-btn-text="configStore.getLabel('essentials.global', 'close')"
+        aria-labelledby="vs-menu-banner-copy"
     >
         <template v-slot:banner-text>
-            <div v-html="banner.copy.value" />
+            <div
+                id="vs-menu-banner-copy"
+                v-html="banner.copy.value"
+            />
         </template>
 
         <template v-slot:banner-cta>

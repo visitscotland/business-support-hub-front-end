@@ -1,5 +1,5 @@
 <template>
-    <div
+    <main
         class="vs-main-container"
         :class="{ 'has-edit-button': page.isPreview() }"
     >
@@ -37,7 +37,7 @@
             :page="page"
             :component="component"
         />
-    </div>
+    </main>
 </template>
 
 <script lang="ts" setup>
