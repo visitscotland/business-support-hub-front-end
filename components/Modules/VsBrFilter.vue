@@ -71,12 +71,16 @@ const configStore = useConfigStore();
 const filter = ref();
 const filterGroups = ref<any>();
 
-watch(filter, () => {
+onMounted(() => {
     // Group filters for use in filter sections.
     filterGroups.value = Object.values(
-        Object.groupBy(props.filters, ({ group }: { group: any }) => group)
-    );   
-}, { once: true });
+        props.filters.reduce((acc: any, value: any) => {
+            acc[value.group] = acc[value.group] || [];
+            acc[value.group].push(value);
+            return acc;
+        }, Object.create(null))
+    );
+});
 
 // Determine the group type.
 const getGroupType = (group: any) => {
