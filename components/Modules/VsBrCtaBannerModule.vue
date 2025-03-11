@@ -29,7 +29,7 @@
                     </VsHeading>    
                 
                     <VsBrRichText :input-content="copy.value" />
-                    <div>
+                    <div class="mb-100">
                         <VsButton :href="formatLink(cta.link)">
                             {{ cta.label }}
                         </VsButton>
