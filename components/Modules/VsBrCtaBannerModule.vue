@@ -1,6 +1,7 @@
 <template>
     <VsModuleWrapper
-        :class="nested ? 'pt-0': null"    
+        :class="nested ? 'pt-0': null"
+        class="vs-cta-banner-module"
         :theme="themeValue"
     >
         <VsContainer>
@@ -8,7 +9,7 @@
                 <VsCol
                     cols="12"
                     md="6"
-                    class="d-flex justify-content-center"
+                    class="d-flex align-items-center justify-content-center"
                 >
                     <VsBrImage
                         :image="imageValue"
@@ -29,7 +30,7 @@
                     </VsHeading>    
                 
                     <VsBrRichText :input-content="copy.value" />
-                    <div class="mb-100">
+                    <div>
                         <VsButton :href="formatLink(cta.link)">
                             {{ cta.label }}
                         </VsButton>
@@ -71,3 +72,11 @@ const {
 
 const imageValue = computed(() => image.cmsImage);
 </script>
+
+<style lang="scss">
+.vs-cta-banner-module {
+    .vs-heading {
+        margin-top: -0.5rem;
+    }
+}
+</style>
