@@ -151,6 +151,9 @@ const isMounted = ref(false);
 
 onMounted(() => {
   isMounted.value = true;
+
+  const hydrationEvent = new Event('vs-app-hydrated');
+  window.dispatchEvent(hydrationEvent);
 });
 
 /**

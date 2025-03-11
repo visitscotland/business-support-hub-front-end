@@ -69,4 +69,8 @@ export default defineNuxtConfig({
     },
 
     compatibilityDate: '2025-01-16',
+
+    plugins: [
+        '~/plugins/scrollToHash.client.ts',
+    ],
 });
