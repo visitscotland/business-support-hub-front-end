@@ -151,6 +151,9 @@ const isMounted = ref(false);
 
 onMounted(() => {
   isMounted.value = true;
+
+  const hydrationEvent = new Event('vs-app-hydrated');
+  window.dispatchEvent(hydrationEvent);
 });
 
 /**
@@ -174,5 +177,9 @@ app.appContext.config.globalProperties.emitter = emitter;
       &.vs-sticky-nav {
           top: 0;
       }
+  }
+
+  .vs-heading span {
+    scroll-margin-top: 5rem;
   }
 </style>
