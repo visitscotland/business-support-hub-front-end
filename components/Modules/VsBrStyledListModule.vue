@@ -2,7 +2,7 @@
     <VsModuleWrapper
         :anchor-id="anchor || null"
         business-support
-        :class="nested ? 'pt-0': null"
+        :class="nested ? 'py-0 mt-n500' : 'py-0'"
         :heading-level="nested ? 3 : 2"
         :theme="themeValue"
     >
