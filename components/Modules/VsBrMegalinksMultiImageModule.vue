@@ -311,7 +311,7 @@ const getLgSize = (index: number, linksLength: number) => {
     }
 
     .vs-megalinks {
-        // override the application of 6rem padding-top for a dot-com use-case (DS-1117)
+        /* override the application of 6rem padding-top for a dot-com use-case (DS-1117) */
         @media (min-width: 992px) {
             padding-top: 3rem;
         }
