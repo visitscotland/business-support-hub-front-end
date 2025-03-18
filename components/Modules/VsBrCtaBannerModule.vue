@@ -1,6 +1,7 @@
 <template>
     <VsModuleWrapper
-        :class="nested ? 'pt-0': null"    
+        :class="nested ? 'pt-0': null"
+        class="vs-cta-banner-module"
         :theme="themeValue"
     >
         <VsContainer>
@@ -8,7 +9,7 @@
                 <VsCol
                     cols="12"
                     md="6"
-                    class="d-flex justify-content-center"
+                    class="d-flex align-items-center justify-content-center"
                 >
                     <VsBrImage
                         :image="imageValue"
@@ -71,3 +72,17 @@ const {
 
 const imageValue = computed(() => image.cmsImage);
 </script>
+
+<style lang="scss">
+.vs-cta-banner-module {
+    @media (min-width: 768px) {
+        .vs-heading {
+            margin-top: unset;
+        }
+    }
+
+    .vs-button {
+        margin-top: 0.75rem;
+    }
+}
+</style>
