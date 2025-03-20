@@ -23,6 +23,7 @@
                 >
                 <VsBrImageWithCaption
                     :image="module.image.cmsImage"
+                    :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                 />
             </template>
 
@@ -54,7 +55,7 @@
             >
                 <template
                     #article-sidebar
-                     v-if="section.video || section.quote || section.image"
+                    v-if="section.video || section.quote || section.image"
                 >
                     <VsBrArticleSidebar
                         :section="section"

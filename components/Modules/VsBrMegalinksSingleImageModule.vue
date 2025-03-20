@@ -32,6 +32,7 @@
                         :image="module.image.cmsImage
                             ? module.image.cmsImage
                             : module.image.externalImage"
+                        :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                     />
                 </template>
 

@@ -11,6 +11,7 @@
                     :is-hero="false"
                     variant="fullwidth"
                     :image="image"
+                    :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                 />
             </VsCol>
         </VsRow>
@@ -25,6 +26,8 @@ import {
 } from '@visitscotland/component-library/components';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
+import useConfigStore from '~/stores/configStore';
+const configStore = useConfigStore();
 
 const props = defineProps<{
     image?: any,

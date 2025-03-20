@@ -28,6 +28,7 @@
                     :video-id="youtubeId"
                     :video-title="heroVideo.displayName"
                     :video-btn="heroVideo.cta"
+                    :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                 />
             </template>
             <template
@@ -39,6 +40,7 @@
                     :use-lazy-loading="false"
                     variant="large"
                     :image="heroImage"
+                    :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                 />
             </template>
         </template>
