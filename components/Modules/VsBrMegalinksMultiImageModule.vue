@@ -59,7 +59,7 @@
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in featuredLinks[0].badges"
                                     :key="badgeIndex"
-                                    class="mb-050 text-capitalize"
+                                    class="mb-050"
                                 >
                                     {{ badge }}
                                 </VsBadge>
@@ -112,7 +112,7 @@
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in link.badges"
                                     :key="badgeIndex"
-                                    class="mb-050 text-capitalize"
+                                    class="mb-050"
                                 >
                                     {{ badge }}
                                 </VsBadge>
@@ -166,7 +166,7 @@
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in featuredLinks[1].badges"
                                     :key="badgeIndex"
-                                    class="mb-050 text-capitalize"
+                                    class="mb-050"
                                 >
                                     {{ badge }}
                                 </VsBadge>

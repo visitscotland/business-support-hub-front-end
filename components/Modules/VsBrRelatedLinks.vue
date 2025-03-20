@@ -27,12 +27,12 @@
                             v-if="link.readTime || link.contentType"
                             v-slot:stretched-card-badges
                         >
-                            <VsBadge v-if="link.readTime">
-                                {{ link.readTime }}
-                            </VsBadge>
-
                             <VsBadge v-if="link.contentType">
                                 {{ link.contentType }}
+                            </VsBadge>
+                            
+                            <VsBadge v-if="link.readTime">
+                                {{ link.readTime }}
                             </VsBadge>
                         </template>
                     </VsStretchedLinkCard>
