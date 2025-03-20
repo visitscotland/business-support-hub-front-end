@@ -2,9 +2,7 @@
     <div class="vs-sticky-nav" :class="{ 'has-edit-button': page && page.isPreview() }">
         <VsBrSkipTo />
         <header>
-            <VsGlobalMenu
-                active-site=""
-            />
+            <VsGlobalMenu />
 
             <BrManageMenuButton :menu="menuData" />
 
