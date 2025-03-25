@@ -1,6 +1,10 @@
 <template>
     <VsRow v-if="data">
-        <VsCol cols="12" md="3">
+        <VsCol
+            cols="12"
+            lg="4"
+            xxl="3"
+        >
             <div
                 class="d-none d-lg-block event__results"
             >
@@ -15,7 +19,11 @@
             />
         </VsCol>
 
-        <VsCol cols="12" md="9">
+        <VsCol
+            cols="12"
+            lg="8"
+            xxl="9"
+        >
             <div class="events-controls">
                 <div class="col1">
                     <VsButton
