@@ -54,7 +54,6 @@
                         <VsBadge 
                             v-for="(badge, badgeIndex) in link.badges"
                             :key="badgeIndex"
-                            class="text-capitalize"
                         >
                             {{ badge }}
                         </VsBadge>
