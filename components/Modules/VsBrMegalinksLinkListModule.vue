@@ -8,6 +8,7 @@
         :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
         :no-js-message="configStore.getLabel('video', 'video.no-js')"
         :button-link="module.cta ? formatLink(module.cta.link) : null"
+        :sectionId="module.anchor"
     >
         <template
             v-if="module.introduction"
@@ -54,7 +55,6 @@
                         <VsBadge 
                             v-for="(badge, badgeIndex) in link.badges"
                             :key="badgeIndex"
-                            class="text-capitalize"
                         >
                             {{ badge }}
                         </VsBadge>

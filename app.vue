@@ -179,6 +179,7 @@ app.appContext.config.globalProperties.emitter = emitter;
       }
   }
 
+  .vs-heading[id],
   .vs-heading span {
     scroll-margin-top: 5rem;
   }
