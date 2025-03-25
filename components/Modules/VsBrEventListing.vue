@@ -76,6 +76,7 @@
                     :cta-label="result.cta.label" 
                     :cta-href="result.cta.link"
                     :key="result.title + index"
+                    data-event-listing="True"
                 >
                     <template #event-card-header>
                         {{ result.title }}
