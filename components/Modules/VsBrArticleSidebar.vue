@@ -19,13 +19,11 @@
                     "
                     :small-play-button="true"
                     :show-toggle="false"
-                    :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                 />
             </template>
             <template v-else-if="section.image">
                 <VsBrImageWithCaption 
                     :image="section.image.cmsImage" 
-                    :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                 />
             </template>
         </template>

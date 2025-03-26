@@ -23,7 +23,6 @@
                 >
                 <VsBrImageWithCaption
                     :image="module.image.cmsImage"
-                    :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                 />
             </template>
 

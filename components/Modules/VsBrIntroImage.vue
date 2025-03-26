@@ -11,7 +11,6 @@
                     :is-hero="false"
                     variant="fullwidth"
                     :image="image"
-                    :toggleButtonText="configStore.getLabel('essentials.global', 'image.toggle.text')"
                 />
             </VsCol>
         </VsRow>
