@@ -25,8 +25,6 @@ import {
 } from '@visitscotland/component-library/components';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
-import useConfigStore from '~/stores/configStore';
-const configStore = useConfigStore();
 
 const props = defineProps<{
     image?: any,

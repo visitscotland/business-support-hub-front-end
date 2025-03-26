@@ -22,9 +22,7 @@
                 />
             </template>
             <template v-else-if="section.image">
-                <VsBrImageWithCaption 
-                    :image="section.image.cmsImage" 
-                />
+                <VsBrImageWithCaption :image="section.image.cmsImage" />
             </template>
         </template>
 
