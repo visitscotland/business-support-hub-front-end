@@ -9,6 +9,7 @@
             :anchor-link="module.anchor ? formatLink(module.anchor) : ''"
             businessSupport
             :heading-level="module.nested ? 3 : 2"
+            :heading-style="module.nested ? 'heading-m' : 'heading-xl'"
         >
             <template
                 v-if="module.introduction && module.introduction.value"
