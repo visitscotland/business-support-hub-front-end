@@ -15,7 +15,6 @@
                 :search-close-button-text="configStore.getLabel('search', 'close-form')"
                 :logo-alt-text="configStore.getLabel('navigation.static', 'meganav.logo-alt-text')"
                 :no-search="false"
-                :is-static="true"
             >
                 <template #mega-nav-top-menu-items>
                     <VsBrMegaNav
