@@ -54,7 +54,7 @@
             >
                 <template
                     #article-sidebar
-                     v-if="section.video || section.quote || section.image"
+                    v-if="section.video || section.quote || section.image"
                 >
                     <VsBrArticleSidebar
                         :section="section"
