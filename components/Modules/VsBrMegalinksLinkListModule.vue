@@ -7,8 +7,10 @@
         :cookie-link-text="configStore.getLabel('essentials.global', 'cookie.link-message')"
         :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
         :no-js-message="configStore.getLabel('video', 'video.no-js')"
-        :button-link="module.cta ? formatLink(module.cta.link) : null"
+        :button-link="module.cta ? formatLink(module.cta.link) : undefined"
         :sectionId="module.anchor"
+        :heading-level="module.nested ? 3 : 2"
+        :heading-style="module.nested ? 'heading-m' : 'heading-xl'"
     >
         <template
             v-if="module.introduction"
@@ -95,7 +97,7 @@ import {
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
-import useConfigStore from '~/stores/configStore.ts';
+import useConfigStore from '~/stores/configStore';
 
 import formatLink from '~/composables/formatLink';
 

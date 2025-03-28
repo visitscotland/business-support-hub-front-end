@@ -7,7 +7,9 @@
         :cookie-link-text="configStore.getLabel('essentials.global', 'cookie.link-message')"
         :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
         :no-js-message="configStore.getLabel('video', 'video.no-js')"
-        :button-link="module.cta ? formatLink(module.cta.link) : null"
+        :button-link="module.cta ? formatLink(module.cta.link) : undefined"
+        :heading-level="module.nested ? 3 : 2"
+        :heading-style="module.nested ? 'heading-m' : 'heading-xl'"
     >
         <template
             v-if="module.introduction"
@@ -236,7 +238,7 @@ if (page && module.links) {
             'error-message': configStore.getLabel('essentials.global', 'third-party-error'),
             label: nextLink.label,
             teaser: nextLink.teaser,
-            badges: [],
+            badges: [] as string[],
         };
 
         if (nextLink.contentType) {
@@ -266,7 +268,7 @@ if (page && module.featuredLinks) {
             'error-message': configStore.getLabel('essentials.global', 'third-party-error'),
             label: nextLink.label,
             teaser: nextLink.teaser,
-            badges: [],
+            badges: [] as string[]
         };
 
         if (nextLink.contentType) {
@@ -296,7 +298,6 @@ const getLgSize = (index: number, linksLength: number) => {
 
     return '6';
 };
-
 </script>
 
 <style lang="scss">
