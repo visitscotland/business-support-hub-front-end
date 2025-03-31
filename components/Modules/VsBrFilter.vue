@@ -6,12 +6,12 @@
         ref="filter"
     >
         <VsFilterSection
-            v-for="group in filterGroups"
+            v-for="(group, index) in filterGroups"
             :key="group"
             :section-title="getSectionLabel(group)"
             :type="getGroupType(group)"
         >
-            <template v-if="getGroupType(group) === 'inline'">             
+            <template v-if="getGroupType(group) === 'list' && index === 0">             
                 <div
                     v-for="filter in group"
                     class="date-picker"
@@ -85,7 +85,7 @@ onMounted(() => {
 // Determine the group type.
 const getGroupType = (group: any) => {
     if (group.some((g: any) => g.type === 'DATE')) {
-        return 'inline';
+        return 'list';
     } else if (group.some((g: any) => g.type === 'BOOLEAN')) {
         return 'list';
     } else if (group.some((g: any) => g.type === 'MULTISELECT')) {
@@ -169,3 +169,11 @@ const handleUpdate = (event: Event) => {
     });
 };
 </script>
+
+<style lang="scss">
+.vs-filter {
+    .date-picker {
+        margin-bottom: 0.75rem;
+    }
+}
+</style>

@@ -18,6 +18,7 @@
                 ? configStore.getLabel('essentials.global', 'default.alt-text')
                 : imageData.altText"
         :use-lazy-loading="useLazyLoading"
+        :toggle-button-text="configStore.getLabel('essentials.global', 'image.toggle.text')"
     >
         <template #video-title>
             {{ videoTitle }}

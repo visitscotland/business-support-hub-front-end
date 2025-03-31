@@ -3,6 +3,7 @@
         class="my-400"
         :id="moduleId"
         no-container
+        data-event-listing="True"
     >
         <VsTabItem 
             v-for="eventList in module.eventsListings"

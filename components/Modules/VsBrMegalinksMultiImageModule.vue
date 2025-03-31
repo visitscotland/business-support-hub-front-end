@@ -59,7 +59,7 @@
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in featuredLinks[0].badges"
                                     :key="badgeIndex"
-                                    class="mb-050 text-capitalize"
+                                    class="mb-050"
                                 >
                                     {{ badge }}
                                 </VsBadge>
@@ -112,7 +112,7 @@
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in link.badges"
                                     :key="badgeIndex"
-                                    class="mb-050 text-capitalize"
+                                    class="mb-050"
                                 >
                                     {{ badge }}
                                 </VsBadge>
@@ -166,7 +166,7 @@
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in featuredLinks[1].badges"
                                     :key="badgeIndex"
-                                    class="mb-050 text-capitalize"
+                                    class="mb-050"
                                 >
                                     {{ badge }}
                                 </VsBadge>
@@ -299,7 +299,7 @@ const getLgSize = (index: number, linksLength: number) => {
 
 </script>
 
-<style>
+<style lang="scss">
     div.multi-image-links-module {
         span {
             display: block;
@@ -307,6 +307,13 @@ const getLgSize = (index: number, linksLength: number) => {
 
         .image-link {
             padding: 1rem;
+        }
+    }
+
+    .vs-megalinks {
+        /* override the application of 6rem padding-top for a dot-com use-case (DS-1117) */
+        @media (min-width: 992px) {
+            padding-top: 3rem;
         }
     }
 </style>
