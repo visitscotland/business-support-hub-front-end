@@ -4,6 +4,7 @@
         business-support
         :class="nested ? 'py-0 mt-n500' : 'py-0'"
         :heading-level="nested ? 3 : 2"
+        :heading-style="nested ? 'heading-m' : 'heading-xl'"
         :theme="themeValue"
     >
         <template

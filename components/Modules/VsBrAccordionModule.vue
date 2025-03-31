@@ -4,6 +4,7 @@
         business-support
         :class="nested ? 'pt-0': null"
         :heading-level="nested ? 3 : 2"
+        :heading-style="nested ? 'heading-m' : 'heading-xl'"
         :theme="themeValue"
     >
         <template #vs-module-wrapper-heading>
