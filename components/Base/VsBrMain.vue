@@ -129,15 +129,6 @@ if (page.value) {
 
     const runtimeConfig = useRuntimeConfig();
 
-    let ogImage = '';
-
-    if (document.model.data.heroImage) {
-        const imageValue = page.value.getContent(document.model.data.heroImage.$ref);
-        if (imageValue) {
-            ogImage = imageValue.getOriginal().getUrl();
-        }
-    }
-
     useHead({
         title: document.model.data.seoTitle,
         meta: [
@@ -201,6 +192,15 @@ if (page.value) {
             },
         ],
     });
+
+    let ogImage = '';
+
+    if (document.model.data.heroImage) {
+        const imageValue = page.value.getContent(document.model.data.heroImage.$ref);
+        if (imageValue) {
+            ogImage = imageValue.getOriginal().getUrl();
+        }
+    }
 
     useSeoMeta({
         ogTitle: document.model.data.seoTitle,
