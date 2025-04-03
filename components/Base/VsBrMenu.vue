@@ -32,7 +32,7 @@
     </div>
 
     <VsBanner
-        v-if="banner"
+        v-if="banner && banner.ctaLink"
         :close-btn-text="configStore.getLabel('essentials.global', 'close')"
         aria-labelledby="vs-menu-banner-copy"
     >

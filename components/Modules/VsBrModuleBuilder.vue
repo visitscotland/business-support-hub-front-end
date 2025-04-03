@@ -118,8 +118,6 @@
             <VsBrEventListingModule :module="item" />
         </NuxtLazyHydrate>
 
-        
-
         <div
             v-else-if="item.type === 'ErrorModule'"
         >
