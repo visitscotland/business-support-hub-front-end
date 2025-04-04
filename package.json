@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.3.13",
-    "@nuxt/scripts": "^0.11.1",
+    "@nuxt/scripts": "^0.9.5",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@vue/eslint-config-airbnb": "^8.0.0",
