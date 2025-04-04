@@ -56,7 +56,7 @@
 
                             <template
                                 #vs-multi-image-badges
-                                v-if="featuredLinks[0].badges.length"
+                                v-if="featuredLinks[0].badges.length && !isHomePage"
                             >
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in featuredLinks[0].badges"
@@ -109,7 +109,7 @@
 
                             <template
                                 #vs-multi-image-badges
-                                v-if="link.badges.length"
+                                v-if="link.badges.length && !isHomePage"
                             >
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in link.badges"
@@ -163,7 +163,7 @@
 
                             <template
                                 #vs-multi-image-badges
-                                v-if="featuredLinks[1].badges.length"
+                                v-if="featuredLinks[1].badges.length && !isHomePage"
                             >
                                 <VsBadge
                                     v-for="(badge, badgeIndex) in featuredLinks[1].badges"
@@ -215,6 +215,8 @@ import formatLink from '~/composables/formatLink';
 const configStore = useConfigStore();
 
 const page: Page | undefined = inject('page');
+const route = useRoute();
+const isHomePage = computed(() => route.path === '/');
 
 const props = defineProps<{ module: Object, theme: string }>();
 const module: any = props.module;
