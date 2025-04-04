@@ -192,6 +192,22 @@ if (page.value) {
             },
         ],
     });
+
+    let ogImage = '';
+
+    if (document.model.data.heroImage) {
+        const imageValue = page.value.getContent(document.model.data.heroImage.$ref);
+        if (imageValue) {
+            ogImage = imageValue.getOriginal().getUrl();
+        }
+    }
+
+    useSeoMeta({
+        ogTitle: document.model.data.seoTitle,
+        ogDescription: document.model.data.seoDescription,
+        ogUrl: useRequestURL().toString(),
+        ogImage: ogImage,
+    });
 }
 
 provide('page', page.value);
