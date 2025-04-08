@@ -33,6 +33,12 @@
 
                     <div class="p-075">
                         <VsBrRichText :input-content="item.copy.value" />
+
+                        <VsBrDownloadCard
+                            v-if="item.link"
+                            :link="item.link"
+                            :within-nested="nested || null"
+                        />
                     </div>
                 </VsAccordionItem>
             </VsAccordion>
@@ -49,6 +55,7 @@ import {
     VsModuleWrapper,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
+import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
 
 const props = defineProps<{
     idPrefix: string,
