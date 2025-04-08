@@ -7,7 +7,7 @@
     >
         <div>
             <VsIcon
-                :name="`${props.link.extension}-link`"
+                :name="setIconName"
                 size="xl"
             />
         </div>
@@ -56,6 +56,29 @@ const props = withDefaults(defineProps<Props>(), {
 
 const buttonLabel = `${configStore.getLabel('download', 'download')} (${props.link.size})`;
 const publishedText = `${configStore.getLabel('download', 'published')} ${props.link.publishedDate}`;
+
+// Map file extension to icon name.
+const setIconName = computed(() => {
+    switch(props.link.extension) {
+        case 'eps':
+            return 'file-eps-regular';
+        case 'jpg':
+            return 'file-jpg-regular';
+        case 'pdf':
+            return 'pdf-link';
+        case 'png':
+            return 'file-png-regular';
+        case 'svg':
+            return 'file-svg-regular';
+        case 'xls':
+        case 'xlsx':
+            return 'file-excel-regular';
+        case 'doc':
+        case 'docx':
+        default:
+            return 'file-doc-regular';
+    }
+});
 </script>
 
 <style lang="scss">
@@ -78,7 +101,7 @@ const publishedText = `${configStore.getLabel('download', 'published')} ${props.
     }
 
     @media (min-width: 992px) {
-        grid-template-columns: auto 3fr 1fr;
+        grid-template-columns: auto 2fr 1fr;
     }
 }
 </style>
