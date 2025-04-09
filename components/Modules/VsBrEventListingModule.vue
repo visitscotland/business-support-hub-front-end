@@ -23,7 +23,6 @@
                 </VsRow>
                 <VsBrEventListing
                     :event-data="eventList"
-                    data-endpoint="http://localhost:8080/site/api/bsh/events-search/training" 
                     :module-id="moduleId"
                 />
             </VsContainer>

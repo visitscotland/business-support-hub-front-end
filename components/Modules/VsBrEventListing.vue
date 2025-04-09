@@ -169,7 +169,6 @@ import VsBrFilter from './VsBrFilter.vue';
 import useConfigStore from '~/stores/configStore';
 
 const props = defineProps<{
-    dataEndpoint: string,
     eventData: any,
     moduleId: string,
 }>();
