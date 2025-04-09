@@ -66,6 +66,12 @@
                 <template v-if="section.copy">
                     <VsBrRichText :input-content="section.copy.value" />
                 </template>
+
+                <VsBrDownloadCard
+                    v-if="section.link"
+                    :link="section.link"
+                    :within-nested="module.nested || null"
+                />
             </VsArticleSection>
         </VsArticle>
     </VsModuleWrapper>
@@ -83,6 +89,7 @@ import {
 
 import formatLink from '~/composables/formatLink';
 
+import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrArticleSidebar from '~/components/Modules/VsBrArticleSidebar.vue';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
