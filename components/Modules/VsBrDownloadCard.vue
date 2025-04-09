@@ -1,6 +1,4 @@
 <template>
-    <!-- <pre>{{ props.link }}</pre> -->
-
     <div
         class="vs-download-card"
         data-test="vs-download-card"
@@ -102,6 +100,10 @@ const setIconName = computed(() => {
 
     @media (min-width: 992px) {
         grid-template-columns: auto 2fr 1fr;
+    }
+
+    .vs-heading {
+        margin-top: 0;
     }
 }
 </style>
