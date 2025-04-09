@@ -1,8 +1,6 @@
 <template>
   <div>
-      <VsBrSkeleton
-          v-show="!isMounted"
-      />
+      <VsBrSkeleton/>
       <div
           class="hydrate"
           v-show="isMounted"
@@ -144,9 +142,7 @@ const mapping = {
 const isMounted = ref(false);
 
 onMounted(() => {
-  setTimeout(() => {
-    isMounted.value = true;
-  }, 50);
+  isMounted.value = true;
 
   const hydrationEvent = new Event('vs-app-hydrated');
   window.dispatchEvent(hydrationEvent);
@@ -178,5 +174,11 @@ app.appContext.config.globalProperties.emitter = emitter;
   .vs-heading[id],
   .vs-heading span {
     scroll-margin-top: 5rem;
+  }
+
+  .hydrate {
+    z-index: 2;
+    position: relative;
+    background-color: white;
   }
 </style>
