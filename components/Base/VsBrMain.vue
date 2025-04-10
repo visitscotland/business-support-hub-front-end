@@ -130,11 +130,11 @@ if (page.value) {
     const runtimeConfig = useRuntimeConfig();
 
     useHead({
-        title: document.model.data.seoTitle,
+        title: `${document.model.data.seoTitle} ${configStore.getLabel('seo', 'title-suffix')}`,
         meta: [
             {
                 name: 'title',
-                content: document.model.data.seoTitle,
+                content: `${document.model.data.seoTitle} ${configStore.getLabel('seo', 'title-suffix')}`,
             },
             {
                 name: 'description',
@@ -191,6 +191,22 @@ if (page.value) {
                 href: useRequestURL().toString(),
             },
         ],
+    });
+
+    let ogImage = '';
+
+    if (document.model.data.heroImage) {
+        const imageValue = page.value.getContent(document.model.data.heroImage.$ref);
+        if (imageValue) {
+            ogImage = imageValue.getOriginal().getUrl();
+        }
+    }
+
+    useSeoMeta({
+        ogTitle: document.model.data.seoTitle,
+        ogDescription: document.model.data.seoDescription,
+        ogUrl: useRequestURL().toString(),
+        ogImage: ogImage,
     });
 }
 
