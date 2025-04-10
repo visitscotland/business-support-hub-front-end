@@ -1,6 +1,6 @@
 <template>
     <VsTabs
-        class="my-400"
+        class="my-400 vs-events-listing"
         :id="moduleId"
         no-container
         data-event-listing="True"
@@ -29,6 +29,14 @@
             </VsContainer>
         </VsTabItem>
     </VsTabs>
+
+    <VsContainer>
+        <VsRow>
+            <VsWarning class="my-400">
+                {{ configStore.getLabel('events-listings-module', 'no-js')}}
+            </VsWarning>
+        </VsRow>
+    </VsContainer>
 </template>
 
 <script setup lang="ts">
@@ -38,14 +46,17 @@ import {
     VsTabs,
     VsTabItem,
     VsRow,
+    VsWarning,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrEventListing from './VsBrEventListing.vue';
+import useConfigStore from '~/stores/configStore';
 
 const props = defineProps<{
     module: Object,
 }>();
 
+const configStore = useConfigStore();
 const module: any = props.module;
 
 const moduleId = computed(() => module.anchor || 'events-listing-module');
@@ -57,6 +68,20 @@ const moduleId = computed(() => module.anchor || 'events-listing-module');
 
     &.vs-tab__item__heading {
         display: none !important;
+    }
+}
+
+.vs-warning {
+    display: none;
+}
+
+.no-js {
+    .vs-events-listing {
+        display: none;
+    }
+
+    .vs-warning {
+        display: block;
     }
 }
 </style>
