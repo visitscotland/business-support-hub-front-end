@@ -1,8 +1,6 @@
 <template>
   <div>
-      <VsBrSkeleton
-          v-show="!isMounted"
-      />
+      <VsBrSkeleton/>
       <div
           class="hydrate"
           v-show="isMounted"
@@ -26,12 +24,6 @@
               </template>
           </br-page>
       </div>
-      <noscript>
-          <component :is="'style'">
-          .skeleton-site { display: none !important }
-          .hydrate { display: block !important }
-          </component>
-      </noscript>
   </div>
 </template>
 
@@ -182,5 +174,11 @@ app.appContext.config.globalProperties.emitter = emitter;
   .vs-heading[id],
   .vs-heading span {
     scroll-margin-top: 5rem;
+  }
+
+  .hydrate {
+    z-index: 2;
+    position: relative;
+    background-color: white;
   }
 </style>
