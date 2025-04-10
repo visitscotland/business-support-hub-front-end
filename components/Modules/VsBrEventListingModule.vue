@@ -71,6 +71,10 @@ const moduleId = computed(() => module.anchor || 'events-listing-module');
     }
 }
 
+.vs-warning {
+    display: none;
+}
+
 .no-js {
     .vs-events-listing {
         display: none;
