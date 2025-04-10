@@ -33,7 +33,7 @@
     <VsContainer>
         <VsRow>
             <VsWarning class="my-400">
-                No JS message here
+                {{ configStore.getLabel('events-listings-module', 'no-js')}}
             </VsWarning>
         </VsRow>
     </VsContainer>
@@ -50,11 +50,13 @@ import {
 } from '@visitscotland/component-library/components';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrEventListing from './VsBrEventListing.vue';
+import useConfigStore from '~/stores/configStore';
 
 const props = defineProps<{
     module: Object,
 }>();
 
+const configStore = useConfigStore();
 const module: any = props.module;
 
 const moduleId = computed(() => module.anchor || 'events-listing-module');
