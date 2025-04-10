@@ -91,38 +91,39 @@
 
                         <VsList unstyled>
                             <VsRow>
-                            <VsCol
-                                cols="12"
-                                md="4"
-                            >
-                                <li v-if="result.times">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'time') }}:</strong> {{ result.times }}
-                                </li>
-                                <li v-if="result.price">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'price') }}:</strong> {{ result.price }}
-                                </li>
-                                <li v-if="result.location">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'location') }}:</strong> {{ result.location }}
-                                </li>
-                                <li v-if="result.organizer">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organizer }}
-                                </li>
-                            </VsCol>
+                                <VsCol
+                                    cols="12"
+                                    md="4"
+                                >
+                                    <li v-if="result.times">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'time') }}:</strong> {{ result.times }}
+                                    </li>
+                                    <li v-if="result.price">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'price') }}:</strong> {{ result.price }}
+                                    </li>
+                                    <li v-if="result.location">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'location') }}:</strong> {{ result.location }}
+                                    </li>
+                                    <li v-if="result.organiser && filterId !== 'travel'">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organiser }}
+                                    </li>
+                                </VsCol>
 
-                            <VsCol
-                                cols="12"
-                                md="4"
-                            >
-                                <li v-if="result.registrationDeadline">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'registration') }}: </strong> {{ result.registrationDeadline }}
-                                </li>
-                                <li v-if="result.organizer">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organizer }}
-                                </li>
-                                <li v-if="result.contact">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'contact') }}:</strong> {{ result.contact }}
-                                </li>
-                            </VsCol>
+                                <VsCol
+                                    v-if="filterId === 'travel'"
+                                    cols="12"
+                                    md="4"
+                                >
+                                    <li v-if="result.registrationDeadline">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'registration') }}: </strong> {{ result.registrationDeadline }}
+                                    </li>
+                                    <li v-if="result.organiser">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organiser }}
+                                    </li>
+                                    <li v-if="result.contact">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'contact') }}:</strong> {{ result.contact }}
+                                    </li>
+                                </VsCol>
                             </VsRow>
                         </VsList>
                     </template>
@@ -168,7 +169,6 @@ import VsBrFilter from './VsBrFilter.vue';
 import useConfigStore from '~/stores/configStore';
 
 const props = defineProps<{
-    dataEndpoint: string,
     eventData: any,
     moduleId: string,
 }>();
