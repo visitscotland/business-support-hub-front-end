@@ -11,6 +11,12 @@ if (!env.VS_BRANCH_PROPERTIES_DIR) { env.VS_BRANCH_PROPERTIES_DIR = "ci/properti
 if (!env.VS_BRANCH_PROPERTIES_FILE) { env.VS_BRANCH_PROPERTIES_FILE = env.BRANCH_NAME.substring(env.BRANCH_NAME.lastIndexOf('/') + 1) + ".properties" }
 echo "==/Setting default environment variables"
 
+echo "== Setting project-specific environment variables"
+if (!env.BR_CMS_ORIGIN_LOCATION) { env.BR_CMS_ORIGIN_LOCATION = "https://cms-develop-brc.visitscotland.com" }
+if (!env.BR_RESOURCE_API_ENDPOINT) { env.BR_RESOURCE_API_ENDPOINT = "https://develop-brc-support.visitscotland.org/resourceapi" }
+if (!env.BR_X_FORWARDED_HOST) { env.BR_X_FORWARDED_HOST = "develop-brc-support.visitscotland.org" }
+echo "== Setting project-specific environment variables"
+
 pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -123,9 +129,9 @@ pipeline {
                         echo; echo "==== PRINTENV $STAGE_NAME =====" > printenv.$STAGE_NAME
                         printenv >> printenv.$STAGE_NAME
                         echo "====/PRINTENV $STAGE_NAME =====" >> printenv.$STAGE_NAME ; echo
-                        export BR_CMS_ORIGIN_LOCATION=https://cms-develop-brc.visitscotland.com
-                        export BR_RESOURCE_API_ENDPOINT=https://develop-brc-support.visitscotland.org/resourceapi
-                        export BR_X_FORWARDED_HOST=develop-brc-support.visitscotland.org
+                        export BR_CMS_ORIGIN_LOCATION
+			export BR_RESOURCE_API_ENDPOINT
+			export BR_X_FORWARDED_HOST
                         yarn build
                     '''
                 }
