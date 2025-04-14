@@ -24,6 +24,12 @@
               </template>
           </br-page>
       </div>
+        <noscript>
+            <component :is="'style'">
+            .skeleton-site { display: none !important }
+            .hydrate { display: block !important }
+            </component>
+        </noscript>
   </div>
 </template>
 
