@@ -34,6 +34,12 @@
                 :variant="variant"
             >
                 <VsBrRichText :input-content="item.content" />
+
+                <VsBrDownloadCard
+                    v-if="item.link"
+                    :link="item.link"
+                    :within-nested="nested || null"
+                />
             </VsStyledListItem>
 
             <template
@@ -48,9 +54,10 @@
 
 <script setup lang="ts">
 import type { Page } from '@bloomreach/spa-sdk';
-import type { LooseObject } from '~/types/types';
+import type { DownloadCardLink, LooseObject } from '~/types/types';
 import { VsModuleWrapper, VsStyledList, VsStyledListItem } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
+import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
 
 const props = defineProps<{
     module: LooseObject,
@@ -69,7 +76,7 @@ const page: Page | undefined = inject('page');
 
 // Set the listItem content by extracting the data from the sections.
 const listItems = computed(() => {
-    return sections.map(({ copy, heading, image }: { copy: LooseObject, heading: string, image: LooseObject }) => {
+    return sections.map(({ copy, heading, image, link }: { copy: LooseObject, heading: string, image: LooseObject, link: DownloadCardLink }) => {
         const content = copy.value;
         let imageSrc = '';
 
@@ -79,7 +86,7 @@ const listItems = computed(() => {
             imageSrc = imageValue.getOriginal().getUrl();
         }
 
-        return { content, heading, imageSrc };
+        return { content, heading, imageSrc, link };
     });
 });
 
