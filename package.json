@@ -30,6 +30,7 @@
     "@bloomreach/vue3-sdk": "^22.0.5",
     "@pinia/nuxt": "^0.5.1",
     "@visitscotland/component-library": "4.19.2",
+    "@visitscotland/component-library": "4.19.3",
     "axios": "^1.7.4",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
