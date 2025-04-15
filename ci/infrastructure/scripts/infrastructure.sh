@@ -249,7 +249,7 @@ defaultSettings() {
   # check for VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE, ensure it's unset if it's not overridden
   # - this variable is needed when the pipeline is used with fixed port environments where the branch name may change
   if [ -z "$VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE" ]; then
-    unset VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE
+    VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE="unset"
   else
     echo "$(eval $VS_LOG_DATESTAMP) INFO  [$VS_SCRIPTNAME] VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE was set to $VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE before $0 was called"
   fi
@@ -465,7 +465,7 @@ manageContainers() {
       deleteContainers
       unset CONTAINER_ID
     else
-      echo "$(eval $VS_LOG_DATESTAMP) WARN  [$VS_SCRIPTNAME] VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE is $VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE but VS_CONTAINER_PORT_CLASH_PREDICTED is $VS_CONTAINER_PORT_CLASH_PREDICTED, so existing container $CONTAINER_ID will be left"
+      echo "$(eval $VS_LOG_DATESTAMP) WARN  [$VS_SCRIPTNAME]  VS_CONTAINER_PORT_CLASH_PREDICTED is $VS_CONTAINER_PORT_CLASH_PREDICTED but VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE is $VS_CONTAINER_REMOVE_WHEN_PORT_IN_USE, so existing container $CONTAINER_ID will be left and this operation will be marked as a failure"
     fi
   else
     echo "$(eval $VS_LOG_DATESTAMP) INFO [$VS_SCRIPTNAME] No CONTAINER_ID was found"
@@ -1084,6 +1084,15 @@ createBuildReport() {
     if [ ! -z "$VS_CONTAINER_EXT_PORT_SSR" ]&&[ "${VS_BUILD_TYPE^^}" == "BRXM" ]; then
       echo "# Direct SSR access - available only on the Web Development LAN" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
       echo "#   - http://$VS_HOST_IP_ADDRESS:$VS_CONTAINER_EXT_PORT_SSR/site/" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
+    fi
+    if [ ! -z "$VS_BRXM_DSSR_SITES" ]; then
+      echo "Resource API URLs for SPA-SDK/DSSR sites" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
+      for SITE in $VS_BRXM_DSSR_SITES; do
+        echo " - https://$SITE/resourceapi?vs_brxm_host=$VS_HOST_IP_ADDRESS&vs_brxm_port=$VS_CONTAINER_BASE_PORT&vs-no-redirect" | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
+      done
+      echo "NOTE: the vs-no-redirect query string parameter allows the content to be served without redirecting to a bare URL"
+      echo "      this is necessary to allow non-browser requests, such as those from the front-end to the resourceapi, to be served"
+      echo "      to view a fully integrated SPA-SDK/DSSR site, please use the configuration URL provided by the CI job for that site/branch"
       echo "# " | tee -a $VS_MAIL_NOTIFY_BUILD_MESSAGE
     fi
     if [ ! -z "$VS_CONTAINER_EXT_PORT_SSH" ]; then
