@@ -15,7 +15,7 @@
     "lint:fix": "yarn lint --fix"
   },
   "devDependencies": {
-    "@nuxt/eslint-config": "^0.3.13",
+    "@nuxt/eslint-config": "^0.7.3",
     "@nuxt/scripts": "^0.9.5",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
@@ -39,6 +39,7 @@
     "pinia": "^2.2.0",
     "sass": "^1.77.4",
     "standard-version": "^9.5.0",
+    "typescript": "^5.7.2",
     "youtube-vue3": "^0.1.15"
   },
   "overrides": {
