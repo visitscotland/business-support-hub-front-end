@@ -10,6 +10,7 @@
         :button-link="module.cta ? formatLink(module.cta.link) : undefined"
         :heading-level="module.nested ? 3 : 2"
         :heading-style="module.nested ? 'heading-m' : 'heading-xl'"
+        :sectionId="module.anchor"
     >
         <template
             v-if="module.introduction"
