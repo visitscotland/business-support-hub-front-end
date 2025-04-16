@@ -8,7 +8,7 @@
         :no-cookies-message="configStore.getLabel('video', 'video.no-cookies')"
         :no-js-message="configStore.getLabel('video', 'video.no-js')"
         :button-link="module.cta ? formatLink(module.cta.link) : undefined"
-        :sectionId="module.anchor"
+        :section-id="module.anchor"
         :heading-level="module.nested ? 3 : 2"
         :heading-style="module.nested ? 'heading-m' : 'heading-xl'"
     >
@@ -54,14 +54,13 @@
                     <template
                         #vs-link-list-badges
                     >
-                        <VsBadge 
+                        <VsBadge
                             v-for="(badge, badgeIndex) in link.badges"
                             :key="badgeIndex"
                         >
                             {{ badge }}
                         </VsBadge>
                     </template>
-                    
                 </VsMegalinkLinkList>
 
                 <VsBrVideoModal
@@ -84,6 +83,8 @@
 
 <script lang="ts" setup>
 /* eslint-disable import/no-import-module-exports */
+/* eslint no-undef: 0 */
+
 import { inject } from 'vue';
 
 import { type Page } from '@bloomreach/spa-sdk';
@@ -97,9 +98,9 @@ import {
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
-import formatLink from '~/composables/formatLink';
+import formatLink from '~/composables/formatLink.ts';
 
 const configStore = useConfigStore();
 
@@ -121,22 +122,22 @@ if (page && module.links) {
             ? page.getContent(nextLink.image.cmsImage.$ref)
             : page.getContent(nextLink.image.externalImage.$ref);
 
-        let badgesArray: Array<string> = [];
+        const badgesArray: Array<string> = [];
 
-        if(nextLink.type === "EXTERNAL") {
+        if (nextLink.type === 'EXTERNAL') {
             badgesArray.push('External website');
         }
 
-        if(nextLink.type === "DOWNLOAD") {
+        if (nextLink.type === 'DOWNLOAD') {
             badgesArray.push('Download');
         }
 
-        if(nextLink.contentType) {
+        if (nextLink.contentType) {
             badgesArray.push(nextLink.contentType);
         }
 
-        if(nextLink.readTime) {
-            badgesArray.push(nextLink.readTime)
+        if (nextLink.readTime) {
+            badgesArray.push(nextLink.readTime);
         }
 
         links.push({
@@ -158,5 +159,5 @@ if (page && module.links) {
             display: block;
         }
     }
-    
+
 </style>

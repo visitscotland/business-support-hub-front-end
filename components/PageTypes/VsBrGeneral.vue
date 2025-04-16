@@ -56,7 +56,7 @@
     <NuxtLazyHydrate
         :when-visible="{ rootMargin: '50px' }"
     >
-        <VsBrNewsletterSignpost 
+        <VsBrNewsletterSignpost
             v-if="!documentData.hideNewsletter && configStore.newsletterSignpost"
             :data="configStore.newsletterSignpost"
         />
@@ -64,15 +64,16 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs } from 'vue';
+/* eslint no-undef: 0 */
+
+import { toRefs, ref } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import type { TableOfContentLink } from '~/types/types';
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 import VsBrHeroSectionModule from '~/components/Modules/VsBrHeroSectionModule.vue';
 import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
 import VsBrModuleBuilder from '~/components/Modules/VsBrModuleBuilder.vue';
 import VsBrRelatedLinks from '~/components/Modules/VsBrRelatedLinks.vue';
-import VsBrNewsletterSignpost from '../Modules/VsBrNewsletterSignpost.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
 import VsBrBreadcrumb from '~/components/Modules/VsBrBreadcrumb.vue';
 
@@ -81,6 +82,7 @@ import {
     VsRow,
     VsCol,
 } from '@visitscotland/component-library/components';
+import VsBrNewsletterSignpost from '../Modules/VsBrNewsletterSignpost.vue';
 
 const props = defineProps<{
     component: Component,
@@ -95,8 +97,6 @@ let documentData : any = {
 };
 let pageItems: any[] = [];
 const otyml = ref<any>(null);
-
-const relatedLinks = ref<any[]>([]);
 
 let topLevelArticleModule : any = {
 };
@@ -132,20 +132,25 @@ if (page.value) {
                 copy: documentData.introduction,
                 image: {
                     cmsImage: documentData.heroImage,
-                }
+                },
             }],
-        }
+        };
     }
 }
 
 // Create list of anchor links and titles for each module, excluding nested modules.
-const tableOfContentsLinks= computed((): TableOfContentLink[] => {
-    return pageItems.flatMap(({ anchor, title, nested, type }: { anchor: string, title: string, nested: boolean }) => {
+const tableOfContentsLinks = computed((): TableOfContentLink[] => pageItems.flatMap(
+    (
+        { anchor, title, nested, type }: { anchor: string, title: string, nested: boolean },
+    ) => {
         if (nested) return [];
 
         if (type === 'SignpostModule') return [];
 
-        return { anchor, title };
-    });
-});
+        return {
+            anchor,
+            title,
+        };
+    },
+));
 </script>

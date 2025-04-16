@@ -15,17 +15,13 @@
 import { toRefs, provide } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
 import VsBrGtm from '~/components/Modules/VsBrGtm.vue';
 
 const props = defineProps<{ component: Component, page: Page }>();
 
 const { component, page } = toRefs(props);
-
-let pageComponent : any = {
-};
-let pageName : string = '';
 
 let document : any = {
 };
@@ -38,9 +34,6 @@ const errorData = {
 const configStore = useConfigStore();
 
 if (page.value) {
-    pageComponent = page.value.getComponent();
-    pageName = pageComponent.model.name;
-
     const event = useRequestEvent();
     setResponseStatus(event, 500, 'Something Went Wrong');
 

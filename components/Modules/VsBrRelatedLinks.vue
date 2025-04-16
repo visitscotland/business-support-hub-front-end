@@ -8,7 +8,8 @@
                 <VsCol
                     cols="12"
                     md="3"
-                    v-for="link in links"
+                    v-for="(link, index) in links"
+                    :key="index"
                 >
                     <VsStretchedLinkCard
                         :link="formatLink(link.link)"
@@ -25,12 +26,12 @@
 
                         <template
                             v-if="link.readTime || link.contentType"
-                            v-slot:stretched-card-badges
+                            #stretched-card-badges
                         >
                             <VsBadge v-if="link.contentType">
                                 {{ link.contentType }}
                             </VsBadge>
-                            
+
                             <VsBadge v-if="link.readTime">
                                 {{ link.readTime }}
                             </VsBadge>
@@ -49,7 +50,7 @@ import {
     VsContainer,
     VsModuleWrapper,
     VsRow,
-    VsStretchedLinkCard
+    VsStretchedLinkCard,
 } from '@visitscotland/component-library/components';
 
 const props = defineProps<{

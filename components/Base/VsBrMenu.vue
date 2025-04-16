@@ -35,20 +35,20 @@
         :close-btn-text="configStore.getLabel('essentials.global', 'close')"
         aria-labelledby="vs-menu-banner-copy"
     >
-        <template v-slot:banner-text>
+        <template #banner-text>
             <div
                 id="vs-menu-banner-copy"
                 v-html="banner.copy.value"
             />
         </template>
 
-        <template v-slot:banner-cta>
-            <vs-link
+        <template #banner-cta>
+            <VsLink
                 :href="banner.ctaLink.link"
                 :type="banner.ctaLink.type.toLowerCase()"
             >
                 {{ banner.ctaLink.label }}
-            </vs-link>
+            </VsLink>
         </template>
     </VsBanner>
 </template>
@@ -58,7 +58,7 @@ import { toRefs } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageMenuButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
 import VsBrSkipTo from '~/components/Base/VsBrSkipTo.vue';
 

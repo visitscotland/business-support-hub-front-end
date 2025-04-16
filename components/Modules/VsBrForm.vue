@@ -80,7 +80,9 @@
 </template>
 
 <script lang="ts" setup>
-import useConfigStore from '~/stores/configStore';
+/* eslint-disable import/no-import-module-exports */
+
+import useConfigStore from '~/stores/configStore.ts';
 
 import {
     VsContainer,

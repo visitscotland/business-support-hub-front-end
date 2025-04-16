@@ -30,7 +30,7 @@
                 :key="index"
                 :heading="item.heading"
                 :heading-level="nested ? 4 : 3"
-                :imageSrc="item.imageSrc ? item.imageSrc : null"
+                :image-src="item.imageSrc ? item.imageSrc : null"
                 :variant="variant"
             >
                 <VsBrRichText :input-content="item.content" />
@@ -53,9 +53,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed, inject } from 'vue';
 import type { Page } from '@bloomreach/spa-sdk';
 import type { DownloadCardLink, LooseObject } from '~/types/types';
-import { VsModuleWrapper, VsStyledList, VsStyledListItem } from '@visitscotland/component-library/components';
+import {
+    VsModuleWrapper, VsStyledList, VsStyledListItem,
+} from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
 
@@ -75,8 +78,11 @@ const {
 const page: Page | undefined = inject('page');
 
 // Set the listItem content by extracting the data from the sections.
-const listItems = computed(() => {
-    return sections.map(({ copy, heading, image, link }: { copy: LooseObject, heading: string, image: LooseObject, link: DownloadCardLink }) => {
+const listItems = computed(() => sections.map(
+    (
+        { copy, heading, image, link }:
+            { copy: LooseObject, heading: string, image: LooseObject, link: DownloadCardLink },
+    ) => {
         const content = copy.value;
         let imageSrc = '';
 
@@ -86,28 +92,33 @@ const listItems = computed(() => {
             imageSrc = imageValue.getOriginal().getUrl();
         }
 
-        return { content, heading, imageSrc, link };
-    });
-});
+        return {
+            content,
+            heading,
+            imageSrc,
+            link,
+        };
+    },
+));
 
 const variant = computed(() => {
     let selectedVariant = '';
 
     switch (layout) {
-        case 'bullet-list':
-            selectedVariant = 'icon';
-            break;
-        case 'horizontal-list':
-            selectedVariant = 'image-horizontal';
-            break;
-        case 'numbered-list':
-            selectedVariant = 'numbered';
-            break;
-        case 'visual-list':
-            selectedVariant = 'image';
-            break;
-        default:
-            selectedVariant = 'image';
+    case 'bullet-list':
+        selectedVariant = 'icon';
+        break;
+    case 'horizontal-list':
+        selectedVariant = 'image-horizontal';
+        break;
+    case 'numbered-list':
+        selectedVariant = 'numbered';
+        break;
+    case 'visual-list':
+        selectedVariant = 'image';
+        break;
+    default:
+        selectedVariant = 'image';
     }
 
     return selectedVariant;

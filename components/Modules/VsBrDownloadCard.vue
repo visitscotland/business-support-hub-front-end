@@ -18,7 +18,9 @@
                 {{ props.link.label }}
             </VsHeading>
 
-            <div class="vs-download-card__published">{{ publishedText }}</div>
+            <div class="vs-download-card__published">
+                {{ publishedText }}
+            </div>
 
             <p>{{ props.link.teaser }}</p>
         </div>
@@ -32,13 +34,16 @@
                 {{ buttonLabel }}
             </VsButton>
         </div>
-    </div>    
+    </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { DownloadCardLink } from '~/types/types';
-import { VsButton, VsHeading, VsIcon } from '@visitscotland/component-library/components';
-import useConfigStore from '~/stores/configStore';
+import {
+    VsButton, VsHeading, VsIcon,
+} from '@visitscotland/component-library/components';
+import useConfigStore from '~/stores/configStore.ts';
 
 const configStore = useConfigStore();
 
@@ -57,24 +62,24 @@ const publishedText = `${configStore.getLabel('download', 'published')} ${props.
 
 // Map file extension to icon name.
 const setIconName = computed(() => {
-    switch(props.link.extension) {
-        case 'eps':
-            return 'file-eps-regular';
-        case 'jpg':
-            return 'file-jpg-regular';
-        case 'pdf':
-            return 'pdf-link';
-        case 'png':
-            return 'file-png-regular';
-        case 'svg':
-            return 'file-svg-regular';
-        case 'xls':
-        case 'xlsx':
-            return 'file-excel-regular';
-        case 'doc':
-        case 'docx':
-        default:
-            return 'file-doc-regular';
+    switch (props.link.extension) {
+    case 'eps':
+        return 'file-eps-regular';
+    case 'jpg':
+        return 'file-jpg-regular';
+    case 'pdf':
+        return 'pdf-link';
+    case 'png':
+        return 'file-png-regular';
+    case 'svg':
+        return 'file-svg-regular';
+    case 'xls':
+    case 'xlsx':
+        return 'file-excel-regular';
+    case 'doc':
+    case 'docx':
+    default:
+        return 'file-doc-regular';
     }
 });
 </script>

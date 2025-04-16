@@ -11,45 +11,48 @@
             :section-title="getSectionLabel(group)"
             :type="getGroupType(group)"
         >
-            <template v-if="getGroupType(group) === 'list' && index === 0">             
+            <template v-if="getGroupType(group) === 'list' && index === 0">
                 <div
-                    v-for="filter in group"
+                    v-for="(listFilter, listIndex) in group"
+                    :key="listIndex"
                     class="date-picker"
                 >
-                    <label :for="`${props.filterId}-${filter.key}`">
-                        {{ filter.label }}
+                    <label :for="`${props.filterId}-${listFilter.key}`">
+                        {{ listFilter.label }}
                     </label>
                     <div>
                         <input
                             type="date"
-                            :id="`${props.filterId}-${filter.key}`"
-                            :name="`${props.filterId}-${filter.key}`"
+                            :id="`${props.filterId}-${listFilter.key}`"
+                            :name="`${props.filterId}-${listFilter.key}`"
                             data-type="date"
-                            :data-label="filter.label"
+                            :data-label="listFilter.label"
                         >
                     </div>
                 </div>
             </template>
             <template v-else-if="getGroupType(group) === 'list'">
                 <VsCheckbox
-                    v-for="filter in group"
-                    :field-name="`${props.filterId}-${filter.key}`"
-                    :label="filter.label"
+                    v-for="(listFilter, listIndex) in group"
+                    :key="listIndex"
+                    :field-name="`${props.filterId}-${listFilter.key}`"
+                    :label="listFilter.label"
                     value="checked"
                     size="sm"
                     data-type="boolean"
-                    :data-label="filter.label"
+                    :data-label="listFilter.label"
                 />
             </template>
             <template v-else-if="getGroupType(group) === 'group'">
                 <VsCheckbox
-                    v-for="filter in group[0].values"
-                    :field-name="`${props.filterId}-${filter.key}`"
-                    :label="filter.label"
+                    v-for="(groupFilter, groupIndex) in group[0].values"
+                    :key="groupIndex"
+                    :field-name="`${props.filterId}-${groupFilter.key}`"
+                    :label="groupFilter.label"
                     value="checked"
                     size="sm"
                     :data-type="getSectionKey(group)"
-                    :data-label="filter.label"
+                    :data-label="groupFilter.label"
                 />
             </template>
         </VsFilterSection>
@@ -57,8 +60,11 @@
 </template>
 
 <script setup lang="ts">
-import useConfigStore from '~/stores/configStore';
-import { VsFilter, VsFilterSection, VsCheckbox } from '@visitscotland/component-library/components';
+import { ref, onMounted } from 'vue';
+import useConfigStore from '~/stores/configStore.ts';
+import {
+    VsFilter, VsFilterSection, VsCheckbox,
+} from '@visitscotland/component-library/components';
 
 const props = defineProps<{
     filters: any,
@@ -78,7 +84,7 @@ onMounted(() => {
             acc[value.group] = acc[value.group] || [];
             acc[value.group].push(value);
             return acc;
-        }, Object.create(null))
+        }, Object.create(null)),
     );
 });
 
@@ -86,35 +92,35 @@ onMounted(() => {
 const getGroupType = (group: any) => {
     if (group.some((g: any) => g.type === 'DATE')) {
         return 'list';
-    } else if (group.some((g: any) => g.type === 'BOOLEAN')) {
+    } if (group.some((g: any) => g.type === 'BOOLEAN')) {
         return 'list';
-    } else if (group.some((g: any) => g.type === 'MULTISELECT')) {
+    } if (group.some((g: any) => g.type === 'MULTISELECT')) {
         return 'group';
     }
+
+    return '';
 };
 
 // Determine the section label.
 const getSectionLabel = (group: any) => {
     if (group.some((g: any) => g.type === 'MULTISELECT')) {
         return group[0].label;
-    } else {
-        return null;
     }
+    return null;
 };
 
 // Determine the section key.
 const getSectionKey = (group: any) => {
     if (group.some((g: any) => g.type === 'MULTISELECT')) {
         return group[0].key;
-    } else {
-        return null;
     }
+    return null;
 };
 
 // Reset all input fields.
 const resetAll = () => {
     filter.value.resetAll();
-}
+};
 
 // Reset one input field.
 const resetOne = (id: string) => {
@@ -128,17 +134,13 @@ defineExpose({
 
 // Remove the filter id from the input id.
 // This is needed for updating the api query parameter.
-const cleanKey = (key: string) => {
-    return key.slice(props.filterId.length + 1);
-}
+const cleanKey = (key: string) => key.slice(props.filterId.length + 1);
 
 // Format date from 'YYYY-mm-dd' to 'dd/mm/YYYY'.
-const formatDate = (value: string) => {
-    return value.split('-').reverse().join('/');
-};
+const formatDate = (value: string) => value.split('-').reverse().join('/');
 
 // set and emit a payload when a filter input has change.
-// This payload will be used by the parent to set the 
+// This payload will be used by the parent to set the
 // selected filters list and api query parameters.
 const handleUpdate = (event: Event) => {
     if (!event.target) return;
@@ -154,14 +156,14 @@ const handleUpdate = (event: Event) => {
         value = formatDate(event.target.value);
         label = `${label}: ${value}`;
     } else if (type === 'boolean') {
-        value = event.target.checked ? true : false;
+        value = !!event.target.checked;
     } else {
         key = type;
         value = cleanKey(event.target.id);
     }
 
     emit('filter-updated', {
-        fieldId, 
+        fieldId,
         key,
         label,
         type,

@@ -43,7 +43,7 @@
                 :module="item"
             />
         </NuxtLazyHydrate>
-        
+
         <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'ArticleModule' && item.layout === 'accordion'"
@@ -53,7 +53,7 @@
                 :module="item"
             />
         </NuxtLazyHydrate>
-        
+
         <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'ArticleModule' && styledListLayouts.includes(item.layout)"
@@ -67,11 +67,11 @@
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'SignpostModule'"
         >
-            <VsBrCtaBannerModule 
+            <VsBrCtaBannerModule
                 :module="item"
             />
         </NuxtLazyHydrate>
-        
+
         <NuxtLazyHydrate
             :when-visible="{ rootMargin: '50px' }"
             v-else-if="item.type === 'FormModule'"
@@ -118,8 +118,6 @@
             <VsBrEventListingModule :module="item" />
         </NuxtLazyHydrate>
 
-        
-
         <div
             v-else-if="item.type === 'ErrorModule'"
         >
@@ -136,20 +134,20 @@
 </template>
 
 <script lang="ts" setup>
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 
 import type { Page } from '@bloomreach/spa-sdk';
 import { BrManageContentButton } from '@bloomreach/vue3-sdk';
 
-import VsBrMegalinksLinkListModule from '~/components/Modules/VsBrMegalinksLinkListModule.vue'
+import VsBrMegalinksLinkListModule from '~/components/Modules/VsBrMegalinksLinkListModule.vue';
 import VsBrHorizontalLinksModule from '~/components/Modules/VsBrHorizontalLinksModule.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
 import VsBrAccordionModule from '~/components/Modules/VsBrAccordionModule.vue';
 import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue';
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
-import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
+import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
 import VsBrMegalinksMultiImageModule from './VsBrMegalinksMultiImageModule.vue';
 import VsBrEventListingModule from './VsBrEventListingModule.vue';
 
@@ -173,10 +171,9 @@ const currentTheme = ref(themes[0]);
 // Set the background colour (theme) for each module.
 if (modules) {
     for (let x = 0; x < modules.length; x++) {
-
         // Set the default theme value to the opposite of the previous value.
         let themeValue = currentTheme.value === themes[0] ? themes[1] : themes[0];
-        
+
         // Set the first module to be light.
         if (x === 0) {
             themeValue = themes[0];
@@ -184,11 +181,11 @@ if (modules) {
         } else if (modules[x].nested) {
             themeValue = currentTheme.value;
         }
-        
+
         // Add the theme properties to the module object.
         modules[x].themeValue = themeValue;
         modules[x].themeIndex = themeValue === themes[0] ? 0 : 1;
-        
+
         // Update the current theme.
         currentTheme.value = themeValue;
 

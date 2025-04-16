@@ -5,7 +5,7 @@
                 <VsLinkList :toc="toc">
                     <template
                         v-if="heading"
-                        v-slot:heading
+                        #heading
                     >
                         {{ heading }}
                     </template>
@@ -24,7 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import { VsCol, VsContainer, VsLinkList, VsLinkListItem, VsRow, } from '@visitscotland/component-library/components';
+import {
+    VsCol, VsContainer, VsLinkList, VsLinkListItem, VsRow,
+} from '@visitscotland/component-library/components';
 
 defineProps<{
     heading?: string,

@@ -11,6 +11,11 @@
 </template>
 
 <script setup lang="ts">
+/* eslint no-undef: 0 */
+
+import {
+    inject, computed, ref,
+} from 'vue';
 import type { Page } from '@bloomreach/spa-sdk';
 import type { LooseObject } from '~/types/types';
 import { VsHeroSection } from '@visitscotland/component-library/components';
@@ -28,7 +33,7 @@ const imageValue = ref<any>();
 const imageSrc = ref('');
 const imageData = ref<any>();
 
- // Get the hero image data.
+// Get the hero image data.
 if (page && props.content.heroImage) {
     imageValue.value = page.getContent(props.content.heroImage.$ref);
     imageSrc.value = imageValue.value.getOriginal().getUrl();

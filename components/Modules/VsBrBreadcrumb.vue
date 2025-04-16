@@ -27,7 +27,7 @@ import {
     VsBreadcrumbItem,
 } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
 const configStore = useConfigStore();
 
