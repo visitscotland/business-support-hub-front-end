@@ -12,7 +12,8 @@
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
     "lint": "eslint ./**/*.{js,vue,ts}",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,vue,ts}": "eslint"
