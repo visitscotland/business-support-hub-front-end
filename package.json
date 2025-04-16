@@ -14,6 +14,9 @@
     "lint": "eslint ./**/*.{js,vue,ts}",
     "lint:fix": "yarn lint --fix"
   },
+  "lint-staged": {
+    "*.{js,vue,ts}": "eslint"
+  },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.7.3",
     "@nuxt/scripts": "^0.9.5",
@@ -23,7 +26,8 @@
     "eslint": "^8.56.0",
     "husky": "^9.1.4",
     "nuxt": "^3.12.4",
-    "nuxt-lazy-hydrate": "^1.0.0"
+    "nuxt-lazy-hydrate": "^1.0.0",
+    "lint-staged": "^15.2.10"
   },
   "dependencies": {
     "@bloomreach/spa-sdk": "^23.3.0",
