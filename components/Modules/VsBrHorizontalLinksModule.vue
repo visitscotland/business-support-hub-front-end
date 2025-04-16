@@ -58,9 +58,9 @@ import {
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
-import formatLink from '~/composables/formatLink';
+import formatLink from '~/composables/formatLink.ts';
 
 const configStore = useConfigStore();
 

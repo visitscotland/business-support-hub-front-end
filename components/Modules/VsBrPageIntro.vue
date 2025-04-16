@@ -3,7 +3,7 @@
         :background="lightBackground ? themeCalculator(1) : themeCalculator(0)"
         :hero-intro="heroImage ? true : false"
         :is-itinerary="itinerary ? true : false"
-        :has-toc="tableOfContentsLinks ? true: false"
+        :has-toc="tableOfContentsLinks ? true : false"
     >
         <template
             #vs-intro-hero
@@ -87,7 +87,7 @@
         <!-- TODO - Itinerary Summary -->
 
         <template
-            v-slot:vs-intro-table-of-contents
+            #vs-intro-table-of-contents
             v-if="tableOfContentsLinks"
         >
             <VsBrLinkListModule
@@ -100,13 +100,15 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, toRefs } from 'vue';
+import {
+    inject, ref, toRefs,
+} from 'vue';
 import type { TableOfContentLink } from '~/types/types';
 import { VsPageIntro, VsBlogDetails } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore';
-import themeCalculator from '~/composables/themeCalculator';
-import extractYoutubeId from '~/composables/extractYoutubeId';
+import useConfigStore from '~/stores/configStore.ts';
+import themeCalculator from '~/composables/themeCalculator.ts';
+import extractYoutubeId from '~/composables/extractYoutubeId.ts';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrBreadcrumb from '~/components/Modules/VsBrBreadcrumb.vue';
@@ -131,7 +133,7 @@ const {
     content,
     lightBackground,
     heroImage,
-    itinerary
+    itinerary,
 } = toRefs(props);
 
 const breadcrumb = ref<any[]>([]);
@@ -151,7 +153,7 @@ if (page) {
         breadcrumb.value = pageModels.breadcrumb.items;
 
         // TODO - localised labels for minute/s and reading time:
-        readTime.value = `${content.value.readingTime} minute read`; 
+        readTime.value = `${content.value.readingTime} minute read`;
 
         if (content.value.publishDate) {
             publishDate.value = new Date(content.value.publishDate).toLocaleString(
