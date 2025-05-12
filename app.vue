@@ -148,10 +148,19 @@ const mapping = {
 const isMounted = ref(false);
 
 onMounted(() => {
-  isMounted.value = true;
+    isMounted.value = true;
 
-  const hydrationEvent = new Event('vs-app-hydrated');
-  window.dispatchEvent(hydrationEvent);
+    const hydrationEvent = new Event('vs-app-hydrated');
+    window.dispatchEvent(hydrationEvent);
+
+    if (import.meta.client) {
+        const cludoExperienceBuilder = document.createElement('script');
+        cludoExperienceBuilder.id = 'cludo-experience-manager';
+        cludoExperienceBuilder.src = 'https://customer.cludo.com/scripts/bundles/experiences/manager.js';
+        cludoExperienceBuilder.setAttribute('data-cid', runtimeConfig.public.CLUDO_CUSTOMER_ID);
+        cludoExperienceBuilder.defer = true;
+        document.body.appendChild(cludoExperienceBuilder);
+    }
 });
 
 /**
