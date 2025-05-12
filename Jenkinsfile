@@ -56,7 +56,6 @@ echo "== Setting default application variables"
 if (!env.BR_CMS_ORIGIN_LOCATION ) { env.BR_CMS_ORIGIN_LOCATION = "https://feature.visitscotland.com" }
 if (!env.BR_RESOURCE_API_ENDPOINT ) { env.BR_RESOURCE_API_ENDPOINT = "https://feature-support.visitscotland.org/resourceapi" }
 if (!env.BR_X_FORWARDED_HOST ) { env.BR_X_FORWARDED_HOST = "feature-support.visitscotland.org" }
-if (!env.CLUDO_CUSTOMER_ID ) { env.CLUDO_CUSTOMER_ID = "623" }
 echo "==/Setting default application variables"
 
 echo "== Setting default container variables"

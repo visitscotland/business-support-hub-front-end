@@ -20,7 +20,6 @@ export default defineNuxtConfig({
             BR_CMS_ORIGIN_LOCATION: process.env.BR_CMS_ORIGIN_LOCATION,
             BR_NUXT_APP_DEBUG: process.env.BR_NUXT_APP_DEBUG,
             COMP_LIBRARY_VERSION: clVersion,
-            CLUDO_CUSTOMER_ID: process.env.CLUDO_CUSTOMER_ID,
         },
     },
 
