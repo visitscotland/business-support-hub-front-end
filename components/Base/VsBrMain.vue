@@ -233,6 +233,16 @@ if (page.value) {
 
         document.body.appendChild(cludoExperienceBuilder);
     });
+
+    useHead({
+        link: [
+            {
+                rel: 'stylesheet',
+                type: 'text/css',
+                href: 'styles/cludo-chatbot.css',
+            },
+        ],
+    });
 }
 
 provide('page', page.value);

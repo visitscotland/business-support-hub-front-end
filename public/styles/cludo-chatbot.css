@@ -1,0 +1,31 @@
+.cludo-assistant {
+    --assistant-top-bar-background-color: #200F2E !important;
+}
+
+.cludo-assistant-container {
+    border: 0 !important
+}
+
+.cludo-tab-bar__tab--active {
+    --active-tab-text-color: #A8308C !important;
+}
+
+.assistant-chat-form__conversation-controls-container .cludo-button {
+    --button-foreground-color: #1F49D6 !important;
+    --button-outline-color: #1F49D6 !important;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.assistant-chat-form__input {
+    --assistant-qa-input-outline-color: #535396 !important;
+}
+
+.cludo-assistant-button {
+    --button-backrgound-color: #FFFFFF !important;
+    --button-foreground-color: #1F49D6 !important;
+    --button-outline-color: #1F49D6 !important;
+
+    background-color: var(--button-backrgound-color) !important;
+    border: 2px solid var(--button-outline-color) !important;
+}
