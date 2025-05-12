@@ -13,8 +13,16 @@
 .assistant-chat-form__conversation-controls-container .cludo-button {
     --button-foreground-color: #1F49D6 !important;
     --button-outline-color: #1F49D6 !important;
+
+    --button-background-color--hover: #1F49D6 !important;
+    --button-foreground-color--hover: #FFFFFF !important;
     padding-top: 0;
     padding-bottom: 0;
+}
+
+.assistant-chat-form__conversation-controls-container .cludo-button:hover {
+    background-color: var(--button-background-color--hover) !important;
+    color: var(--button-foreground-color--hover) !important;   
 }
 
 .assistant-chat-form__input {
@@ -22,10 +30,17 @@
 }
 
 .cludo-assistant-button {
-    --button-backrgound-color: #FFFFFF !important;
+    --button-background-color: #FFFFFF !important;
     --button-foreground-color: #1F49D6 !important;
     --button-outline-color: #1F49D6 !important;
+    --button-background-color--hover: #1F49D6 !important;
+    --button-foreground-color--hover: #FFFFFF !important;
 
-    background-color: var(--button-backrgound-color) !important;
+    background-color: var(--button-background-color) !important;
     border: 2px solid var(--button-outline-color) !important;
+}
+
+.cludo-assistant-button:hover {
+    background-color: var(--button-background-color--hover) !important;
+    color: var(--button-foreground-color--hover) !important;   
 }
