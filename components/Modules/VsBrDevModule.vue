@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable import/no-import-module-exports */
+/* eslint no-undef: 0 */
 
 const props = defineProps<{
     module: Object,
@@ -15,7 +15,7 @@ const links = [];
 
 for (let x = 0; x < module.headContributions.length; x++) {
     links.push({
-        rel: "stylesheet",
+        rel: 'stylesheet',
         href: module.headContributions[x],
     });
 }

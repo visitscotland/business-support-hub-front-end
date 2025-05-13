@@ -1,6 +1,6 @@
 <template>
     <VsModuleWrapper
-        :class="nested ? 'pt-0': null"
+        :class="nested ? 'pt-0' : null"
         class="vs-cta-banner-module"
         :theme="themeValue"
     >
@@ -27,8 +27,8 @@
                         :id="anchor"
                     >
                         {{ title }}
-                    </VsHeading>    
-                
+                    </VsHeading>
+
                     <VsBrRichText :input-content="copy.value" />
                     <div>
                         <VsButton :href="formatLink(cta.link)">
@@ -42,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { LooseObject } from '~/types/types';
 import {
     VsButton,
@@ -54,7 +55,7 @@ import {
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import VsBrImage from '~/components//Utils/VsBrImage.vue';
 
-import formatLink from '~/composables/formatLink';
+import formatLink from '~/composables/formatLink.ts';
 
 const props = defineProps<{
     module: LooseObject,

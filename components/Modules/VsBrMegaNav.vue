@@ -85,8 +85,6 @@
 <script lang="ts" setup>
 import { useScript } from '#imports';
 
-import { onMounted, nextTick } from 'vue';
-
 import {
     VsMegaNavDropdownContainer,
     VsMegaNavList,

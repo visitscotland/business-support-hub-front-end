@@ -1,36 +1,36 @@
 <template>
-  <div>
-      <VsBrSkeleton/>
-      <div
-          class="hydrate"
-          v-show="isMounted"
-      >
-          <br-page
-              :configuration="configuration"
-              :mapping="mapping"
-          >
-              <template #default>
-                  <div
-                      :class="!isMounted ? 'no-js' : ''"
-                  >
-                      <br-component component="menu" />
-                      <br-component component="main" />
-                      <NuxtLazyHydrate
-                          :when-visible="{ rootMargin: '50px' }"
-                      >
-                          <br-component component="footer" />
-                      </NuxtLazyHydrate>
-                  </div>
-              </template>
-          </br-page>
-      </div>
+    <div>
+        <VsBrSkeleton />
+        <div
+            class="hydrate"
+            v-show="isMounted"
+        >
+            <br-page
+                :configuration="configuration"
+                :mapping="mapping"
+            >
+                <template #default>
+                    <div
+                        :class="!isMounted ? 'no-js' : ''"
+                    >
+                        <br-component component="menu" />
+                        <br-component component="main" />
+                        <NuxtLazyHydrate
+                            :when-visible="{ rootMargin: '50px' }"
+                        >
+                            <br-component component="footer" />
+                        </NuxtLazyHydrate>
+                    </div>
+                </template>
+            </br-page>
+        </div>
         <noscript>
             <component :is="'style'">
             .skeleton-site { display: none !important }
             .hydrate { display: block !important }
             </component>
         </noscript>
-  </div>
+    </div>
 </template>
 
 <script setup>
@@ -46,7 +46,7 @@
 import axios from 'axios';
 
 import {
-  getCurrentInstance, ref, onMounted,
+    getCurrentInstance, ref, onMounted,
 } from 'vue';
 import mitt from 'mitt';
 
@@ -86,19 +86,19 @@ let authorizationToken = '';
 let serverId = '';
 
 if (window && window.location) {
-  const searchParams = new URLSearchParams(window.location.search);
-  authorizationToken = searchParams.get(PREVIEW_TOKEN_KEY);
-  serverId = searchParams.get(PREVIEW_SERVER_ID_KEY);
+    const searchParams = new URLSearchParams(window.location.search);
+    authorizationToken = searchParams.get(PREVIEW_TOKEN_KEY);
+    serverId = searchParams.get(PREVIEW_SERVER_ID_KEY);
 }
 
 /**
  * This object retrieves the runtimeConfig object from nuxt.config, making set values from the .env
  * file available at runtime
- */ 
+ */
 const runtimeConfig = useRuntimeConfig();
 
 if (process.server && xForwardedhost.value) {
-  axios.defaults.headers.common.Host = xForwardedhost.value;
+    axios.defaults.headers.common.Host = xForwardedhost.value;
 }
 
 /**
@@ -107,26 +107,26 @@ if (process.server && xForwardedhost.value) {
  * httpClient of choice
  */
 const configuration = {
-  path: route,
-  endpoint: endpoint.value,
-  httpClient: axios,
-  ...(authorizationToken ? {
-      authorizationToken,
-  } : {
-  }),
-  ...(serverId ? {
-      serverId,
-  } : {
-  }),
-  origin: runtimeConfig.public.BR_CMS_ORIGIN_LOCATION,
-  debug: runtimeConfig.public.BR_NUXT_APP_DEBUG === 'true',
+    path: route,
+    endpoint: endpoint.value,
+    httpClient: axios,
+    ...(authorizationToken ? {
+        authorizationToken,
+    } : {
+    }),
+    ...(serverId ? {
+        serverId,
+    } : {
+    }),
+    origin: runtimeConfig.public.BR_CMS_ORIGIN_LOCATION,
+    debug: runtimeConfig.public.BR_NUXT_APP_DEBUG === 'true',
 };
 
 /**
  * This object maps Bloomreach Components in the CMS data to a set of Vue components. It is
  * passed to the br-page object as a prop, and we can then render each of those components by
  * name as a br-component object, as in the template above.
- * 
+ *
  * It would be possible to render every aspect of the site here with this mapping, but in most
  * of our projects the main CMS data isn't constructed using Bloomreach Components. As such, we
  * only get passed the 3 core components: menu, main and footer. Within each of those the component
@@ -135,9 +135,9 @@ const configuration = {
  * which contain our modules in the case of main.
  */
 const mapping = {
-  menu: VsBrMenu,
-  main: VsBrMain,
-  footer: VsBrFooter,
+    menu: VsBrMenu,
+    main: VsBrMain,
+    footer: VsBrFooter,
 };
 
 /**
@@ -148,10 +148,10 @@ const mapping = {
 const isMounted = ref(false);
 
 onMounted(() => {
-  isMounted.value = true;
+    isMounted.value = true;
 
-  const hydrationEvent = new Event('vs-app-hydrated');
-  window.dispatchEvent(hydrationEvent);
+    const hydrationEvent = new Event('vs-app-hydrated');
+    window.dispatchEvent(hydrationEvent);
 });
 
 /**
