@@ -189,7 +189,7 @@ useHead({
         {
             rel: 'stylesheet',
             type: 'text/css',
-            href: 'styles/cludo-chatbot.css',
+            href: '/styles/cludo-chatbot.css',
         },
     ],
 });
