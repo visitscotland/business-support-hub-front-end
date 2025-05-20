@@ -67,3 +67,17 @@
 .assistant-result-item__result-path {
     display: none !important;
 }
+
+.cludo-expanding-shortcut__expanding-section {
+    top: auto !important;
+    bottom: calc(100% + 8px) !important;
+    right: 8px !important;
+    box-shadow: 0 5px 20px -4px rgba(16, 24, 40, 0.25), 0px 4px 6px -2px rgba(16, 24, 40, .25) !important;
+    max-height: 250px;
+    overflow-y: scroll;
+}
+
+.cludo-expanding-shortcut__expanding-section .cludo-button {
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+}
