@@ -15,8 +15,8 @@
         :play-button-text="videoBtn ? videoBtn : configStore.getLabel('video', 'video.play-btn')"
         :image-src="imageValue.getOriginal().getUrl()"
         :alt-text="noAltText
-                ? configStore.getLabel('essentials.global', 'default.alt-text')
-                : imageData.altText"
+            ? configStore.getLabel('essentials.global', 'default.alt-text')
+            : imageData.altText"
         :use-lazy-loading="useLazyLoading"
         :toggle-button-text="configStore.getLabel('essentials.global', 'image.toggle.text')"
     >
@@ -78,19 +78,20 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs, inject } from 'vue';
+import {
+    toRefs, inject, ref,
+} from 'vue';
 
 import type { Page } from '@bloomreach/spa-sdk';
 
 import {
     VsImageWithCaption,
-    VsImg,
     VsCaption,
     VsSocialCreditLink,
     VsIcon,
 } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
 const configStore = useConfigStore();
 
@@ -151,8 +152,4 @@ if (page) {
     imageData = imageValue.model.data;
     imageSrc.value = imageValue.getOriginal().getUrl();
 }
-
-const isImageSvg = computed(() => {
-    return imageSrc.value.endsWith('.svg');
-});
 </script>

@@ -12,10 +12,14 @@
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
     "lint": "eslint ./**/*.{js,vue,ts}",
-    "lint:fix": "yarn lint --fix"
+    "lint:fix": "yarn lint --fix",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,vue,ts}": "eslint"
   },
   "devDependencies": {
-    "@nuxt/eslint-config": "^0.3.13",
+    "@nuxt/eslint-config": "^0.7.3",
     "@nuxt/scripts": "^0.9.5",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
@@ -23,7 +27,8 @@
     "eslint": "^8.56.0",
     "husky": "^9.1.4",
     "nuxt": "^3.12.4",
-    "nuxt-lazy-hydrate": "^1.0.0"
+    "nuxt-lazy-hydrate": "^1.0.0",
+    "lint-staged": "^15.2.10"
   },
   "dependencies": {
     "@bloomreach/spa-sdk": "^23.3.0",
@@ -38,10 +43,16 @@
     "pinia": "^2.2.0",
     "sass": "^1.77.4",
     "standard-version": "^9.5.0",
+    "typescript": "^5.7.2",
     "youtube-vue3": "^0.1.15"
   },
   "overrides": {
-    "minimist": "latest"
+    "minimist": "latest",
+    "minimatch": "9.0.3"
+  },
+  "resolutions": {
+    "minimist": "latest",
+    "minimatch": "9.0.3"
   },
   "config": {
     "commitizen": {

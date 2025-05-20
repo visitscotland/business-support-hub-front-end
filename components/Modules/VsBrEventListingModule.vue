@@ -5,21 +5,21 @@
         no-container
         data-event-listing="True"
     >
-        <VsTabItem 
-            v-for="eventList in module.eventsListings"
+        <VsTabItem
+            v-for="(eventList, index) in module.eventsListings"
+            :key="index"
             :title="eventList.title"
         >
             <VsContainer class="mt-300">
                 <VsRow>
                     <VsHeading
                         level="3"
-                        heading-style="heading-m"   
+                        heading-style="heading-m"
                     >
                         {{ eventList.title }}
                     </VsHeading>
 
                     <VsBrRichText :input-content="eventList.copy.value" />
-
                 </VsRow>
                 <VsBrEventListing
                     :event-data="eventList"
@@ -32,13 +32,16 @@
     <VsContainer>
         <VsRow>
             <VsWarning class="my-400">
-                {{ configStore.getLabel('events-listings-module', 'no-js')}}
+                {{ configStore.getLabel('events-listings-module', 'no-js') }}
             </VsWarning>
         </VsRow>
     </VsContainer>
 </template>
 
 <script setup lang="ts">
+/* eslint import/no-import-module-exports: 0 */
+
+import { computed } from 'vue';
 import {
     VsContainer,
     VsHeading,
@@ -47,9 +50,9 @@ import {
     VsRow,
     VsWarning,
 } from '@visitscotland/component-library/components';
+import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrEventListing from './VsBrEventListing.vue';
-import useConfigStore from '~/stores/configStore';
 
 const props = defineProps<{
     module: Object,

@@ -206,7 +206,7 @@ if (page.value) {
         ogTitle: pageDocument.model.data.seoTitle,
         ogDescription: pageDocument.model.data.seoDescription,
         ogUrl: useRequestURL().toString(),
-        ogImage: ogImage,
+        ogImage,
     });
 
     onMounted(() => {
@@ -252,22 +252,22 @@ provide('page', page.value);
     }
 
     // Cludo autocomplete results attaches to the VsMeganav's input field, but there's an inconsistency in the markup or styles that cause the icons to be positioned wrongly. This is a BSH-specific workaround.
-    
+
     .cludo-search-autocomplete-results,
     .cludo-search-autocomplete-suggestions {
       list-style: none;
       padding: 0;
-      
+
       h3 {
             font-size: 1.25rem;
             margin-top: 1rem
         }
     }
-    
+
     .vs-site-search-form__label  {
         top: 26px;
     }
-        
+
     @media (min-width: 992px) {
         .vs-site-search-form__label  {
             top: 35px;
@@ -277,6 +277,5 @@ provide('page', page.value);
     .vs-input__clear-button {
         top: 32px;
     }
-
 
 </style>
