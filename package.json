@@ -26,9 +26,9 @@
     "@vue/eslint-config-airbnb": "^8.0.0",
     "eslint": "^8.56.0",
     "husky": "^9.1.4",
+    "lint-staged": "^15.2.10",
     "nuxt": "^3.12.4",
-    "nuxt-lazy-hydrate": "^1.0.0",
-    "lint-staged": "^15.2.10"
+    "nuxt-lazy-hydrate": "^1.0.0"
   },
   "dependencies": {
     "@bloomreach/spa-sdk": "^23.3.0",
@@ -44,6 +44,7 @@
     "sass": "^1.77.4",
     "standard-version": "^9.5.0",
     "typescript": "^5.7.2",
+    "unenv": "^1.10.0",
     "youtube-vue3": "^0.1.15"
   },
   "overrides": {
