@@ -187,4 +187,9 @@ app.appContext.config.globalProperties.emitter = emitter;
     position: relative;
     background-color: white;
   }
+
+  .cludo-assistant {
+    right: 4.5rem !important;
+    bottom: 2.125rem !important;
+  }
 </style>
