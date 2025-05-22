@@ -97,6 +97,7 @@ import {
     VsRow,
     VsWarning,
     VsEventCard,
+    VsList
 } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
@@ -113,9 +114,9 @@ const featuredEvent = {
     "anchor": null,
     "errorMessages": null,
     "marketoId": null,
-    "title": "VisitScotland bitesize webinars: start working with online travel agents",
-    "summary": "<p>Discover how an online travel agent (OTA) can increase bookings and profitability without detracting from direct bookings. Get practical tips on how to create an OTA listing and how to manage your relationship with an OTA.</p>\n\n<p>For tourism experiences (tours, visitor attractions and activity providers) that want to use OTAs for the first time.</p>",
-    "dates": "22 May, 2025",
+    "title": "VisitScotland bitesize webinars: The importance of the UK domestic market",
+    "summary": "<p>Discover the importance of the UK market and the performance of domestic tourism in Scotland. This session will focus on who our domestic visitors are and what motivates them to plan, book and visit. You will also hear about the future prospects for domestic tourism, current sentiment of UK residents and Scotland holiday intentions for 2025.</p>",
+    "dates": "05 June, 2025",
     "times": "14:00 - 14:30",
     "price": "Free",
     "location": "Online",
