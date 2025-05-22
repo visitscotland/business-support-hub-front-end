@@ -1,15 +1,62 @@
 <template>
-    <VsTabs
-        class="my-400 vs-events-listing"
-        :id="moduleId"
-        no-container
-        data-event-listing="True"
-    >
-        <VsTabItem
-            v-for="(eventList, index) in module.eventsListings"
-            :key="index"
-            :title="eventList.title"
-        >
+
+    <section class="vs-rich-text-wrapper featured">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="vs-heading vs-heading--heading-xl">Featured webinar</h2>
+                    <VsEventCard
+                        :cta-label="featuredEvent.cta.label"
+                        :cta-href="featuredEvent.cta.link"
+                        :key="featuredEvent.title"
+                        :data-event-listing="True">
+                        <template #event-card-header>
+                            {{ featuredEvent.title }}
+                        </template>
+
+                        <template #event-card-date>
+                            {{ featuredEvent.dates }}
+                        </template>
+
+                        <template #event-card-content>
+                            <VsBrRichText :input-content="featuredEvent.summary" />
+
+                            <VsList unstyled>
+                                <VsRow>
+                                    <VsCol
+                                        cols="2"
+                                        md="4">
+                                        <li>
+                                            <strong>Time:</strong> {{ featuredEvent.times }}
+                                        </li>
+                                        <li>
+                                            <strong>Price:</strong> Free
+                                        </li>
+                                        <li>
+                                            <strong>Location:</strong> Online
+                                        </li>
+                                    </VsCol>
+
+                                    <VsCol
+                                           cols="12"
+                                           md="4">
+                                        <li>
+                                            <strong>Organiser:</strong> VisitScotland
+                                        </li>
+                                    </VsCol>
+                                </VsRow>
+                            </VsList>
+                        </template>
+                    </VsEventCard>
+
+                </div>
+            </div>
+        </div>
+        </section>
+
+
+    <VsTabs class="my-400 vs-events-listing" :id="moduleId" no-container data-event-listing="True">
+        <VsTabItem v-for="(eventList, index) in module.eventsListings" :key="index" :title="eventList.title">
             <VsContainer class="mt-300">
                 <VsRow>
                     <VsHeading
@@ -49,6 +96,7 @@ import {
     VsTabItem,
     VsRow,
     VsWarning,
+    VsEventCard,
 } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
@@ -60,11 +108,38 @@ const props = defineProps<{
 
 const configStore = useConfigStore();
 const module: any = props.module;
+const featuredEvent = {
+    "hippoBean": null,
+    "anchor": null,
+    "errorMessages": null,
+    "marketoId": null,
+    "title": "VisitScotland bitesize webinars: start working with online travel agents",
+    "summary": "<p>Discover how an online travel agent (OTA) can increase bookings and profitability without detracting from direct bookings. Get practical tips on how to create an OTA listing and how to manage your relationship with an OTA.</p>\n\n<p>For tourism experiences (tours, visitor attractions and activity providers) that want to use OTAs for the first time.</p>",
+    "dates": "22 May, 2025",
+    "times": "14:00 - 14:30",
+    "price": "Free",
+    "location": "Online",
+    "organiser": "VisitScotland",
+    "contact": null,
+    "registrationDeadline": null,
+    "cta": {
+        "label": "Find out more",
+        "link": "https://visitscotland.eventsair.com/2025-2026-business-development-programme/registration-webinars/Site/Register",
+        "type": "EXTERNAL"
+    },
+    "type": "EventCard"
+};
 
 const moduleId = computed(() => module.anchor || 'events-listing-module');
 </script>
 
 <style lang="scss">
+
+.featured {
+    .vs-event-card {
+        border: 1px solid rgb(233,233,233);
+    }
+}
 .vs-tabs--no-container .tab-pane .vs-heading {
     display: block !important;
 
