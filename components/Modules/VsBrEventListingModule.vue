@@ -1,10 +1,6 @@
 <template>
-    <VsTabs
-        class="my-400 vs-events-listing"
-        :id="moduleId"
-        no-container
-        data-event-listing="True"
-    >
+    <VsBrFeaturedEventModule />
+    <VsTabs class="my-400 vs-events-listing" :id="moduleId" no-container data-event-listing="True">
         <VsTabItem
             v-for="(eventList, index) in module.eventsListings"
             :key="index"
