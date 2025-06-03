@@ -1,10 +1,6 @@
 <template>
-    <VsTabs
-        class="my-400 vs-events-listing"
-        :id="moduleId"
-        no-container
-        data-event-listing="True"
-    >
+    <VsBrFeaturedEventModule />
+    <VsTabs class="my-400 vs-events-listing" :id="moduleId" no-container data-event-listing="True">
         <VsTabItem
             v-for="(eventList, index) in module.eventsListings"
             :key="index"
@@ -65,6 +61,12 @@ const moduleId = computed(() => module.anchor || 'events-listing-module');
 </script>
 
 <style lang="scss">
+
+.featured {
+    .vs-event-card {
+        border: 1px solid rgb(233,233,233);
+    }
+}
 .vs-tabs--no-container .tab-pane .vs-heading {
     display: block !important;
 
