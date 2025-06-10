@@ -77,6 +77,11 @@
     overflow-y: scroll;
 }
 
+.assistant-suggested-pages-region__expanding-shortcut-wrapper .cludo-expanding-shortcut__expanding-section {
+    bottom: auto !important;
+    top: calc(100% + 8px) !important;
+}
+
 .cludo-expanding-shortcut__expanding-section .cludo-button {
     margin-top: 5px !important;
     margin-bottom: 5px !important;
