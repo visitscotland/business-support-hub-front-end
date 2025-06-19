@@ -214,6 +214,10 @@ if (page.value) {
         const cludoEngineId = componentModels.cludoEngineId;
         const cludoExperienceId = componentModels.cludoExperienceId;
 
+        window.cludoCustomerId = customerId;
+        window.cludoEngineId = cludoEngineId;
+        window.cludoExperienceId = cludoExperienceId;
+
         const cludoExperienceBuilder = document.createElement('script');
         cludoExperienceBuilder.id = 'cludo-experience-manager';
         cludoExperienceBuilder.src = 'https://customer.cludo.com/scripts/bundles/experiences/manager.js';
