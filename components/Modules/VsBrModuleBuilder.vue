@@ -112,6 +112,16 @@
         </NuxtLazyHydrate>
 
         <NuxtLazyHydrate
+            v-if="item.type === 'ComparisonModule'"
+            :when-visible="{ rootMargin: '50px' }"
+        >
+            <VsBrComparison
+                :features="item.functions"
+                :providers="item.providers"
+            />
+        </NuxtLazyHydrate>
+
+        <NuxtLazyHydrate
             v-if="item.type === 'EventsLingsModule'"
             :when-visible="{ rootMargin: '50px' }"
         >
