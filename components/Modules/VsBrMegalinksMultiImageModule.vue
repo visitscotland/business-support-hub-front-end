@@ -10,6 +10,7 @@
         :button-link="module.cta ? formatLink(module.cta.link) : undefined"
         :heading-level="module.nested ? 3 : 2"
         :heading-style="module.nested ? 'heading-m' : 'heading-xl'"
+        :sectionId="module.anchor"
     >
         <template
             v-if="module.introduction"
@@ -194,6 +195,7 @@
 
 <script lang="ts" setup>
 /* eslint-disable import/no-import-module-exports */
+/* eslint no-undef: 0 */
 
 import { inject } from 'vue';
 
@@ -209,8 +211,8 @@ import {
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
-import useConfigStore from '~/stores/configStore';
-import formatLink from '~/composables/formatLink';
+import useConfigStore from '~/stores/configStore.ts';
+import formatLink from '~/composables/formatLink.ts';
 
 const configStore = useConfigStore();
 
@@ -270,7 +272,7 @@ if (page && module.featuredLinks) {
             'error-message': configStore.getLabel('essentials.global', 'third-party-error'),
             label: nextLink.label,
             teaser: nextLink.teaser,
-            badges: [] as string[]
+            badges: [] as string[],
         };
 
         if (nextLink.contentType) {

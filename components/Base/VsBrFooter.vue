@@ -112,13 +112,15 @@
 </template>
 
 <script lang="ts" setup>
+/* eslint no-undef: 0 */
+
 import {
     toRefs, ref, defineAsyncComponent, onMounted,
 } from 'vue';
 import type { Component, Page } from '@bloomreach/spa-sdk';
 import { BrManageMenuButton } from '@bloomreach/vue3-sdk';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
 import {
     VsFooter,
@@ -180,6 +182,16 @@ const VsBrIconFonts = defineAsyncComponent(() => import('../Utils/VsBrIconFonts.
 
 onMounted(() => {
     isMounted.value = true;
+});
+
+useHead({
+    link: [
+        {
+            rel: 'stylesheet',
+            type: 'text/css',
+            href: '/styles/cludo-chatbot.css',
+        },
+    ],
 });
 
 </script>

@@ -30,6 +30,8 @@
 </template>
 
 <script lang="ts" setup>
+/* eslint no-undef: 0 */
+
 import {
     VsContainer,
     VsHeading,
@@ -39,16 +41,16 @@ import {
 useHead({
     link: [
         {
-            rel: "stylesheet",
-            type: "text/css",
-            href: "styles/cludo-search-results.css",
-        }
+            rel: 'stylesheet',
+            type: 'text/css',
+            href: 'styles/cludo-search-results.css',
+        },
     ],
     script: [
         {
-            src: "https://kit.fontawesome.com/01f07a4485.js",
-            crossorigin: "anonymous",
-        }
-    ]
+            src: 'https://kit.fontawesome.com/01f07a4485.js',
+            crossorigin: 'anonymous',
+        },
+    ],
 });
 </script>

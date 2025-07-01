@@ -93,9 +93,9 @@ import {
     VsLinkListItem,
 } from '@visitscotland/component-library/components';
 
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
 
-import formatLink from '~/composables/formatLink';
+import formatLink from '~/composables/formatLink.ts';
 
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';

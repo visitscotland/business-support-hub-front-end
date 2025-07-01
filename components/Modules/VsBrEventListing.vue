@@ -10,7 +10,7 @@
             >
                 {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
             </div>
-            
+
             <VsBrFilter
                 :filters="props.eventData.filters"
                 :filter-id="filterId"
@@ -37,7 +37,8 @@
                     </VsButton>
 
                     <VsButton
-                        v-for="filter in selectedFilters"
+                        v-for="(filter, index) in selectedFilters"
+                        :key="index"
                         :rounded="false"
                         variant="secondary"
                         size="sm"
@@ -73,7 +74,7 @@
                 <VsEventCard
                     v-for="(result, index) in data.results"
                     :cta-icon="setIcon(result.cta.type)"
-                    :cta-label="result.cta.label" 
+                    :cta-label="result.cta.label"
                     :cta-href="result.cta.link"
                     :key="result.title + index"
                     data-event-listing="True"
@@ -91,38 +92,39 @@
 
                         <VsList unstyled>
                             <VsRow>
-                            <VsCol
-                                cols="12"
-                                md="4"
-                            >
-                                <li v-if="result.times">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'time') }}:</strong> {{ result.times }}
-                                </li>
-                                <li v-if="result.price">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'price') }}:</strong> {{ result.price }}
-                                </li>
-                                <li v-if="result.location">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'location') }}:</strong> {{ result.location }}
-                                </li>
-                                <li v-if="result.organizer">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organizer }}
-                                </li>
-                            </VsCol>
+                                <VsCol
+                                    cols="12"
+                                    md="4"
+                                >
+                                    <li v-if="result.times">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'time') }}:</strong> {{ result.times }}
+                                    </li>
+                                    <li v-if="result.price">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'price') }}:</strong> {{ result.price }}
+                                    </li>
+                                    <li v-if="result.location">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'location') }}:</strong> {{ result.location }}
+                                    </li>
+                                    <li v-if="result.organiser && filterId !== 'travel'">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organiser }}
+                                    </li>
+                                </VsCol>
 
-                            <VsCol
-                                cols="12"
-                                md="4"
-                            >
-                                <li v-if="result.registrationDeadline">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'registration') }}: </strong> {{ result.registrationDeadline }}
-                                </li>
-                                <li v-if="result.organizer">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organizer }}
-                                </li>
-                                <li v-if="result.contact">
-                                    <strong>{{ configStore.getLabel('events-listings-module', 'contact') }}:</strong> {{ result.contact }}
-                                </li>
-                            </VsCol>
+                                <VsCol
+                                    v-if="filterId === 'travel'"
+                                    cols="12"
+                                    md="4"
+                                >
+                                    <li v-if="result.registrationDeadline">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'registration') }}: </strong> {{ result.registrationDeadline }}
+                                    </li>
+                                    <li v-if="result.organiser">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organiser }}
+                                    </li>
+                                    <li v-if="result.contact">
+                                        <strong>{{ configStore.getLabel('events-listings-module', 'contact') }}:</strong> {{ result.contact }}
+                                    </li>
+                                </VsCol>
                             </VsRow>
                         </VsList>
                     </template>
@@ -153,6 +155,9 @@
 </template>
 
 <script setup lang="ts">
+/* eslint no-undef: 0 */
+
+import { ref, computed } from 'vue';
 import {
     VsButton,
     VsCol,
@@ -163,12 +168,11 @@ import {
     VsPagination,
     VsRow,
 } from '@visitscotland/component-library/components';
+import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrFilter from './VsBrFilter.vue';
-import useConfigStore from '~/stores/configStore';
 
 const props = defineProps<{
-    dataEndpoint: string,
     eventData: any,
     moduleId: string,
 }>();
@@ -184,11 +188,11 @@ const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
 
 // Call the api to get the event card data.
-const { data, status }: { data: any, status: any } = await useFetch(props.eventData.baseEndPoint, {
-    query: query.value, 
+const { data }: { data: any } = await useFetch(props.eventData.baseEndPoint, {
+    query: query.value,
 });
 const totalResults = computed(() => data.value.total);
-const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize))
+const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize));
 
 // Update the sort query parameter.
 const updateSort = (event: Event) => {
@@ -199,6 +203,30 @@ const updateSort = (event: Event) => {
     query.value.sort = key;
     currentPage.value = 1;
     selectedSortBy.value = label;
+};
+
+// Remove a filter from the selected filters and api query parameters.
+const removeSelectedFilter = (fieldId: string, key: string, value: string | boolean) => {
+    // Remove filter from API query.
+    const queryIndex = query.value[key].indexOf(value);
+
+    if (queryIndex > -1) {
+        query.value[key].splice(queryIndex, 1);
+    } else {
+        delete query.value[key];
+    }
+
+    // Remove filter from selectedFilters list.
+    const index = selectedFilters.value.findIndex((el) => el.key === key);
+    if (index > -1) {
+        selectedFilters.value.splice(index, 1);
+    }
+
+    // Clear the filter input field.
+    filter.value.resetOne(fieldId);
+
+    // Reset pagination.
+    currentPage.value = 1;
 };
 
 // Update the selected filters when a filter input is changed.
@@ -230,7 +258,7 @@ const updateSelectedFilters = (payload: any) => {
                 selectedFilters.value.splice(index, 1);
             }
         }
-        
+
         // Add filter to selectedFilters list.
         selectedFilters.value.push({
             fieldId,
@@ -246,30 +274,6 @@ const updateSelectedFilters = (payload: any) => {
     currentPage.value = 1;
 };
 
-// Remove a filter from the selected filters and api query parameters.
-const removeSelectedFilter = (fieldId: string, key: string, value: string | boolean) => {
-    // Remove filter from API query.
-    const queryIndex = query.value[key].indexOf(value);
-    
-    if (queryIndex > -1) {
-        query.value[key].splice(queryIndex, 1);
-    } else {
-        delete query.value[key];
-    }
-
-    // Remove filter from selectedFilters list.
-    const index = selectedFilters.value.findIndex((el) => el.key === key);
-    if (index > -1) {
-        selectedFilters.value.splice(index, 1);
-    }
-
-    // Clear the filter input field.
-    filter.value.resetOne(fieldId);
-
-    // Reset pagination.
-    currentPage.value = 1;
-};
-
 // Update page query parameter when the page number updates.
 watch(currentPage, (newPage, oldPage) => {
     if (newPage === 1) {
@@ -280,13 +284,15 @@ watch(currentPage, (newPage, oldPage) => {
 
     // Scroll to the top of the listing when the pagination changed.
     const element = document.getElementById(props.moduleId);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    element?.scrollIntoView({
+        behavior: 'smooth',
+    });
 });
 
 // Clear all filters and remove all query parameters.
 const clearAllFilters = () => {
     // Delete all parameters from the query.
-    Object.keys(query.value).forEach(key => {
+    Object.keys(query.value).forEach((key) => {
         if (key !== 'sort') {
             delete query.value[key];
         } else {
@@ -307,12 +313,12 @@ const clearAllFilters = () => {
 const setIcon = (linkType: string) => {
     if (linkType === 'EXTERNAL') {
         return 'external-link';
-    } else if (linkType === 'INTERNAL') {
+    } if (linkType === 'INTERNAL') {
         return 'internal-link';
     }
 
     return null;
-}
+};
 </script>
 
 <style lang="scss">

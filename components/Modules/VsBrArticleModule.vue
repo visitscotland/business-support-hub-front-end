@@ -7,31 +7,28 @@
         <VsArticle
             :title="module.title"
             :anchor-link="module.anchor ? formatLink(module.anchor) : ''"
-            businessSupport
+            business-support
             :heading-level="module.nested ? 3 : 2"
             :heading-style="module.nested ? 'heading-m' : 'heading-xl'"
         >
             <template
                 v-if="module.introduction && module.introduction.value"
-                v-slot:vs-article-intro
+                #vs-article-intro
             >
                 <div v-html="module.introduction.value" />
             </template>
 
             <template
-                v-if="module.image"
-                #vs-article-img
-                >
-                <VsBrImageWithCaption
-                    :image="module.image.cmsImage"
-                />
-            </template>
-
-            <template
-                v-if="module.video"
+                v-if="module.image || module.video"
                 #vs-article-img
             >
+                <VsBrImageWithCaption
+                    v-if="module.image"
+                    :image="module.image.cmsImage"
+                />
+
                 <VsVideo
+                    v-if="module.video"
                     :video-title="module.video.label"
                     :video-id="module.video.youtubeId
                         ? module.video.youtubeId
@@ -51,7 +48,7 @@
                 v-for="(section, index) in articleSections"
                 :key="index"
                 sidebar-align="right"
-                businessSupport
+                business-support
             >
                 <template
                     #article-sidebar
@@ -66,6 +63,12 @@
                 <template v-if="section.copy">
                     <VsBrRichText :input-content="section.copy.value" />
                 </template>
+
+                <VsBrDownloadCard
+                    v-if="section.link"
+                    :link="section.link"
+                    :within-nested="module.nested || null"
+                />
             </VsArticleSection>
         </VsArticle>
     </VsModuleWrapper>
@@ -81,12 +84,14 @@ import {
     VsVideo,
 } from '@visitscotland/component-library/components';
 
-import formatLink from '~/composables/formatLink';
+import formatLink from '~/composables/formatLink.ts';
 
+import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
 import VsBrArticleSidebar from '~/components/Modules/VsBrArticleSidebar.vue';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
-import useConfigStore from '~/stores/configStore';
+import useConfigStore from '~/stores/configStore.ts';
+
 const configStore = useConfigStore();
 
 const props = defineProps<{
