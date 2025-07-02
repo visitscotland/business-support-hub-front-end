@@ -1,17 +1,29 @@
 <template>
     <VsContainer>
         <div class="flex-wrapper">
-            <VsAlert>
-                <div v-if="selectedFeatures.length === 0">
-                    Select features to see matching providers.
+            <div class="flex-column">
+                <VsAlert>
+                    <div v-if="selectedFeatures.length === 0">
+                        Select features to see matching providers.
+                    </div>
+                    <div v-else-if="matchingProviders.length === 0">
+                        No matches! Select fewer features.
+                    </div>
+                    <div v-else>
+                        Shortlisted providers: {{ matchingProviders.length }}
+                    </div>
+                </VsAlert>
+                <div class="w-200">
+                    <VsButton
+                        class="mt-200"
+                        variant="primary"
+                        :onclick="handleSubmit"
+                        :disabled="matchingProviders.length === 0 || selectedFeatures.length === 0"
+                    >
+                        Submit
+                    </VsButton>
                 </div>
-                <div v-else-if="matchingProviders.length === 0">
-                    No matches! Select fewer features.
-                </div>
-                <div v-else>
-                    Shortlisted providers: {{ matchingProviders.length }}
-                </div>
-            </VsAlert>
+            </div>
         </div>
         <VsRow>
             <VsCol
@@ -33,7 +45,7 @@
                         {{ feature.description }}
                     </label>
                 </div> -->
-                <form action="http://localhost:8080/site/bsh-api/api/obs/form/shortlist" method="GET">
+                <form class="mb-400">
                     <!-- I don't which of these parameters are actually needed -->
                     <VsCheckbox
                         v-for="feature in features"
@@ -67,12 +79,6 @@
                         value=""
                     > -->
                     <!-- <input type="submit">Submit</input> -->
-                    <VsButton
-                        variant="primary"
-                        :onclick="handleSubmit"
-                    >
-                        Submit
-                    </VsButton>
                 </form>
                 <!-- <ul>
                     <li v-for="provider in matchingProviders" :key="provider.name">
@@ -88,6 +94,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import axios from 'axios';
 import {
     VsRow,
     VsContainer,
@@ -97,7 +104,6 @@ import {
     VsButton,
 } from '@visitscotland/component-library/components';
 
-// Props
 const props = defineProps({
     features: {
         type: Array,
@@ -109,7 +115,6 @@ const props = defineProps({
     },
 });
 
-// Selected features
 const selectedFeatures = ref([]);
 
 const matchingProviders = computed(() => {
@@ -118,16 +123,43 @@ const matchingProviders = computed(() => {
     return props.providers.filter((provider) => selectedFeatures.value.every((featureId) => provider.functions.includes(featureId)));
 });
 
-// const handleSubmit = () => {
-//     console.log('SUBMIT!');
-// };
+const local = 'http://localhost:8080/site/bsh-api/api/obs/form/shortlist';
+const devBrc = 'https://develop-brc-support.visitscotland.org/api/obs/form/shortlist';
+
+async function handleSubmit(event) {
+    event.preventDefault();
+    const payload = {
+        'online-booking-process': 'true',
+    };
+
+    const jsonPayload = JSON.stringify(payload);
+
+    try {
+        const response = await axios.post(devBrc, jsonPayload, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        console.log('Response:', response.data);
+    } catch (error) {
+        console.error('Error submitting form:', error);
+    }
+}
+
 </script>
 
 <style lang="scss">
     .flex-wrapper {
         position: sticky;
         justify-content: end;
-        top: 60px;
+        top: 100px;
         display: flex;
+    }
+
+    .flex-column {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
     }
 </style>
