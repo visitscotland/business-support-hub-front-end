@@ -108,5 +108,5 @@ const theme: string = props.theme;
 
 </script>
 
-<style>
+<style lang="scss">
 </style>
