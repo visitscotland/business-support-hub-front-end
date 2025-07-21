@@ -60,8 +60,7 @@ export default defineNuxtConfig({
     },
 
     css: [
-        '@visitscotland/component-library/components/style.css',
-        '@visitscotland/component-library/components/fonts.css',
+        '@visitscotland/component-library/style.css',
     ],
 
     build: {
