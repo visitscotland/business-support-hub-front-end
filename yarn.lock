@@ -3291,10 +3291,10 @@
     picomatch "^4.0.2"
     resolve-from "^5.0.0"
 
-"@visitscotland/component-library@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-5.0.1.tgz#a59d88b9a3e05fe370410386ebd35bd4a3924bd0"
-  integrity sha512-AMXcJK1y2h7Lap1y1fCy8yD0zD1PDQ0tFhfaDnTkjQb+M6sCV+V1h3YBqzBnmvDDHnJUH9g0fUOS6dMpnu0PGg==
+"@visitscotland/component-library@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-5.0.2.tgz#0c6a4b60b3ef467a31d40d365eda14fe17927d1b"
+  integrity sha512-MS3+cWyrmDDa6GaXARzN5cJoN70VL7vOB7wHeprDT9GZJ2okLmOsqXLy8hStzGxStpW7J04UsAGOmRbDKVuDDQ==
   dependencies:
     "@mapbox/geojson-extent" "^1.0.1"
     "@pinia/testing" "^0.1.3"

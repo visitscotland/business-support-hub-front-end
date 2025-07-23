@@ -42,7 +42,7 @@
                         :rounded="false"
                         variant="secondary"
                         size="sm"
-                        icon="close"
+                        icon="fa-regular fa-xmark"
                         icon-position="right"
                         @click="removeSelectedFilter(filter.fieldId, filter.key, filter.value)"
                     >
