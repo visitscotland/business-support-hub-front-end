@@ -1,0 +1,52 @@
+{
+    "content": {
+        "heading": "Get your assessment workbook",
+        "successHeading": "Your workbook's on its way",
+        "successContent": "<p>This is a longer message we can show to the end user blah blah blah</p>",
+        "noJs": "<p><strong>You need JavaScript enabled to be able to display this form.</strong></p> <p>You can enable this in your browser settings. You can also ask to subscribe by sending an email to <a href='mailto:info@visitscotland.com'>info@visitscotland.com</a>.</p>",
+        "submit": "Submit"
+    },
+    "fields": [
+        { 
+            "name": "email",
+            "element": "input",
+            "type": "email",
+            "label": "Email",
+            "validation": {
+                "required": true,
+                "email": true,
+                "maxLength": "100"
+            },
+            "validationMessages": {
+                "maxLength": "Your email must be a maximum of 100 characters"
+            }
+        },
+        {
+            "name": "first_name",
+            "element": "input",
+            "type": "text",
+            "label": "First name",
+            "validation": {
+                "required": true
+            }
+        },
+        {
+            "name": "last_name",
+            "element": "input",
+            "type": "text",
+            "label": "Last name",
+            "validation": {
+                "required": true
+            }
+        },
+        {
+            "name": "business_name",
+            "element": "input",
+            "type": "text",
+            "label": "Business name",
+            "validation": {
+                "required": true
+            }
+        }        
+    ]
+}

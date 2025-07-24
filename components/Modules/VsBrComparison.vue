@@ -1,4 +1,6 @@
 <template>
+    <!-- {{  features }}
+    {{ providers }} -->
     <VsContainer>
         <div class="flex-wrapper">
             <div class="flex-column">
@@ -17,76 +19,78 @@
                     <VsButton
                         class="mt-200"
                         variant="primary"
-                        :onclick="handleSubmit"
+                        :onclick="toggleView"
                         :disabled="matchingProviders.length === 0 || selectedFeatures.length === 0"
                     >
-                        Submit
+                        <span v-if="view === 'features'">
+                            View results
+                        </span>
+                        <span v-if="view === 'results'">
+                            Select features
+                        </span>
                     </VsButton>
                 </div>
             </div>
         </div>
-        <VsRow>
+        <VsRow v-if="view === 'features'">
             <VsCol
                 cols="12"
                 md="10"
                 lg="7"
                 class="col-xxl-6"
             >
-                <!-- {{ selectedFeatures }} -->
                 <h3>Select Features</h3>
-                <!-- <div v-for="feature in features" :key="feature" class="vs-checkbox form-check">
-                    <label>
-                        <input
-                        class="form-check-input"
-                            type="checkbox"
-                            :value="feature.id"
-                            v-model="selectedFeatures"
-                        />
-                        {{ feature.description }}
-                    </label>
-                </div> -->
-                <form class="mb-400">
-                    <!-- I don't which of these parameters are actually needed -->
-                    <VsCheckbox
-                        v-for="feature in features"
-                        v-model="selectedFeatures"
-                        :key="feature"
-                        :ref="feature.id"
-                        :name="feature.id"
-                        :value="feature.id"
-                        :label="feature.description"
-                        :field-name="feature.id"
-                    />
-                    <!-- <VsInput
-                        autoComplete
-                        fieldName="email-address"
-                        invalid="false"
-                        label="Email address"
-                        reAlertErrors="false"
-                        triggerValidate="false"
-                        type="email"
-                    /> -->
-                    <!-- <label for="email-address">Email address</label>
-                    <input
-                        id="email-address"
-                        class="form-control vs-input vs-input--email-address"
-                        name="email-address"
-                        type="email"
-                        placeholder=""
-                        autocomplete="on"
-                        aria-invalid="false"
-                        v=""
-                        value=""
-                    > -->
-                    <!-- <input type="submit">Submit</input> -->
-                </form>
-                <!-- <ul>
-                    <li v-for="provider in matchingProviders" :key="provider.name">
-                        <a :href="provider.url" target="_blank" rel="noopener noreferrer">
-                            {{ provider.name }}
-                        </a>
-                    </li>
-                </ul> -->
+                <div class="mb-400">
+                    <fieldset
+                        :key="index"
+                        v-for="(group, index) in groups"
+                        class="mb-200"
+                    >
+                        <legend>
+                            {{ group }}
+                        </legend>
+                        <div
+                            v-for="(feature) in features"
+                            :key="feature + index"
+                        >
+                            <VsCheckbox
+                                v-if="feature.groupDescription === group"
+                                v-model="selectedFeatures"
+                                :key="feature"
+                                :ref="feature.id"
+                                :name="feature.id"
+                                :value="feature.id"
+                                :label="checkboxLabel(feature.name, feature.description)"
+                                :field-name="feature.id"
+                            />
+                        </div>
+                    </fieldset>
+                </div>
+            </VsCol>
+        </VsRow>
+        <VsRow v-if="view === 'results'">
+            <VsCol
+                cols="12"
+                md="10"
+                lg="7"
+                class="col-xxl-6"
+            >
+                <VsEventCard
+                    v-for="(provider, index) in matchingProviders"
+                    cta-icon="fa-regular fa-square-arrow-up-right"
+                    cta-label="Visit website"
+                    :cta-href="provider.url"
+                    :key="provider.name + index"
+                    data-event-listing="True"
+                >
+                    <template #event-card-header>
+                        {{ provider.name }}
+                    </template>
+
+                    <template #event-card-content>
+                        <VsBrRichText :input-content="provider.description" class="mb-lg-400" />
+                    </template>
+                </VsEventCard>
             </VsCol>
         </VsRow>
     </VsContainer>
@@ -94,7 +98,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import axios from 'axios';
+// import axios from 'axios';
 import {
     VsRow,
     VsContainer,
@@ -102,6 +106,7 @@ import {
     VsCheckbox,
     VsAlert,
     VsButton,
+    VsEventCard,
 } from '@visitscotland/component-library/components';
 
 const props = defineProps({
@@ -115,7 +120,12 @@ const props = defineProps({
     },
 });
 
+const view = ref('features');
 const selectedFeatures = ref([]);
+
+function checkboxLabel(name, description) {
+    return description === null ? `${name}` : `${name} - ${description}`;
+}
 
 const matchingProviders = computed(() => {
     if (selectedFeatures.value.length === 0) return props.providers;
@@ -123,27 +133,38 @@ const matchingProviders = computed(() => {
     return props.providers.filter((provider) => selectedFeatures.value.every((featureId) => provider.functions.includes(featureId)));
 });
 
-const local = 'http://localhost:8080/site/bsh-api/api/obs/form/shortlist';
-const devBrc = 'https://develop-brc-support.visitscotland.org/api/obs/form/shortlist';
+// const groups = props.features.((feature) => feature.group);
+const groups = new Set(props.features.map((feature) => feature.groupDescription));
 
-async function handleSubmit(event) {
-    event.preventDefault();
-    const payload = {
-        'online-booking-process': 'true',
-    };
+// const local = 'http://localhost:8080/site/bsh-api/api/obs/form/shortlist';
+// const devBrc = 'https://develop-brc-support.visitscotland.org/api/obs/form/shortlist';
 
-    const jsonPayload = JSON.stringify(payload);
+// async function handleSubmit(event) {
+//     event.preventDefault();
+//     const payload = {
+//         'online-booking-process': 'true',
+//     };
 
-    try {
-        const response = await axios.post(devBrc, jsonPayload, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+//     const jsonPayload = JSON.stringify(payload);
 
-        console.log('Response:', response.data);
-    } catch (error) {
-        console.error('Error submitting form:', error);
+//     try {
+//         const response = await axios.post(devBrc, jsonPayload, {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         });
+
+//         console.log('Response:', response.data);
+//     } catch (error) {
+//         console.error('Error submitting form:', error);
+//     }
+// }
+
+function toggleView() {
+    if (view.value === 'features') {
+        view.value = 'results';
+    } else if (view.value === 'results') {
+        view.value = 'features';
     }
 }
 
