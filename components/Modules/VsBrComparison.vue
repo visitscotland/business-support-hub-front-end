@@ -108,6 +108,9 @@ import {
     VsButton,
     VsEventCard,
 } from '@visitscotland/component-library/components';
+import useFeatureStore from '~/stores/featureStore.ts';
+
+const featureStore = useFeatureStore();
 
 const props = defineProps({
     features: {
@@ -166,6 +169,8 @@ function toggleView() {
     } else if (view.value === 'results') {
         view.value = 'features';
     }
+    featureStore.selectedFeatures = selectedFeatures;
+    featureStore.matchingProviders = matchingProviders;
 }
 
 </script>
