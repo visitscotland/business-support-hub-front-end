@@ -28,7 +28,7 @@
         <div class="vs-download-card__cta">
             <VsButton
                 :href="props.link.link"
-                icon="download-link"
+                icon="fa-regular fa-arrow-down-to-line"
                 icon-position="right"
             >
                 {{ buttonLabel }}
