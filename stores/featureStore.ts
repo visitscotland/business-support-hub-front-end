@@ -1,16 +1,13 @@
 import { defineStore } from 'pinia';
 
-interface IFeatureState {
-    selectedFeatures: any,
-    matchingProviders: any,
-}
-
 const useFeatureStore = defineStore('featureStore', {
-    state: (): IFeatureState => ({
-
+    state: () => ({
     }),
     actions: {
-
+        update(features, providers) {
+            this.selectedFeatures = features;
+            this.selectedProviders = providers;
+        },
     },
 });
 

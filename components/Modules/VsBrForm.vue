@@ -72,6 +72,18 @@
                             name="legalBasis"
                             :value="module.config.legalBasis"
                         >
+                        <input
+                            v-if="featureStore.selectedFeatures"
+                            type="hidden"
+                            name="comparisonFeatures"
+                            :value="featureStore.selectedFeatures"
+                        >
+                        <input
+                            v-if="featureStore.selectedProviders"
+                            type="hidden"
+                            name="comparisonProviders"
+                            :value="featureStore.selectedProviders"
+                        >
                     </template>
                 </VsForm>
             </VsCol>
@@ -83,6 +95,7 @@
 /* eslint-disable import/no-import-module-exports */
 
 import useConfigStore from '~/stores/configStore.ts';
+import useFeatureStore from '~/stores/featureStore.ts';
 
 import {
     VsContainer,
@@ -92,6 +105,7 @@ import {
 } from '@visitscotland/component-library/components';
 
 const configStore = useConfigStore();
+const featureStore = useFeatureStore();
 
 const props = defineProps<{ module: Object }>();
 const module: any = props.module;

@@ -1,7 +1,7 @@
 <template>
     <VsContainer>
         <!-- {{ featureStore }} -->
-        <!-- <div class="flex-wrapper">
+        <div class="flex-wrapper">
             <div class="flex-column">
                 <VsAlert>
                     <div v-if="selectedFeatures.length === 0">
@@ -30,8 +30,8 @@
                     </VsButton>
                 </div>
             </div>
-        </div> -->
-        <!-- <VsRow v-if="view === 'features'">
+        </div>
+        <VsRow v-if="view === 'features'">
             <VsCol
                 cols="12"
                 md="10"
@@ -93,71 +93,19 @@
                     </template>
                 </VsEventCard>
             </VsCol>
-        </VsRow> -->
-        <VsTabs>
-            <VsTabItem title="Select features">
-                <div class="mb-400">
-                    <fieldset
-                        :key="index"
-                        v-for="(group, index) in groups"
-                        class="mb-200"
-                    >
-                        <legend>
-                            {{ group }}
-                        </legend>
-                        <div
-                            v-for="(feature) in features"
-                            :key="feature + index"
-                        >
-                            <VsCheckbox
-                                v-if="feature.groupDescription === group"
-                                v-model="selectedFeatures"
-                                :key="feature"
-                                :ref="feature.id"
-                                :name="feature.id"
-                                :value="feature.id"
-                                :label="checkboxLabel(feature.name, feature.description)"
-                                :field-name="feature.id"
-                                @status-update="updateStore"
-                            />
-                        </div>
-                    </fieldset>
-                </div>
-            </VsTabItem>
-            <VsTabItem
-                :title="resultTabTitle"
-                :disabled="selectedFeatures.length === 0 || matchingProviders.length === 0"
-            >
-                <VsCol
-                    cols="12"
-                    md="10"
-                    lg="7"
-                    class="col-xxl-6"
-                >
-                    <ul>
-                        <li
-                            v-for="(provider, index) in matchingProviders"
-                            :key="provider.name + index"
-                        >
-                            <a href="provider.url">
-                                {{ provider.name }}
-                            </a>
-                        </li>
-                    </ul>
-                </VsCol>
-            </VsTabItem>
-        </VsTabs>
+        </VsRow>
     </VsContainer>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 import {
+    VsRow,
     VsContainer,
     VsCol,
     VsCheckbox,
-    VsTabs,
-    VsTabItem,
+    VsAlert,
+    VsButton,
 } from '@visitscotland/component-library/components';
 import useFeatureStore from '~/stores/featureStore.ts';
 
@@ -174,10 +122,10 @@ const props = defineProps({
     },
 });
 
+const view = ref('features');
 const selectedFeatures = ref([]);
 // const selectedProviders = ref([]);
 
-// COMPUTED MICROCOPY
 function checkboxLabel(name, description) {
     return description === null ? `${name}` : `${name} - ${description}`;
 }
@@ -188,13 +136,6 @@ const matchingProviders = computed(() => {
     return props.providers.filter((provider) => (
         selectedFeatures.value.every((featureId) => provider.features.includes(featureId))
     ));
-});
-
-const resultTabTitle = computed(() => {
-    if (selectedFeatures.value.length > 0) {
-        return `Results (${matchingProviders.value.length})`;
-    };
-    return 'No matches';
 });
 
 const selectedProviders = computed(() => (
@@ -208,6 +149,14 @@ const selectedProviders = computed(() => (
 ));
 
 const groups = new Set(props.features.map((feature) => feature.groupDescription));
+
+function toggleView() {
+    if (view.value === 'features') {
+        view.value = 'results';
+    } else if (view.value === 'results') {
+        view.value = 'features';
+    }
+}
 
 function updateStore() {
     featureStore.update(selectedFeatures, selectedProviders);
