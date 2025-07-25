@@ -1,7 +1,6 @@
 <template>
-    <!-- {{  features }}
-    {{ providers }} -->
     <VsContainer>
+        {{ featureStore }}
         <div class="flex-wrapper">
             <div class="flex-column">
                 <VsAlert>
@@ -133,35 +132,12 @@ function checkboxLabel(name, description) {
 const matchingProviders = computed(() => {
     if (selectedFeatures.value.length === 0) return props.providers;
 
-    return props.providers.filter((provider) => selectedFeatures.value.every((featureId) => provider.functions.includes(featureId)));
+    return props.providers.filter((provider) => (
+        selectedFeatures.value.every((featureId) => provider.features.includes(featureId))
+    ));
 });
 
-// const groups = props.features.((feature) => feature.group);
 const groups = new Set(props.features.map((feature) => feature.groupDescription));
-
-// const local = 'http://localhost:8080/site/bsh-api/api/obs/form/shortlist';
-// const devBrc = 'https://develop-brc-support.visitscotland.org/api/obs/form/shortlist';
-
-// async function handleSubmit(event) {
-//     event.preventDefault();
-//     const payload = {
-//         'online-booking-process': 'true',
-//     };
-
-//     const jsonPayload = JSON.stringify(payload);
-
-//     try {
-//         const response = await axios.post(devBrc, jsonPayload, {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         });
-
-//         console.log('Response:', response.data);
-//     } catch (error) {
-//         console.error('Error submitting form:', error);
-//     }
-// }
 
 function toggleView() {
     if (view.value === 'features') {
@@ -169,8 +145,7 @@ function toggleView() {
     } else if (view.value === 'results') {
         view.value = 'features';
     }
-    featureStore.selectedFeatures = selectedFeatures;
-    featureStore.matchingProviders = matchingProviders;
+    featureStore.update(selectedFeatures, matchingProviders);
 }
 
 </script>

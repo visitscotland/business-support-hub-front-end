@@ -112,11 +112,11 @@
         </NuxtLazyHydrate>
 
         <NuxtLazyHydrate
-            v-if="item.type === 'ComparisonModule'"
+            v-if="item.type === 'ComparatorModule'"
             :when-visible="{ rootMargin: '50px' }"
         >
             <VsBrComparison
-                :features="item.functions"
+                :features="item.features"
                 :providers="item.providers"
             />
         </NuxtLazyHydrate>
