@@ -3,7 +3,7 @@
         :heading="props.content.title"
         :inset="isHomePage"
         :lede="props.content.teaser"
-        :src="isHomePage ? imageSrc : null"
+        :img-src="isHomePage ? imageSrc : null"
         :img-caption="isHomePage ? imageData.description : null"
         :img-credit="isHomePage ? imageData.credit : null"
         :split="isHomePage"
