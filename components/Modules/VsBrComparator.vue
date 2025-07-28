@@ -14,21 +14,6 @@
                         {{ matchingProviders.length }} {{ labels.alert_result_count }}
                     </div>
                 </VsAlert>
-                <div class="w-200">
-                    <VsButton
-                        class="mt-200"
-                        variant="primary"
-                        :onclick="toggleView"
-                        :disabled="matchingProviders.length === 0 || selectedFeatures.length === 0"
-                    >
-                        <span v-if="view === 'features'">
-                            {{ labels.viewToggle_results }}
-                        </span>
-                        <span v-if="view === 'results'">
-                            {{ labels.viewToggle_features }}
-                        </span>
-                    </VsButton>
-                </div>
             </div>
         </div>
         <VsRow v-if="view === 'features'">
@@ -44,7 +29,7 @@
                         v-for="(group, index) in groups"
                         class="mb-200"
                     >
-                        <legend class="vs-heading vs-heading--heading-m">
+                        <legend class="vs-heading vs-heading--heading-m mb-100">
                             {{ group }}
                         </legend>
                         <div
@@ -66,6 +51,21 @@
                     </fieldset>
                 </div>
             </VsCol>
+            <div class="button-wrapper w-lg-400">
+                <VsButton
+                    class="mt-100"
+                    variant="primary"
+                    :onclick="toggleView"
+                    :disabled="matchingProviders.length === 0 || selectedFeatures.length === 0"
+                >
+                    <span v-if="view === 'features'">
+                        {{ labels.viewToggle_results }}
+                    </span>
+                    <span v-if="view === 'results'">
+                        {{ labels.viewToggle_features }}
+                    </span>
+                </VsButton>
+            </div>
         </VsRow>
         <VsRow v-if="view === 'results'">
             <VsCol
@@ -92,6 +92,21 @@
                     </template>
                 </VsEventCard>
             </VsCol>
+            <div class="button-wrapper w-lg-400">
+                <VsButton
+                    class="mt-100"
+                    variant="primary"
+                    :onclick="toggleView"
+                    :disabled="matchingProviders.length === 0 || selectedFeatures.length === 0"
+                >
+                    <span v-if="view === 'features'">
+                        {{ labels.viewToggle_results }}
+                    </span>
+                    <span v-if="view === 'results'">
+                        {{ labels.viewToggle_features }}
+                    </span>
+                </VsButton>
+            </div>
         </VsRow>
     </VsContainer>
 </template>
