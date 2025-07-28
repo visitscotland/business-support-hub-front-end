@@ -1,12 +1,64 @@
 {
     "content": {
-        "heading": "Get your assessment workbook",
+        "heading": "Get tailored worksheet to compare systems",
         "successHeading": "Your workbook's on its way",
         "successContent": "<p>This is a longer message we can show to the end user blah blah blah</p>",
         "noJs": "<p><strong>You need JavaScript enabled to be able to display this form.</strong></p> <p>You can enable this in your browser settings. You can also ask to subscribe by sending an email to <a href='mailto:info@visitscotland.com'>info@visitscotland.com</a>.</p>",
         "submit": "Submit"
     },
     "fields": [
+        {
+            "name": "first_name",
+            "element": "input",
+            "type": "text",
+            "label": "First name",
+            "validation": {
+                "required": true
+            },
+              "validationMessages": {
+                "required": "This field is required"
+            }
+        },
+        {
+            "name": "last_name",
+            "element": "input",
+            "type": "text",
+            "label": "Last name",
+            "validation": {
+                "required": true
+            },
+              "validationMessages": {
+                "required": "This field is required"
+            }
+        },
+        {
+            "name": "business_name",
+            "element": "input",
+            "type": "text",
+            "label": "Business name",
+            "validation": {
+                "required": true
+            },
+              "validationMessages": {
+                "required": "This field is required"
+            }
+        },
+        {
+            "name": "sector",
+            "element": "select",
+            "options": [
+                {"text": "Activity provider", "value": "sector_active_outdoor"},
+                {"text": "Tour provider", "value": "sector_tours_guides_transport"},
+                {"text": "Visitor attraction", "value": "sector_attractions"}
+            ],
+            "label": "What category best describes your business?",
+            "validation": {
+                "required": true
+            },
+            "validationMessages": {
+                "required": "This field is required"
+            }
+        },
         { 
             "name": "email",
             "element": "input",
@@ -18,35 +70,9 @@
                 "maxLength": "100"
             },
             "validationMessages": {
-                "maxLength": "Your email must be a maximum of 100 characters"
+                "maxLength": "Your email must be a maximum of 100 characters",
+                "required": "This field is required"
             }
-        },
-        {
-            "name": "first_name",
-            "element": "input",
-            "type": "text",
-            "label": "First name",
-            "validation": {
-                "required": true
-            }
-        },
-        {
-            "name": "last_name",
-            "element": "input",
-            "type": "text",
-            "label": "Last name",
-            "validation": {
-                "required": true
-            }
-        },
-        {
-            "name": "business_name",
-            "element": "input",
-            "type": "text",
-            "label": "Business name",
-            "validation": {
-                "required": true
-            }
-        }        
+        }
     ]
 }

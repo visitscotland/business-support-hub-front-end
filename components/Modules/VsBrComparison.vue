@@ -95,8 +95,10 @@
             </VsCol>
         </VsRow> -->
         <VsTabs>
-            <VsTabItem title="Select features">
-                <div class="mb-400">
+            <VsTabItem
+                title="Select features"
+            >
+                <div class="mb-400 p-200">
                     <fieldset
                         :key="index"
                         v-for="(group, index) in groups"
@@ -128,23 +130,25 @@
                 :title="resultTabTitle"
                 :disabled="selectedFeatures.length === 0 || matchingProviders.length === 0"
             >
-                <VsCol
-                    cols="12"
-                    md="10"
-                    lg="7"
-                    class="col-xxl-6"
-                >
-                    <ul>
-                        <li
-                            v-for="(provider, index) in matchingProviders"
-                            :key="provider.name + index"
-                        >
-                            <a href="provider.url">
-                                {{ provider.name }}
-                            </a>
-                        </li>
-                    </ul>
-                </VsCol>
+                <div class="p-200">
+                    <VsCol
+                        cols="12"
+                        md="10"
+                        lg="7"
+                        class="col-xxl-6"
+                    >
+                        <ul>
+                            <li
+                                v-for="(provider, index) in matchingProviders"
+                                :key="provider.name + index"
+                            >
+                                <a href="provider.url">
+                                    {{ provider.name }}
+                                </a>
+                            </li>
+                        </ul>
+                    </VsCol>
+                </div>
             </VsTabItem>
         </VsTabs>
     </VsContainer>
@@ -175,7 +179,6 @@ const props = defineProps({
 });
 
 const selectedFeatures = ref([]);
-// const selectedProviders = ref([]);
 
 // COMPUTED MICROCOPY
 function checkboxLabel(name, description) {

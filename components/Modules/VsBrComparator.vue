@@ -5,13 +5,13 @@
             <div class="flex-column">
                 <VsAlert>
                     <div v-if="selectedFeatures.length === 0">
-                        HARDCODED - Select features to see matching providers.
+                        {{ labels.alert_no_selections }}
                     </div>
                     <div v-else-if="matchingProviders.length === 0">
-                        HARDCODED - No matches! Select fewer features.
+                        {{ labels.alert_no_matches }}
                     </div>
                     <div v-else>
-                        HARDCODED - Shortlisted providers: {{ matchingProviders.length }}
+                        {{ matchingProviders.length }} {{ labels.alert_result_count }}
                     </div>
                 </VsAlert>
                 <div class="w-200">
@@ -22,10 +22,10 @@
                         :disabled="matchingProviders.length === 0 || selectedFeatures.length === 0"
                     >
                         <span v-if="view === 'features'">
-                            HARDCODED - View results
+                            {{ labels.viewToggle_results }}
                         </span>
                         <span v-if="view === 'results'">
-                            HARDCODED - Select features
+                            {{ labels.viewToggle_features }}
                         </span>
                     </VsButton>
                 </div>
@@ -38,14 +38,13 @@
                 lg="7"
                 class="col-xxl-6"
             >
-                <h3>HARDCODED - Select Features</h3>
                 <div class="mb-400">
                     <fieldset
                         :key="index"
                         v-for="(group, index) in groups"
                         class="mb-200"
                     >
-                        <legend>
+                        <legend class="vs-heading vs-heading--heading-m">
                             {{ group }}
                         </legend>
                         <div
@@ -75,7 +74,7 @@
                 lg="7"
                 class="col-xxl-6"
             >
-                <h3>HARDCODED - Matching providers</h3>
+                <h2>{{ labels.results_heading }}</h2>
                 <VsEventCard
                     v-for="(provider, index) in matchingProviders"
                     cta-icon="fa-regular fa-square-arrow-up-right"
@@ -106,10 +105,14 @@ import {
     VsCheckbox,
     VsAlert,
     VsButton,
+    VsEventCard,
 } from '@visitscotland/component-library/components';
 import useFeatureStore from '~/stores/featureStore.ts';
+import useConfigStore from '~/stores/configStore.ts';
 
 const featureStore = useFeatureStore();
+const configStore = useConfigStore();
+const labels = configStore.labels['online-booking-system-comparator'];
 
 const props = defineProps({
     features: {
@@ -124,7 +127,6 @@ const props = defineProps({
 
 const view = ref('features');
 const selectedFeatures = ref([]);
-// const selectedProviders = ref([]);
 
 function checkboxLabel(name, description) {
     return description === null ? `${name}` : `${name} - ${description}`;
