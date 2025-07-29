@@ -14,9 +14,6 @@
             "label": "First name",
             "validation": {
                 "required": true
-            },
-              "validationMessages": {
-                "required": "This field is required"
             }
         },
         {
@@ -26,9 +23,6 @@
             "label": "Last name",
             "validation": {
                 "required": true
-            },
-              "validationMessages": {
-                "required": "This field is required"
             }
         },
         {
@@ -38,9 +32,6 @@
             "label": "Business name",
             "validation": {
                 "required": true
-            },
-              "validationMessages": {
-                "required": "This field is required"
             }
         },
         {
@@ -70,8 +61,7 @@
                 "maxLength": "100"
             },
             "validationMessages": {
-                "maxLength": "Your email must be a maximum of 100 characters",
-                "required": "This field is required"
+                "maxLength": "Your email must be a maximum of 100 characters"
             }
         }
     ]
