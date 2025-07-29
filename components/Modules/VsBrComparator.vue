@@ -1,10 +1,16 @@
 <template>
     <VsContainer>
-        <!-- {{ featureStore }} -->
+        <!-- SELECTED FEATURES: {{ selectedFeatures }}
+        <br>
+        <br>
+        SELECTED PROVIDERS: {{ selectedProviders }}
+        <br>
+        <br>
+        FEATURESTORE: {{ featureStore }} -->
         <div class="flex-wrapper">
             <div class="flex-column">
                 <VsAlert>
-                    <div v-if="selectedFeatures.length === 0">
+                    <div v-if="selectedFeatureValues.length === 0">
                         {{ labels.alert_no_selections }}
                     </div>
                     <div v-else-if="matchingProviders.length === 0">
@@ -38,7 +44,7 @@
                         >
                             <VsCheckbox
                                 v-if="feature.groupDescription === group"
-                                v-model="selectedFeatures"
+                                v-model="selectedFeatureValues"
                                 :key="feature"
                                 :ref="feature.id"
                                 :name="feature.id"
@@ -56,7 +62,7 @@
                     class="mt-100"
                     variant="primary"
                     :onclick="toggleView"
-                    :disabled="matchingProviders.length === 0 || selectedFeatures.length === 0"
+                    :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                 >
                     <span v-if="view === 'features'">
                         {{ labels.viewToggle_results }}
@@ -97,7 +103,7 @@
                     class="mt-100"
                     variant="primary"
                     :onclick="toggleView"
-                    :disabled="matchingProviders.length === 0 || selectedFeatures.length === 0"
+                    :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                 >
                     <span v-if="view === 'features'">
                         {{ labels.viewToggle_results }}
@@ -141,17 +147,21 @@ const props = defineProps({
 });
 
 const view = ref('features');
-const selectedFeatures = ref([]);
+
+const selectedFeatureValues = ref([]); // feature ID provided by ticked checkbox
+const selectedFeatures = computed(() => (
+    props.features.filter((feature) => selectedFeatureValues.value.includes(feature.id))
+));
 
 function checkboxLabel(name, description) {
     return description === null ? `${name}` : `${name} - ${description}`;
 }
 
 const matchingProviders = computed(() => {
-    if (selectedFeatures.value.length === 0) return props.providers;
+    if (selectedFeatureValues.value.length === 0) return props.providers;
 
     return props.providers.filter((provider) => (
-        selectedFeatures.value.every((featureId) => provider.features.includes(featureId))
+        selectedFeatureValues.value.every((featureId) => provider.features.includes(featureId))
     ));
 });
 
@@ -160,8 +170,9 @@ const selectedProviders = computed(() => (
         const details = {
             name: provider.name,
             url: provider.url,
+            contact: provider.contact,
         };
-        return JSON.stringify(details);
+        return details;
     })
 ));
 
