@@ -76,13 +76,13 @@
                             v-if="featureStore.selectedFeatures"
                             type="hidden"
                             name="comparisonFeatures"
-                            :value="featureStore.selectedFeatures"
+                            :value="JSON.stringify(featureStore.selectedFeatures)"
                         >
                         <input
                             v-if="featureStore.selectedProviders"
                             type="hidden"
                             name="comparisonProviders"
-                            :value="featureStore.selectedProviders"
+                            :value="JSON.stringify(featureStore.selectedProviders)"
                         >
                     </template>
                 </VsForm>
