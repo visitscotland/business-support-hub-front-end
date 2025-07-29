@@ -1,6 +1,6 @@
 {
     "content": {
-        "heading": "Get tailored worksheet to compare systems",
+        "heading": "Get a tailored worksheet to compare systems",
         "successHeading": "Your workbook's on its way",
         "successContent": "<p>This is a longer message we can show to the end user blah blah blah</p>",
         "noJs": "<p><strong>You need JavaScript enabled to be able to display this form.</strong></p> <p>You can enable this in your browser settings. You can also ask to subscribe by sending an email to <a href='mailto:info@visitscotland.com'>info@visitscotland.com</a>.</p>",
@@ -47,9 +47,9 @@
             "name": "sector",
             "element": "select",
             "options": [
-                {"text": "Activity provider", "value": "sector_active_outdoor"},
-                {"text": "Tour provider", "value": "sector_tours_guides_transport"},
-                {"text": "Visitor attraction", "value": "sector_attractions"}
+                {"text": "Activity provider", "value": "Active and Outdoor"},
+                {"text": "Tour provider", "value": "Tours, Guides and Transport"},
+                {"text": "Visitor attraction", "value": "Visitor Attractions"}
             ],
             "label": "What category best describes your business?",
             "validation": {
