@@ -115,11 +115,7 @@
             v-if="item.type === 'ComparatorModule'"
             :when-visible="{ rootMargin: '50px' }"
         >
-            <!-- <VsBrComparison
-                :features="item.features"
-                :providers="item.providers"
-            /> -->
-            <VsBrComparator
+            <VsBrComparison
                 :features="item.features"
                 :providers="item.providers"
             />
@@ -161,8 +157,7 @@ import VsBrStyledListModule from '~/components/Modules/VsBrStyledListModule.vue'
 import VsBrForm from '~/components/Modules/VsBrForm.vue';
 import VsBrPreviewError from '~/components/Modules/VsBrPreviewError.vue';
 import VsBrCtaBannerModule from '~/components/Modules/VsBrCtaBannerModule.vue';
-import VsBrComparator from '~/components/Modules/VsBrComparator.vue';
-// import VsBrComparison from '~/components/Modules/VsBrComparison.vue';
+import VsBrComparison from '~/components/Modules/VsBrComparison.vue';
 import VsBrMegalinksSingleImageModule from './VsBrMegalinksSingleImageModule.vue';
 import VsBrMegalinksMultiImageModule from './VsBrMegalinksMultiImageModule.vue';
 import VsBrEventListingModule from './VsBrEventListingModule.vue';
