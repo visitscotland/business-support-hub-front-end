@@ -19,7 +19,7 @@
                         >
                             <VsCheckbox
                                 v-if="feature.groupDescription === group"
-                                v-model="selectedFeatures"
+                                v-model="selectedFeaturesValues"
                                 :key="feature"
                                 :ref="feature.id"
                                 :name="feature.id"
@@ -57,7 +57,7 @@
                                 >
                                     <VsCheckbox
                                         v-if="feature.groupDescription === group"
-                                        v-model="selectedFeatures"
+                                        v-model="selectedFeaturesValues"
                                         :key="feature"
                                         :ref="feature.id"
                                         :name="feature.id"
@@ -74,7 +74,7 @@
             </VsTabItem>
             <VsTabItem
                 :title="resultTabTitle"
-                :disabled="selectedFeatures.length === 0 || matchingProviders.length === 0"
+                :disabled="selectedFeaturesValues.length === 0 || matchingProviders.length === 0"
             >
                 <div class="p-200">
                     <VsCol
@@ -97,6 +97,7 @@
                 </div>
             </VsTabItem>
         </VsTabs>
+        <!-- <VsBrComparatorForm /> -->
     </VsContainer>
 </template>
 
@@ -110,6 +111,7 @@ import {
     VsTabItem,
     VsAccordion,
     VsAccordionItem,
+    // VsBrComparatorForm,
 } from '@visitscotland/component-library/components';
 import useFeatureStore from '~/stores/featureStore.ts';
 
@@ -126,7 +128,10 @@ const props = defineProps({
     },
 });
 
-const selectedFeatures = ref([]);
+const selectedFeaturesValues = ref([]); // the feature id values from selected checkboxes
+const selectedFeatures = computed(() => (
+    props.features.filter((feature) => selectedFeaturesValues.value.includes(feature.id))
+));
 
 // COMPUTED MICROCOPY
 function checkboxLabel(name, description) {
@@ -134,15 +139,15 @@ function checkboxLabel(name, description) {
 }
 
 const matchingProviders = computed(() => {
-    if (selectedFeatures.value.length === 0) return props.providers;
+    if (selectedFeaturesValues.value.length === 0) return props.providers;
 
     return props.providers.filter((provider) => (
-        selectedFeatures.value.every((featureId) => provider.features.includes(featureId))
+        selectedFeaturesValues.value.every((featureId) => provider.features.includes(featureId))
     ));
 });
 
 const resultTabTitle = computed(() => {
-    if (selectedFeatures.value.length > 0) {
+    if (selectedFeaturesValues.value.length > 0) {
         return `Results (${matchingProviders.value.length})`;
     };
     return 'No matches';
