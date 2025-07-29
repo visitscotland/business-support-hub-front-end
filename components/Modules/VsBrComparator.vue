@@ -113,6 +113,7 @@
                     </span>
                 </VsButton>
             </div>
+            <VsBrComparatorForm />
         </VsRow>
     </VsContainer>
 </template>
