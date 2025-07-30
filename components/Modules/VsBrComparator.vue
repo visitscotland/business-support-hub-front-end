@@ -146,7 +146,7 @@ function checkboxLabel(name, description) {
     return description === null ? `${name}` : `${name} - ${description}`;
 }
 
-const selectedFeatureValues = ref([]); // feature ID provided by ticked checkbox
+const selectedFeatureValues = ref([]);
 
 const matchingProviders = computed(() => {
     if (selectedFeatureValues.value.length === 0) return props.providers;
