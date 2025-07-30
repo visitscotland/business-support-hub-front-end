@@ -163,7 +163,11 @@ function toggleView() {
         view.value = 'results';
     } else if (view.value === 'results') {
         view.value = 'features';
-    }
+    };
+    window.scroll({
+        top: 0,
+        behavior: 'smooth',
+    });
 }
 </script>
 
