@@ -1,10 +1,10 @@
 <template>
     <VsContainer>
-        <VsTabs>
+        <VsTabs class="mb-200">
             <VsTabItem
-                title="Select features"
+                title="Required features"
             >
-                <div class="mb-400 p-200">
+                <div class="p-200">
                     <!-- <fieldset
                         :key="index"
                         v-for="(group, index) in groups"
@@ -30,10 +30,6 @@
                             />
                         </div>
                     </fieldset> -->
-                    <!-- {{  groups  }} -->
-                    <br>
-                    <br>
-                    <!-- {{  features }} -->
                     <VsAccordion>
                         <VsAccordionItem
                             v-for="(group, index) in groups"
@@ -49,7 +45,6 @@
                                 />
                                 {{ group }}
                             </template>
-
                             <VsBody class="p-075">
                                 <div
                                     v-for="(feature) in features"
@@ -76,28 +71,35 @@
                 :title="resultTabTitle"
                 :disabled="selectedFeaturesValues.length === 0 || matchingProviders.length === 0"
             >
-                <div class="p-200">
-                    <VsCol
-                        cols="12"
-                        md="10"
-                        lg="7"
-                        class="col-xxl-6"
-                    >
-                        <ul>
+                <div>
+                    <VsCol>
+                        <p>
+                            Based on the information you submitted, you now have a shortlist of booking system providers that should be able to provide the functionality your business requires. Once you are satisfied that a provider is likely to offer what you are looking for, you will then want to arrange a demonstration of the system - we can provide you with a free worksheet to help you score and compare systems.
+                        </p>
+
+                        <VsList unstyled>
                             <li
                                 v-for="(provider, index) in matchingProviders"
                                 :key="provider.name + index"
                             >
                                 <a href="provider.url">
-                                    {{ provider.name }}
+                                    <h3>{{ provider.name }}</h3>
                                 </a>
+                                <VsBrRichText :input-content="provider.description" />
                             </li>
-                        </ul>
+                        </VsList>
                     </VsCol>
                 </div>
             </VsTabItem>
+            <VsTabItem
+                title="Request workbook"
+                :disabled="selectedFeaturesValues.length === 0 || matchingProviders.length === 0"
+            >
+                <div class="p-md-200 px-lg-700 pt-lg-600">
+                    <VsBrComparatorForm />
+                </div>
+            </VsTabItem>
         </VsTabs>
-        <!-- <VsBrComparatorForm /> -->
     </VsContainer>
 </template>
 
@@ -111,7 +113,7 @@ import {
     VsTabItem,
     VsAccordion,
     VsAccordionItem,
-    // VsBrComparatorForm,
+    VsList,
 } from '@visitscotland/component-library/components';
 import useFeatureStore from '~/stores/featureStore.ts';
 
@@ -148,7 +150,7 @@ const matchingProviders = computed(() => {
 
 const resultTabTitle = computed(() => {
     if (selectedFeaturesValues.value.length > 0) {
-        return `Results (${matchingProviders.value.length})`;
+        return `Platform shortlist (${matchingProviders.value.length})`;
     };
     return 'No matches';
 });

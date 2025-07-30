@@ -1,26 +1,17 @@
 <template>
     <VsContainer>
-        <!-- SELECTED FEATURES: {{ selectedFeatures }}
-        <br>
-        <br>
-        SELECTED PROVIDERS: {{ selectedProviders }}
-        <br>
-        <br>
-        FEATURESTORE: {{ featureStore }} -->
-        <div class="flex-wrapper">
-            <div class="flex-column">
-                <VsAlert>
-                    <div v-if="selectedFeatureValues.length === 0">
-                        {{ labels.alert_no_selections }}
-                    </div>
-                    <div v-else-if="matchingProviders.length === 0">
-                        {{ labels.alert_no_matches }}
-                    </div>
-                    <div v-else>
-                        {{ matchingProviders.length }} {{ labels.alert_result_count }}
-                    </div>
-                </VsAlert>
-            </div>
+        <div class="alert-wrapper">
+            <VsAlert>
+                <div v-if="selectedFeatureValues.length === 0">
+                    {{ labels.alert_no_selections }}
+                </div>
+                <div v-else-if="matchingProviders.length === 0">
+                    {{ labels.alert_no_matches }}
+                </div>
+                <div v-else>
+                    {{ matchingProviders.length }} {{ labels.alert_result_count }}
+                </div>
+            </VsAlert>
         </div>
         <VsRow v-if="view === 'features'">
             <VsCol
@@ -60,7 +51,7 @@
             <div class="button-wrapper w-lg-400">
                 <VsButton
                     class="mt-100"
-                    variant="primary"
+                    :variant="view === 'results' ? 'secondary' : 'primary'"
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                 >
@@ -81,7 +72,7 @@
                 class="col-xxl-6"
             >
                 <h2>{{ labels.results_heading }}</h2>
-                <VsEventCard
+                <!-- <VsEventCard
                     v-for="(provider, index) in matchingProviders"
                     cta-icon="fa-regular fa-square-arrow-up-right"
                     cta-label="Visit website"
@@ -96,12 +87,25 @@
                     <template #event-card-content>
                         <VsBrRichText :input-content="provider.description" class="mb-lg-400" />
                     </template>
-                </VsEventCard>
+                </VsEventCard> -->
+
+                <div
+                    class="comparator-result"
+                    v-for="(provider, index) in matchingProviders"
+                    :key="provider.name + index"
+                >
+                    <VsLink href="{{ provider.url }}">
+                        <h3>
+                            {{ provider.name }}
+                        </h3>
+                    </VsLink>
+                    <VsBrRichText :input-content="provider.description" />
+                </div>
             </VsCol>
             <div class="button-wrapper w-lg-400">
                 <VsButton
                     class="mt-100"
-                    variant="primary"
+                    :class="{ 'btn-primary': view === 'features', 'btn-secondary': view === 'results' }"
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                 >
@@ -127,7 +131,7 @@ import {
     VsCheckbox,
     VsAlert,
     VsButton,
-    VsEventCard,
+    VsLink,
 } from '@visitscotland/component-library/components';
 import useFeatureStore from '~/stores/featureStore.ts';
 import useConfigStore from '~/stores/configStore.ts';
@@ -152,7 +156,7 @@ const view = ref('features');
 const selectedFeatureValues = ref([]); // feature ID provided by ticked checkbox
 const selectedFeatures = computed(() => (
     props.features.filter((feature) => selectedFeatureValues.value.includes(feature.id))
-));
+)); // array of objects to be added to the store for inclusion in the form
 
 function checkboxLabel(name, description) {
     return description === null ? `${name}` : `${name} - ${description}`;
@@ -194,16 +198,10 @@ function updateStore() {
 </script>
 
 <style lang="scss">
-    .flex-wrapper {
+    .alert-wrapper {
         position: sticky;
         justify-content: end;
         top: 100px;
         display: flex;
-    }
-
-    .flex-column {
-        display: flex;
-        flex-direction: column;
-        align-items: end;
     }
 </style>
