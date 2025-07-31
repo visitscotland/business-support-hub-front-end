@@ -3,13 +3,13 @@
         <div class="alert-wrapper">
             <VsAlert role="alert">
                 <div v-if="selectedFeatureValues.length === 0">
-                    {{ labels.alert_no_selections }}
+                    {{ labels['alert-no-selections'] }}
                 </div>
                 <div v-else-if="matchingProviders.length === 0">
-                    {{ labels.alert_no_matches }}
+                    {{ labels['alert-no-matches'] }}
                 </div>
                 <div v-else>
-                    {{ matchingProviders.length }} {{ labels.alert_result_count }}
+                    {{ matchingProviders.length }} {{ labels['alert-result-count'] }}
                 </div>
             </VsAlert>
         </div>
@@ -55,10 +55,10 @@
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                 >
                     <span v-if="view === 'features'">
-                        {{ labels.viewToggle_results }}
+                        {{ labels['viewToggle-results'] }}
                     </span>
                     <span v-if="view === 'results'">
-                        {{ labels.viewToggle_features }}
+                        {{ labels['viewToggle-features'] }}
                     </span>
                 </VsButton>
             </div>
@@ -71,7 +71,7 @@
                 class="col-xxl-6"
             >
                 <VsHeading level="2" class="mb-200">
-                    {{ labels.results_heading }}
+                    {{ labels['results-heading'] }}
                 </VsHeading>
                 <div class="d-flex flex-column gap-200">
                     <div
@@ -100,10 +100,10 @@
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                 >
                     <span v-if="view === 'features'">
-                        {{ labels.viewToggle_results }}
+                        {{ labels['viewToggle-results'] }}
                     </span>
                     <span v-if="view === 'results'">
-                        {{ labels.viewToggle_features }}
+                        {{ labels['viewToggle-features'] }}
                     </span>
                 </VsButton>
             </div>
