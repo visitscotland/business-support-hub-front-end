@@ -62,15 +62,15 @@
         </template>
 
         <template
-            #vs-blog-data
+            #vs-article-data
         >
-            <VsBlogDetails
+            <VsArticleDetails
                 v-if="content.readingTime !== 0"
-                :blog-publish-date="lastPublished"
-                :blog-read-time="readTime"
+                :article-publish-date="lastPublished"
+                :article-read-time="readTime"
             />
             <div v-else class="mb-150">
-                <span class="vs-blog-details vs-blog-details__date vs-blog-details--highlight">
+                <span class="vs-article-details vs-article-details__date vs-article-details--highlight">
                     {{ lastPublished }}
                 </span>
             </div>
@@ -104,7 +104,7 @@ import {
     inject, ref, toRefs,
 } from 'vue';
 import type { TableOfContentLink } from '~/types/types';
-import { VsPageIntro, VsBlogDetails } from '@visitscotland/component-library/components';
+import { VsPageIntro, VsArticleDetails } from '@visitscotland/component-library/components';
 
 import useConfigStore from '~/stores/configStore.ts';
 import themeCalculator from '~/composables/themeCalculator.ts';
