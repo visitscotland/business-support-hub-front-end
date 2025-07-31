@@ -1,5 +1,5 @@
 <template>
-    <VsContainer class="pb-300">
+    <VsContainer class="pb-300" id="vs-br-comparator">
         <div class="alert-wrapper">
             <VsAlert>
                 <div v-if="selectedFeatureValues.length === 0">
@@ -164,10 +164,8 @@ function toggleView() {
     } else if (view.value === 'results') {
         view.value = 'features';
     };
-    window.scroll({
-        top: 0,
-        behavior: 'smooth',
-    });
+
+    document.querySelector('#vs-br-comparator').scrollIntoView();
 }
 </script>
 
