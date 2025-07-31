@@ -1,5 +1,9 @@
 <template>
     <VsContainer class="pb-300" id="vs-br-comparator">
+        {{ selectedFeatureValues }}
+        <br>
+        <br>
+        {{ matchingProviders }}
         <div class="alert-wrapper">
             <VsAlert role="alert">
                 <div v-if="selectedFeatureValues.length === 0">
@@ -107,6 +111,16 @@
                     </span>
                 </VsButton>
             </div>
+            <VsHeading level="2">
+                {{ labels['form-title'] }}
+            </VsHeading>
+            <p>
+                {{ labels['next-steps-text'] }}
+            </p>
+
+            <VsBrComparatorForm
+                :features="selectedFeatureValues"
+            />
         </VsRow>
     </VsContainer>
 </template>
