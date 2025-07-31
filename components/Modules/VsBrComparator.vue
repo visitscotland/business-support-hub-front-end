@@ -1,7 +1,7 @@
 <template>
     <VsContainer class="pb-300" id="vs-br-comparator">
         <div class="alert-wrapper">
-            <VsAlert>
+            <VsAlert role="alert">
                 <div v-if="selectedFeatureValues.length === 0">
                     {{ labels.alert_no_selections }}
                 </div>
