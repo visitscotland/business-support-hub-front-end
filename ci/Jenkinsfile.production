@@ -12,53 +12,52 @@ if (!env.VS_BRANCH_PROPERTIES_FILE) { env.VS_BRANCH_PROPERTIES_FILE = env.BRANCH
 echo "==/Setting default environment variables"
 
 pipeline {
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '10'))
-        disableConcurrentBuilds()
-        timestamps()
-    }
+	options {
+		buildDiscarder(logRotator(numToKeepStr: '10'))
+		disableConcurrentBuilds()
+		timestamps()
+	}
+	agent {label thisAgent}
 
-    agent {label thisAgent}
+	environment {
+		GITHUB_PAT_JENKINS_CI = credentials('github-pat-jenkins-ci')
+	}
 
-    environment {
-        GITHUB_PAT_JENKINS_CI = credentials('github-pat-jenkins-ci')
-    }
+	stages {
+		stage ('SCM checkout') {
+			agent {
+				docker {
+					image '$VS_DOCKER_BUILDER_IMAGE_NAME'
+					label thisAgent
+					reuseNode true
+				}
+			}
+			steps {
+				sh '''
+					set +x
+					echo; echo "running stage $STAGE_NAME on $HOSTNAME"
+					echo; echo "==== PRINTENV $STAGE_NAME 1 =====" > printenv.$STAGE_NAME
+					printenv >> printenv.$STAGE_NAME
+					echo "====/PRINTENV $STAGE_NAME 1 =====" >> printenv.$STAGE_NAME ; echo
+					#ls -alh
+					export HOME=$WORKSPACE
+					export npm_config_cache=$HOME
+					echo; echo "==== PRINTENV $STAGE_NAME 2 =====" > printenv2.$STAGE_NAME
+					printenv >> printenv2.$STAGE_NAME
+					echo "====/PRINTENV $STAGE_NAME 2 =====" >> printenv2.$STAGE_NAME; echo
+					echo; echo "==== TOOLS CHECK ====="
+				'''
+				sh 'set +x; node --version; exit 0'
+				sh 'set +x; npm --version; exit 0'
+				sh 'set +x; yarn --version; exit 0'
+				sh 'set +x; echo "==== TOOLS CHECK ====="; echo'
+				checkout scm
+			}
+		} //end stage
 
-    stages {
-        stage ('SCM checkout') {
-            agent {
-                docker {
-                image '$VS_DOCKER_BUILDER_IMAGE_NAME'
-                label thisAgent
-                reuseNode true
-                }
-            }
-            steps {
-                sh '''
-                    set +x
-                    echo; echo "running stage $STAGE_NAME on $HOSTNAME"
-                    echo; echo "==== PRINTENV $STAGE_NAME 1 =====" > printenv.$STAGE_NAME
-                    printenv >> printenv.$STAGE_NAME
-                    echo "====/PRINTENV $STAGE_NAME 1 =====" >> printenv.$STAGE_NAME ; echo
-                    #ls -alh
-                    export HOME=$WORKSPACE
-                    export npm_config_cache=$HOME
-                    echo; echo "==== PRINTENV $STAGE_NAME 2 =====" > printenv2.$STAGE_NAME
-                    printenv >> printenv2.$STAGE_NAME
-                    echo "====/PRINTENV $STAGE_NAME 2 =====" >> printenv2.$STAGE_NAME; echo
-                    echo; echo "==== TOOLS CHECK ====="
-                '''
-                sh 'set +x; node --version; exit 0'
-                sh 'set +x; npm --version; exit 0'
-                sh 'set +x; yarn --version; exit 0'
-                sh 'set +x; echo "==== TOOLS CHECK ====="; echo'
-                checkout scm
-            }
-        } //end stage
-
-        stage ('Install Dependencies') {
-            agent {
-                docker {
+		stage ('Install Dependencies') {
+			agent {
+				docker {
                 image '$VS_DOCKER_BUILDER_IMAGE_NAME'
                 label thisAgent
                 reuseNode true
