@@ -68,6 +68,7 @@
                     :key="index"
                     :href="link"
                     :icon="`fab fa-${key === 'twitter' ? 'x-twitter' : key}`"
+                    :aria-label="key"
                 />
             </VsFooterSocialMenu>
         </template>
