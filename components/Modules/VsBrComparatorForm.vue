@@ -9,15 +9,25 @@
                 lg="7"
                 class="col-xxl-6"
             >
+                <VsHeading
+                    level="2"
+                    class="mt-300"
+                    heading-style="heading-l"
+                >
+                    {{ labels['form-title'] }}
+                </VsHeading>
+                <p>
+                    {{ labels['next-steps-text'] }}
+                </p>
                 <VsForm
                     :is-marketo="false"
                     submit-url="#"
-                    data-url="https://static.visitscotland.com/forms/testing/BSHUB-968.json"
+                    data-url="/form.json"
                     :messaging-url="configStore.getLabel('forms', 'form.messaging-url')"
-                    recaptcha-key="6LfqqfcZAAAAACbkbPaHRZTIFpKZGAPZBDkwBKhe"
+                    :recaptcha-key="configStore.getLabel('forms', 'form.recaptcha-key')"
                     language="en"
                     :is-prod="false"
-                    recaptcha-textarea-label="configStore.getLabel('forms', 'form.recaptcha-textarea-label')"
+                    :recaptcha-textarea-label="configStore.getLabel('forms', 'form.recaptcha-textarea-label')"
                 >
                     <template #no-js>
                         {{ noJsMessage }}
@@ -69,7 +79,6 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable import/no-import-module-exports */
 import useConfigStore from '~/stores/configStore.ts';
 
 import {
@@ -77,13 +86,16 @@ import {
     VsRow,
     VsCol,
     VsForm,
+    VsHeading,
 } from '@visitscotland/component-library/components';
 
 const configStore = useConfigStore();
+const labels = configStore.labels['online-booking-system-comparator'];
 
 const props = defineProps<{ features: Array, providers: Array }>();
 const features: any = props.features;
 const providers: any = props.providers;
 
-const noJsMessage = module.noJavaScriptMessage || configStore.getLabel('forms', 'form.no-js');
+const noJsMessage = labels.noJavaScriptMessage || configStore.getLabel('forms', 'form.no-js');
+
 </script>

@@ -107,13 +107,6 @@
                     </span>
                 </VsButton>
             </div>
-            <VsHeading level="2" class="mt-300">
-                {{ labels['form-title'] }}
-            </VsHeading>
-            <p>
-                {{ labels['next-steps-text'] }}
-            </p>
-
             <VsBrComparatorForm
                 :features="selectedFeatures"
                 :providers="selectedProviders"
