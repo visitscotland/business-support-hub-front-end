@@ -27,7 +27,7 @@
     "eslint": "^8.56.0",
     "husky": "^9.1.4",
     "lint-staged": "^15.2.10",
-    "nuxt": "~3.14.4",
+    "nuxt": "~3.16.0",
     "nuxt-lazy-hydrate": "^1.0.0"
   },
   "dependencies": {
@@ -35,7 +35,7 @@
     "@bloomreach/vue3-sdk": "^22.0.5",
     "@pinia/nuxt": "^0.5.1",
     "@visitscotland/component-library": "^5.3.6",
-    "axios": "^1.7.4",
+    "axios": "^1.8.2",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "mitt": "^3.0.0",
