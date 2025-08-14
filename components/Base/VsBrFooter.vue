@@ -68,6 +68,7 @@
                     :key="index"
                     :href="link"
                     :icon="`fab fa-${key === 'twitter' ? 'x-twitter' : key}`"
+                    :aria-label-override="key"
                 />
             </VsFooterSocialMenu>
         </template>
@@ -105,6 +106,7 @@
 
 <script lang="ts" setup>
 /* eslint no-undef: 0 */
+/* eslint vuejs-accessibility/aria-props: 0 */
 
 import {
     toRefs, ref, onMounted,
