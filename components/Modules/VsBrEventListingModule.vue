@@ -19,7 +19,9 @@
                         {{ eventList.title }}
                     </VsHeading>
 
-                    <VsBrRichText :input-content="eventList.copy.value" />
+                    <VsBody>
+                        <VsBrRichText :input-content="eventList.copy.value" />
+                    </VsBody>
                 </VsRow>
                 <VsBrEventListing
                     :event-data="eventList"
@@ -49,6 +51,7 @@ import {
     VsTabItem,
     VsRow,
     VsWarning,
+    VsBody,
 } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
