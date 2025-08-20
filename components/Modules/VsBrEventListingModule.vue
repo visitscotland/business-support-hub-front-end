@@ -31,7 +31,7 @@
 
     <VsContainer>
         <VsRow>
-            <VsWarning class="my-400">
+            <VsWarning class="my-400 vs-events-listing__warning">
                 {{ configStore.getLabel('events-listings-module', 'no-js') }}
             </VsWarning>
         </VsRow>
@@ -79,19 +79,17 @@ const moduleId = computed(() => module.anchor || 'events-listing-module');
     }
 }
 
-.vs-events-listing {
-    .vs-warning {
-        display: none;
-    }
+.vs-events-listing__warning {
+    display: none;
 }
 
 .no-js {
     .vs-events-listing {
         display: none;
+    }
 
-        .vs-warning {
-            display: block;
-        }
+    .vs-events-listing__warning {
+        display: block;
     }
 }
 </style>
