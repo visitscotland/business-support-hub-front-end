@@ -1,4 +1,5 @@
 <template>
+    <VsBrFeaturedEventModule />
     <VsTabs
         class="my-400 vs-events-listing"
         :id="moduleId"
