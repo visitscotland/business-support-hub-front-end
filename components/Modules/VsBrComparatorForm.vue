@@ -16,13 +16,13 @@
                 >
                     {{ labels['form-title'] }}
                 </VsHeading>
-                <p>
-                    {{ labels['next-steps-text'] }}
-                </p>
+                <VsBody>
+                    <div v-html="labels['next-steps-text']" />
+                </VsBody>
                 <VsForm
                     :is-marketo="false"
-                    submit-url="#"
-                    data-url="/form.json"
+                    :submit-url="labels['submit-url']"
+                    :data-url="labels['form-config']"
                     :messaging-url="configStore.getLabel('forms', 'form.messaging-url')"
                     :recaptcha-key="configStore.getLabel('forms', 'form.recaptcha-key')"
                     language="en"
@@ -87,6 +87,7 @@ import {
     VsCol,
     VsForm,
     VsHeading,
+    VsBody,
 } from '@visitscotland/component-library/components';
 
 const configStore = useConfigStore();
