@@ -33,10 +33,6 @@ echo "==/Setting conditional environment variables"
 echo "== Setting default pipeline environment variables"
 if (!env.VS_CI_DIR) { env.VS_CI_DIR = "ci" }
 if (!env.VS_BRANCH_PROPERTIES_DIR) { env.VS_BRANCH_PROPERTIES_DIR = env.VS_CI_DIR + "/properties" }
-if (!env.VS_BRC_STACK_URI) { env.VS_BRC_STACK_URI = "visitscotland" }
-if (!env.VS_BRC_ENV) { env.VS_BRC_ENV = "demo" }
-if (!env.VS_BRC_STACK_URL) { env.VS_BRC_STACK_URL = "https://api.${VS_BRC_STACK_URI}.bloomreach.cloud" }
-if (!env.VS_BRC_STACK_API_VERSION) { env.VS_BRC_STACK_API_VERSION = "v3" }
 if (!env.VS_DOCKER_IMAGE_NAME) { env.VS_DOCKER_IMAGE_NAME = "vs/vs-brxm15:node18" }
 if (!env.VS_DOCKER_BUILDER_IMAGE_NAME) { env.VS_DOCKER_BUILDER_IMAGE_NAME = "vs/vs-brxm15-builder:node18" }
 if (!env.VS_SKIP_BUILD_FOR_BRANCH) { env.VS_SKIP_BUILD_FOR_BRANCH = "feature/VS-1865-feature-environments-enhancements-log4j" }
@@ -81,7 +77,7 @@ pipeline {
     }
 
     stages {
-	    stage ('Pre-build') {
+        stage ('Pre-build') {
 	        steps {
                 echo "running stage $STAGE_NAME in $HOSTNAME on $NODE_NAME"
                 //!//echo "calling \"/infrastructure.sh setvars\" to set default pipeline variables"
@@ -126,7 +122,7 @@ pipeline {
         stage ('SCM checkout') {
             agent {
                 docker {
-                    image 'vs/vs-brxm15-builder:node18'
+                    image "$VS_DOCKER_BUILDER_IMAGE_NAME"
                     label thisAgent
                     reuseNode true
                 }
@@ -151,9 +147,9 @@ pipeline {
         stage ('Install Dependencies') {
             agent {
                 docker {
-                	image 'vs/vs-brxm15-builder:node18'
-                	label thisAgent
-                	reuseNode true
+                    image "$VS_DOCKER_BUILDER_IMAGE_NAME"
+                    label thisAgent
+                    reuseNode true
                 }
             }
             steps {
@@ -171,7 +167,7 @@ pipeline {
         stage ('Run Tests') {
             agent {
                 docker {
-                    image 'vs/vs-brxm15-builder:node18'
+                    image "$VS_DOCKER_BUILDER_IMAGE_NAME"
                     label thisAgent
                     reuseNode true
                 }
@@ -193,7 +189,7 @@ pipeline {
         stage ('NPM Build') {
             agent {
                 docker {
-                    image 'vs/vs-brxm15-builder:node18'
+                    image "$VS_DOCKER_BUILDER_IMAGE_NAME"
                     label thisAgent
                     reuseNode true
                 }

@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <template v-if="data.results.length > 0">
+            <template v-if="data.results && data.results.length > 0">
                 <VsEventCard
                     v-for="(result, index) in data.results"
                     :cta-icon="setIcon(result.cta.type)"
@@ -88,7 +88,9 @@
                     </template>
 
                     <template #event-card-content>
-                        <VsBrRichText :input-content="result.summary" />
+                        <VsBody>
+                            <VsBrRichText :input-content="result.summary" />
+                        </VsBody>
 
                         <VsList unstyled>
                             <VsRow>
@@ -167,6 +169,7 @@ import {
     VsList,
     VsPagination,
     VsRow,
+    VsBody,
 } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';

@@ -19,7 +19,9 @@
                         {{ eventList.title }}
                     </VsHeading>
 
-                    <VsBrRichText :input-content="eventList.copy.value" />
+                    <VsBody>
+                        <VsBrRichText :input-content="eventList.copy.value" />
+                    </VsBody>
                 </VsRow>
                 <VsBrEventListing
                     :event-data="eventList"
@@ -31,7 +33,7 @@
 
     <VsContainer>
         <VsRow>
-            <VsWarning class="my-400">
+            <VsWarning class="my-400 vs-events-listing__warning">
                 {{ configStore.getLabel('events-listings-module', 'no-js') }}
             </VsWarning>
         </VsRow>
@@ -49,6 +51,7 @@ import {
     VsTabItem,
     VsRow,
     VsWarning,
+    VsBody,
 } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
@@ -79,19 +82,17 @@ const moduleId = computed(() => module.anchor || 'events-listing-module');
     }
 }
 
-.vs-events-listing {
-    .vs-warning {
-        display: none;
-    }
+.vs-events-listing__warning {
+    display: none;
 }
 
 .no-js {
     .vs-events-listing {
         display: none;
+    }
 
-        .vs-warning {
-            display: block;
-        }
+    .vs-events-listing__warning {
+        display: block;
     }
 }
 </style>

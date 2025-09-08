@@ -6,7 +6,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "postinstall": "npm view @visitscotland/component-library version > .clversion && nuxt prepare",
+    "postinstall": "node -p \"require('./node_modules/@visitscotland/component-library/package.json').version\" > .clversion && nuxt prepare",
     "commit": "cz",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
@@ -20,22 +20,22 @@
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.7.3",
-    "@nuxt/scripts": "^0.9.5",
+    "@nuxt/scripts": "^0.11.10",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@vue/eslint-config-airbnb": "^8.0.0",
     "eslint": "^8.56.0",
     "husky": "^9.1.4",
     "lint-staged": "^15.2.10",
-    "nuxt": "~3.14.4",
+    "nuxt": "~3.16.0",
     "nuxt-lazy-hydrate": "^1.0.0"
   },
   "dependencies": {
     "@bloomreach/spa-sdk": "^23.3.0",
     "@bloomreach/vue3-sdk": "^22.0.5",
     "@pinia/nuxt": "^0.5.1",
-    "@visitscotland/component-library": "^5.0.2",
-    "axios": "^1.7.4",
+    "@visitscotland/component-library": "5.3.10",
+    "axios": "^1.8.2",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "mitt": "^3.0.0",
@@ -53,7 +53,8 @@
   },
   "resolutions": {
     "minimist": "latest",
-    "minimatch": "9.0.3"
+    "minimatch": "9.0.3",
+    "vite": "6.3.5"
   },
   "config": {
     "commitizen": {
