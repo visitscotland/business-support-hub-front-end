@@ -101,7 +101,6 @@
             </template>
         </VsFooterCopyright>
     </VsFooter>
-    <VsCookieChecker />
 </template>
 
 <script lang="ts" setup>
@@ -127,7 +126,6 @@ import {
     VsList,
     VsIcon,
     VsCol,
-    VsCookieChecker,
     VsBackToTop,
 } from '@visitscotland/component-library/components';
 
