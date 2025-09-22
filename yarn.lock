@@ -2377,10 +2377,10 @@
     picomatch "^4.0.2"
     resolve-from "^5.0.0"
 
-"@visitscotland/component-library@5.3.10":
-  version "5.3.10"
-  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-5.3.10.tgz#62c05d65d3a653c2a6aeb03a725a75ee957d3722"
-  integrity sha512-Zh2FyLmTOE/ydjvl5gShteHMqSagMdGv90rn8YJfcpS0r4kpmCfLdaMtffiaR2uWoutLFvu9VFagkvA3Y2Fukg==
+"@visitscotland/component-library@5.6.1":
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/@visitscotland/component-library/-/component-library-5.6.1.tgz#720f5daa56c6801d1179df0166214adce0eb571d"
+  integrity sha512-f2jKk4ZNeDFQncJfRHHCbHnbzQ8VLWbqqr/R7pfK8Q7hjdRRVh9gn+ULF/ZrDiM2dQnjRCs9BVyv90sxK3OzKw==
   dependencies:
     "@mapbox/geojson-extent" "^1.0.1"
     "@pinia/testing" "^0.1.3"
