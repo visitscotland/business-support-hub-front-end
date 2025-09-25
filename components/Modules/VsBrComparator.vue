@@ -107,6 +107,10 @@
                     </span>
                 </VsButton>
             </div>
+            <VsBrComparatorForm
+                :features="selectedFeatures"
+                :providers="selectedProviders"
+            />
         </VsRow>
     </VsContainer>
 </template>
@@ -146,8 +150,14 @@ function checkboxLabel(name, description) {
     return description === null ? `${name}` : `${name} - ${description}`;
 }
 
+// Values from selected checkboxes
 const selectedFeatureValues = ref([]);
+//  ...are used get a list of feature objects to add to the form payload
+const selectedFeatures = computed(() => (
+    props.features.filter((feature) => selectedFeatureValues.value.includes(feature.id))
+));
 
+// Provider objects supporting all the selected features
 const matchingProviders = computed(() => {
     if (selectedFeatureValues.value.length === 0) return props.providers;
 
@@ -155,6 +165,18 @@ const matchingProviders = computed(() => {
         selectedFeatureValues.value.every((featureId) => provider.features.includes(featureId))
     ));
 });
+
+// ...are pruned for inclusion as form data
+const selectedProviders = computed(() => (
+    matchingProviders.value.map((provider) => {
+        const details = {
+            name: provider.name,
+            url: provider.url,
+            contact: provider.contact,
+        };
+        return details;
+    })
+));
 
 const groups = new Set(props.features.map((feature) => feature.groupDescription));
 
