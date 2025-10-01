@@ -30,7 +30,7 @@
                         v-if="selectedFilters.length > 0"
                         :rounded="false"
                         variant="primary"
-                        size="sm"
+                        size="md"
                         @click="clearAllFilters"
                     >
                         {{ configStore.getLabel('events-listings-module', 'clear-all') }}
@@ -41,7 +41,7 @@
                         :key="index"
                         :rounded="false"
                         variant="secondary"
-                        size="sm"
+                        size="md"
                         icon="fa-regular fa-xmark"
                         icon-position="right"
                         @click="removeSelectedFilter(filter.fieldId, filter.key, filter.value)"
