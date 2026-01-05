@@ -32,7 +32,9 @@
                             {{ item.heading }}
                         </template>
                         <div class="p-075">
-                            <VsBrRichText :input-content="item.copy.value" />
+                            <VsBody>
+                                <VsBrRichText :input-content="item.copy.value" />
+                            </VsBody>
                             <VsBrDownloadCard
                                 v-if="item.link"
                                 :link="item.link"
@@ -54,6 +56,7 @@ import {
     VsContainer,
     VsModuleWrapper,
     VsCol,
+    VsBody,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
