@@ -10,6 +10,10 @@ interface IConfigState {
     gtm: any,
     locale: string,
     pageMetaData: any,
+    cludoCustomerId: string,
+    cludoExperienceId: string,
+    cludoEngineId: string,
+    cludoLanguage: string,
 }
 
 const useConfigStore = defineStore('configStore', {
@@ -27,6 +31,10 @@ const useConfigStore = defineStore('configStore', {
         locale: '',
         pageMetaData: {
         },
+        cludoCustomerId: '',
+        cludoExperienceId: '',
+        cludoEngineId: '',
+        cludoLanguage: '',
     }),
     actions: {
         getLabel(section: string, key: string) {
