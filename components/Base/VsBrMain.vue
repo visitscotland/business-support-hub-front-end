@@ -103,6 +103,13 @@ if (page.value) {
 
     configStore.locale = pageDocument.model.data.localeString;
 
+    if (componentModels.pageConfiguration) {
+        configStore.cludoCustomerId = componentModels.pageConfiguration['cludo.customer-id'];
+        configStore.cludoExperienceId = componentModels.pageConfiguration['cludo.experience-id'];
+        configStore.cludoEngineId = componentModels.pageConfiguration['cludo.engine-id'];
+        configStore.cludoLanguage = componentModels.pageConfiguration.language;
+    }
+
     let langString = '';
 
     switch (configStore.locale) {
@@ -210,13 +217,11 @@ if (page.value) {
     });
 
     onMounted(() => {
-        const customerId = componentModels.cludoCustomerId;
-        const cludoEngineId = componentModels.cludoEngineId;
-        const cludoExperienceId = componentModels.cludoExperienceId;
+        const customerId = configStore.cludoCustomerId;
+        const cludoEngineId = configStore.cludoEngineId;
 
         window.cludoCustomerId = customerId;
         window.cludoEngineId = cludoEngineId;
-        window.cludoExperienceId = cludoExperienceId;
 
         const cludoExperienceBuilder = document.createElement('script');
         cludoExperienceBuilder.id = 'cludo-experience-manager';
@@ -229,10 +234,6 @@ if (page.value) {
 
         if (cludoEngineId && cludoEngineId !== 'not-defined') {
             cludoExperienceBuilder.setAttribute('data-eid', cludoEngineId);
-        }
-
-        if (cludoExperienceId && cludoExperienceId !== 'not-defined') {
-            cludoExperienceBuilder.setAttribute('data-xid', cludoExperienceId);
         }
 
         document.body.appendChild(cludoExperienceBuilder);
