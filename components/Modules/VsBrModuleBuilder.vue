@@ -178,6 +178,8 @@ const styledListLayouts = ['bullet-list', 'horizontal-list', 'numbered-list', 'v
 const themes = ['light', 'grey'];
 const currentTheme = ref(themes[0]);
 
+let singleImageAlternate = false;
+
 // Set the background colour (theme) for each module.
 if (modules) {
     for (let x = 0; x < modules.length; x++) {
@@ -190,6 +192,11 @@ if (modules) {
         // If the module is nested then use the previous module's theme.
         } else if (modules[x].nested) {
             themeValue = currentTheme.value;
+        }
+
+        if (modules[x].type === 'SingleImageLinksModule') {
+            modules[x].alternate = singleImageAlternate;
+            singleImageAlternate = !singleImageAlternate;
         }
 
         // Add the theme properties to the module object.
