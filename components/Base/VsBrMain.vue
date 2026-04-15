@@ -197,6 +197,10 @@ if (page.value) {
                 rel: 'canonical',
                 href: useRequestURL().toString(),
             },
+            {
+                rel: 'stylesheet',
+                href: '/styles/civic-cookie-manager.css',
+            },
         ],
     });
 
