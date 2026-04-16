@@ -3159,10 +3159,10 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-aws-rum-web@^1.25.0:
-  version "1.25.0"
-  resolved "https://registry.yarnpkg.com/aws-rum-web/-/aws-rum-web-1.25.0.tgz#30a162e422e2a8139c30b9cae56d4431675ace2a"
-  integrity sha512-nN1ctKSXcvDFganJaQfA3pjkagHRSDXG72ILL2BFItcDYMkLO6FiEVWo59nLmzynSXlBMwcqV44BTf0XG6FCjA==
+aws-rum-web@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/aws-rum-web/-/aws-rum-web-2.0.0.tgz#872b8ea327d972173cdf861a05a7c67cbe02e897"
+  integrity sha512-5LqpIDkgUbg0Iu6jMEeYJ6AIHkAia1UTpF+dS7NLvgzdK3smdjXjp1aV/W6IWjQwRI7rO950BBtcJ+G9VoPKWQ==
   dependencies:
     "@aws-crypto/sha256-js" "^3.0.0"
     "@aws-sdk/querystring-builder" "^3.36.0"
