@@ -1,7 +1,7 @@
 /* eslint no-undef: 0 */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 function bufferFile(relPath: string) {
     return fs.readFileSync(path.join(__dirname, relPath), {
@@ -74,7 +74,7 @@ export default defineNuxtConfig({
         transpile: ['bootstrap-vue-next', '@visitscotland/component-library'],
     },
 
-    compatibilityDate: '2025-01-16',
+    compatibilityDate: '2026-05-22',
 
     plugins: [
         '~/plugins/scrollToHash.client.ts',

@@ -11,7 +11,7 @@
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
-    "lint": "eslint ./**/*.{js,vue,ts}",
+    "lint": "eslint . --ext .js,.vue,.ts",
     "lint:fix": "yarn lint --fix",
     "prepare": "husky"
   },
@@ -24,10 +24,10 @@
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@vue/eslint-config-airbnb": "^8.0.0",
-    "eslint": "^8.56.0",
+    "eslint": "^10.2.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
-    "nuxt": "~3.19.0",
+    "lint-staged": "^16.4.0",
+    "nuxt": "^4.0.0",
     "nuxt-lazy-hydrate": "^1.0.0"
   },
   "dependencies": {
