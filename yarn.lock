@@ -3804,13 +3804,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/devtools-api@npm:^6.6.3":
-  version: 6.6.3
-  resolution: "@vue/devtools-api@npm:6.6.3"
-  checksum: 10c0/e9e712f687e901b1ecfcfb958a305db9729d37408677ea8d63189176406196c7c6d4e9580216de590ccbe68037f323c163293e917cfad3834d7f3299cd5a22bb
-  languageName: node
-  linkType: hard
-
 "@vue/devtools-api@npm:^6.6.4":
   version: 6.6.4
   resolution: "@vue/devtools-api@npm:6.6.4"
@@ -11294,7 +11287,7 @@ __metadata:
     nuxt: "npm:~3.19.0"
     nuxt-jsonld: "npm:^2.0.8"
     nuxt-lazy-hydrate: "npm:^1.0.0"
-    pinia: "npm:^2.2.0"
+    pinia: "npm:^3.0.4"
     sass: "npm:^1.77.4"
     standard-version: "npm:^9.5.0"
     typescript: "npm:^5.7.2"
@@ -12340,25 +12333,6 @@ __metadata:
   version: 3.0.0
   resolution: "pify@npm:3.0.0"
   checksum: 10c0/fead19ed9d801f1b1fcd0638a1ac53eabbb0945bf615f2f8806a8b646565a04a1b0e7ef115c951d225f042cca388fdc1cd3add46d10d1ed6951c20bd2998af10
-  languageName: node
-  linkType: hard
-
-"pinia@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "pinia@npm:2.2.0"
-  dependencies:
-    "@vue/devtools-api": "npm:^6.6.3"
-    vue-demi: "npm:^0.14.8"
-  peerDependencies:
-    "@vue/composition-api": ^1.4.0
-    typescript: ">=4.4.4"
-    vue: ^2.6.14 || ^3.3.0
-  peerDependenciesMeta:
-    "@vue/composition-api":
-      optional: true
-    typescript:
-      optional: true
-  checksum: 10c0/2e0889481cd2cf1da0fba5fe197441780c9e49a077cc5a7863ba61dd51c10b79d665db514ff0c7cce3035ecad29fcc69c0de773142e8bf659ec79a954c3a8f9e
   languageName: node
   linkType: hard
 
@@ -15953,7 +15927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-demi@npm:>=0.13.0, vue-demi@npm:>=0.14.8, vue-demi@npm:^0.14.10, vue-demi@npm:^0.14.8":
+"vue-demi@npm:>=0.13.0, vue-demi@npm:>=0.14.8, vue-demi@npm:^0.14.10":
   version: 0.14.10
   resolution: "vue-demi@npm:0.14.10"
   peerDependencies:
