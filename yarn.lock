@@ -4432,9 +4432,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@visitscotland/component-library@npm:^5.57.1":
-  version: 5.57.1
-  resolution: "@visitscotland/component-library@npm:5.57.1"
+"@visitscotland/component-library@npm:^5.57.4":
+  version: 5.57.4
+  resolution: "@visitscotland/component-library@npm:5.57.4"
   dependencies:
     "@floating-ui/dom": "npm:^1.7.6"
     "@googlemaps/js-api-loader": "npm:^2.0.1"
@@ -4466,7 +4466,7 @@ __metadata:
   dependenciesMeta:
     husky:
       built: true
-  checksum: 10c0/194537f025bd532872adf6aa9014bf0b03b7fcc44167cfe51f02f93e64c6240985b15266da584ee581c9420e0fc589fe4bafa892ae2de1b1610e4f092554dfa9
+  checksum: 10c0/6439e38a9859db52143b53f192b52fc2a36468869c438b88d0c265275f5a060e0a83e3dcb6da29141cf72eb52037b096bd5879fb4bf6034e809711fc06d7cbb4
   languageName: node
   linkType: hard
 
@@ -12606,7 +12606,7 @@ __metadata:
     "@nuxtjs/dotenv": "npm:^1.4.2"
     "@nuxtjs/eslint-config-typescript": "npm:^12.1.0"
     "@pinia/nuxt": "npm:^0.11.3"
-    "@visitscotland/component-library": "npm:^5.57.1"
+    "@visitscotland/component-library": "npm:^5.57.4"
     "@vue/eslint-config-airbnb": "npm:^8.0.0"
     aws-rum-web: "npm:^2.1.0"
     axios: "npm:^1.15.2"
