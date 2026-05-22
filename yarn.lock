@@ -3614,9 +3614,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@visitscotland/component-library@npm:^5.47.0":
-  version: 5.48.0
-  resolution: "@visitscotland/component-library@npm:5.48.0"
+"@visitscotland/component-library@npm:^5.57.1":
+  version: 5.57.1
+  resolution: "@visitscotland/component-library@npm:5.57.1"
   dependencies:
     "@floating-ui/dom": "npm:^1.7.6"
     "@googlemaps/js-api-loader": "npm:^2.0.1"
@@ -3632,6 +3632,7 @@ __metadata:
     mapbox-gl: "npm:^1.11.1"
     mitt: "npm:^3.0.0"
     pinia: "npm:^3.0.4"
+    swiper: "npm:^12.1.3"
     vite: "npm:^5.1.3"
     vue: "npm:^3.3.4"
     vue-combo-blocks: "npm:^2.1.1"
@@ -3644,7 +3645,10 @@ __metadata:
   peerDependencies:
     "@popperjs/core": "*"
     postcss: "*"
-  checksum: 10c0/4a0fe4edf5d0bb02ff1664b62ed33ac85b2bf3ec33fd1a5091dd54f0f341c3bd8a91f19bdd2108b16f69c9079430f2c8d74de28ff240fec94debae0731495009
+  dependenciesMeta:
+    husky:
+      built: true
+  checksum: 10c0/194537f025bd532872adf6aa9014bf0b03b7fcc44167cfe51f02f93e64c6240985b15266da584ee581c9420e0fc589fe4bafa892ae2de1b1610e4f092554dfa9
   languageName: node
   linkType: hard
 
@@ -11281,7 +11285,7 @@ __metadata:
     "@nuxtjs/dotenv": "npm:^1.4.2"
     "@nuxtjs/eslint-config-typescript": "npm:^12.1.0"
     "@pinia/nuxt": "npm:^0.11.3"
-    "@visitscotland/component-library": "npm:^5.47.0"
+    "@visitscotland/component-library": "npm:^5.57.1"
     "@vue/eslint-config-airbnb": "npm:^8.0.0"
     aws-rum-web: "npm:^2.1.0"
     axios: "npm:^1.15.2"
@@ -14627,6 +14631,13 @@ __metadata:
   bin:
     svgo: ./bin/svgo.js
   checksum: 10c0/f61f9957b42e0c97593b49a01f3b93cb239b2e818efccb056fcc866d622704d9021c4ef8bd0287264c3e4f33da60e4af14d841b4a624b87ff8888e3b896d13d5
+  languageName: node
+  linkType: hard
+
+"swiper@npm:^12.1.3":
+  version: 12.1.4
+  resolution: "swiper@npm:12.1.4"
+  checksum: 10c0/bbde6c489cae0853f9d7774d69bcb70d5dab1b94f3c1929a81c0d1f1cb9b302bb32101f38ed0b45e77a7158411887bf1ec162afc5335c73d9beb3c4c0ee101a0
   languageName: node
   linkType: hard
 
