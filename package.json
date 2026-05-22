@@ -19,13 +19,13 @@
     "*.{js,vue,ts}": "eslint"
   },
   "devDependencies": {
-    "@nuxt/eslint-config": "^0.7.3",
+    "@nuxt/eslint-config": "^1.15.2",
     "@nuxt/scripts": "^1.0.2",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@vue/eslint-config-airbnb": "^8.0.0",
     "eslint": "^8.56.0",
-    "husky": "^9.1.4",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "nuxt": "~3.19.0",
     "nuxt-lazy-hydrate": "^1.0.0"
@@ -41,10 +41,10 @@
     "cz-conventional-changelog": "^3.3.0",
     "mitt": "^3.0.0",
     "nuxt-jsonld": "^2.0.8",
-    "pinia": "^2.2.0",
-    "sass": "^1.77.4",
+    "pinia": "^3.0.4",
+    "sass": "^1.99.0",
     "standard-version": "^9.5.0",
-    "typescript": "^5.7.2",
+    "typescript": "^6.0.3",
     "unenv": "^1.10.0",
     "youtube-vue3": "^0.1.15"
   },
