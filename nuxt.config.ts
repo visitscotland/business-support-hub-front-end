@@ -74,7 +74,7 @@ export default defineNuxtConfig({
         transpile: ['bootstrap-vue-next', '@visitscotland/component-library'],
     },
 
-    compatibilityDate: '2026-05-22',
+    compatibilityDate: '2025-01-16',
 
     plugins: [
         '~/plugins/scrollToHash.client.ts',
