@@ -40,7 +40,7 @@
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "mitt": "^3.0.0",
-    "nuxt-jsonld": "^2.0.8",
+    "nuxt-jsonld": "^2.2.1",
     "pinia": "^3.0.4",
     "sass": "^1.99.0",
     "standard-version": "^9.5.0",
