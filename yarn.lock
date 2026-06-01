@@ -12654,7 +12654,7 @@ __metadata:
     lint-staged: "npm:^17.0.5"
     mitt: "npm:^3.0.0"
     nuxt: "npm:~3.19.0"
-    nuxt-jsonld: "npm:^2.0.8"
+    nuxt-jsonld: "npm:^2.2.1"
     nuxt-lazy-hydrate: "npm:^1.0.0"
     pinia: "npm:^3.0.4"
     sass: "npm:^1.99.0"
@@ -12665,13 +12665,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"nuxt-jsonld@npm:^2.0.8":
-  version: 2.0.8
-  resolution: "nuxt-jsonld@npm:2.0.8"
+"nuxt-jsonld@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "nuxt-jsonld@npm:2.2.1"
   dependencies:
-    pathe: "npm:^1.1.0"
+    pathe: "npm:^1.1.2"
     schema-dts: "npm:^1.1.2"
-  checksum: 10c0/7f41b12ab6302a1962497e57189380f16146e96cbfb2e342240e489d500e60e2add34dc3bc2afcff176b1ec20334b7873eb6d012d5fe55a65c03ada810b1cff5
+  checksum: 10c0/6905f1fea972c23b4a4c9a69ffe2ab5f847e65abebd872cbe335133748577892a143081f26123344b5bd23da872b01b989f50ccf252ad4279c9c0920153c1b4c
   languageName: node
   linkType: hard
 
@@ -13632,7 +13632,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pathe@npm:^1.1.0, pathe@npm:^1.1.1, pathe@npm:^1.1.2":
+"pathe@npm:^1.1.1, pathe@npm:^1.1.2":
   version: 1.1.2
   resolution: "pathe@npm:1.1.2"
   checksum: 10c0/64ee0a4e587fb0f208d9777a6c56e4f9050039268faaaaecd50e959ef01bf847b7872785c36483fa5cdcdbdfdb31fef2ff222684d4fc21c330ab60395c681897
