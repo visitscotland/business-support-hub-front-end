@@ -35,8 +35,8 @@ export default defineNuxtConfig({
         },
     },
 
-    experimental: {
-        inlineSSRStyles: false,
+    future: {
+        compatibilityVersion: 4,
     },
 
     vue: {
@@ -53,12 +53,9 @@ export default defineNuxtConfig({
         },
     ],
 
-    buildModules: ['@nuxtjs/dotenv'],
-
     modules: [
         '@pinia/nuxt',
         'nuxt-jsonld',
-        'nuxt-lazy-hydrate',
         '@nuxt/scripts',
     ],
 
@@ -74,7 +71,15 @@ export default defineNuxtConfig({
         transpile: ['bootstrap-vue-next', '@visitscotland/component-library'],
     },
 
-    compatibilityDate: '2025-01-16',
+    typescript: {
+        tsConfig: {
+            compilerOptions: {
+                noUncheckedIndexedAccess: false,
+            },
+        },
+    },
+
+    compatibilityDate: '2026-06-26',
 
     plugins: [
         '~/plugins/scrollToHash.client.ts',
