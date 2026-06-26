@@ -35,6 +35,11 @@ export default defineNuxtConfig({
         },
     },
 
+    experimental: {
+        payloadExtraction: false,
+        inlineSSRStyles: false,
+    },
+
     future: {
         compatibilityVersion: 4,
     },
