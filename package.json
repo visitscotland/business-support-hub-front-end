@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^1.16.0",
-    "@nuxt/scripts": "^1.1.0",
+    "@nuxt/scripts": "^1.2.1",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@vue/eslint-config-airbnb": "^8.0.0",
     "eslint": "^10.2.0",
