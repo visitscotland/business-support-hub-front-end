@@ -21,19 +21,18 @@
   "devDependencies": {
     "@nuxt/eslint-config": "^1.16.0",
     "@nuxt/scripts": "^1.1.0",
-    "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@vue/eslint-config-airbnb": "^8.0.0",
     "eslint": "^10.2.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.7",
-    "nuxt": "~3.19.0",
-    "nuxt-lazy-hydrate": "^1.0.0"
+    "nuxt": "^4.4.8"
   },
   "dependencies": {
     "@bloomreach/spa-sdk": "^27.3.1",
     "@bloomreach/vue3-sdk": "^22.0.5",
     "@pinia/nuxt": "^0.11.3",
+    "@unhead/vue": "^2.0.0",
     "@visitscotland/component-library": "^5.57.4",
     "aws-rum-web": "^3.1.0",
     "axios": "^1.16.1",
@@ -46,19 +45,38 @@
     "standard-version": "^9.5.0",
     "typescript": "^6.0.3",
     "unenv": "^1.10.0",
+    "vue": "^3.5.38",
     "youtube-vue3": "^0.1.15"
   },
   "overrides": {
     "minimist": "latest",
     "minimatch": "^10.2.5",
     "lodash": "^4.18.0",
-    "axios": "^1.16.1"
+    "axios": "^1.16.1",
+    "vue": "^3.5.38",
+    "@vue/compiler-core": "^3.5.38",
+    "@vue/compiler-dom": "^3.5.38",
+    "@vue/compiler-ssr": "^3.5.38",
+    "@vue/reactivity": "^3.5.38",
+    "@vue/runtime-core": "^3.5.38",
+    "@vue/runtime-dom": "^3.5.38",
+    "@vue/server-renderer": "^3.5.38",
+    "@vue/shared": "^3.5.38"
   },
   "resolutions": {
     "minimist": "latest",
     "minimatch": "^10.2.5",
     "lodash": "^4.18.0",
-    "axios": "^1.16.1"
+    "axios": "^1.16.1",
+    "vue": "^3.5.38",
+    "@vue/compiler-core": "^3.5.38",
+    "@vue/compiler-dom": "^3.5.38",
+    "@vue/compiler-ssr": "^3.5.38",
+    "@vue/reactivity": "^3.5.38",
+    "@vue/runtime-core": "^3.5.38",
+    "@vue/runtime-dom": "^3.5.38",
+    "@vue/server-renderer": "^3.5.38",
+    "@vue/shared": "^3.5.38"
   },
   "config": {
     "commitizen": {

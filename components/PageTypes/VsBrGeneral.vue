@@ -44,23 +44,15 @@
         :modules="pageItems"
     />
 
-    <NuxtLazyHydrate
-        :when-visible="{ rootMargin: '50px' }"
-    >
-        <VsBrRelatedLinks
-            v-if="otyml"
-            :module="otyml"
-        />
-    </NuxtLazyHydrate>
+    <VsBrRelatedLinks
+        v-if="otyml"
+        :module="otyml"
+    />
 
-    <NuxtLazyHydrate
-        :when-visible="{ rootMargin: '50px' }"
-    >
-        <VsBrNewsletterSignpost
-            v-if="!documentData.hideNewsletter && configStore.newsletterSignpost"
-            :data="configStore.newsletterSignpost"
-        />
-    </NuxtLazyHydrate>
+    <VsBrNewsletterSignpost
+        v-if="!documentData.hideNewsletter && configStore.newsletterSignpost"
+        :data="configStore.newsletterSignpost"
+    />
 </template>
 
 <script lang="ts" setup>
