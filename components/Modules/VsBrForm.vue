@@ -22,6 +22,7 @@
                     :is-prod="module.config.production ? module.config.production : false"
                     :recaptcha-textarea-label="configStore.getLabel('forms', 'form.recaptcha-textarea-label')"
                     :submission-type="module.config.type"
+                    :consent-list="module.config.consentList"
                 >
                     <template #no-js>
                         {{ noJsMessage }}
