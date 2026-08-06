@@ -52,7 +52,7 @@
                 <VsButton
                     :variant="view === 'results' ? 'secondary' : 'primary'"
                     :onclick="toggleView"
-                    :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
+                    :disabled="(matchingProviders.length === 0 || matchingProviders.length > 10) || selectedFeatureValues.length === 0"
                 >
                     <span v-if="view === 'features'">
                         {{ labels['viewToggle-results'] }}
@@ -61,6 +61,13 @@
                         {{ labels['viewToggle-features'] }}
                     </span>
                 </VsButton>
+                <!-- {{  matchingProviders.length }} -->
+                <p 
+                    v-if="matchingProviders.length > 10"
+                    class="fs-200"
+                >
+                    Select a combination of features resulting in fewer than 10 results. 
+                </p>
             </div>
         </VsRow>
         <VsRow v-if="view === 'results'">
