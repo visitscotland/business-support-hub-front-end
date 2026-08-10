@@ -8,6 +8,10 @@
                 <div v-else-if="matchingProviders.length === 0">
                     {{ labels['alert-no-matches'] }}
                 </div>
+                <div v-else-if="selectedFeatureValues.length > 0 && matchingProviders.length > 10">
+                    <!-- {{ labels['alert-excess-matches'] }} -->
+                    Select more features until your results are 10 or less
+                </div>
                 <div v-else>
                     {{ matchingProviders.length }} {{ labels['alert-result-count'] }}
                 </div>
@@ -61,13 +65,6 @@
                         {{ labels['viewToggle-features'] }}
                     </span>
                 </VsButton>
-                <!-- {{  matchingProviders.length }} -->
-                <p 
-                    v-if="matchingProviders.length > 10"
-                    class="fs-200"
-                >
-                    Select a combination of features resulting in fewer than 10 results. 
-                </p>
             </div>
         </VsRow>
         <VsRow v-if="view === 'results'">
