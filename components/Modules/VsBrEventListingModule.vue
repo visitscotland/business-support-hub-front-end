@@ -9,6 +9,7 @@
             v-for="(eventList, index) in module.eventsListings"
             :key="index"
             :title="eventList.title"
+            :active="index === 0"
         >
             <VsContainer class="mt-300">
                 <VsRow>
@@ -58,7 +59,7 @@ import VsBrRichText from './VsBrRichText.vue';
 import VsBrEventListing from './VsBrEventListing.vue';
 
 const props = defineProps<{
-    module: Object,
+    module: object,
 }>();
 
 const configStore = useConfigStore();
