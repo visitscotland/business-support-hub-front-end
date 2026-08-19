@@ -4,12 +4,12 @@
         :id="moduleId"
         no-container
         data-event-listing="True"
+        v-model:index="tabIndex"
     >
         <VsTabItem
             v-for="(eventList, index) in module.eventsListings"
             :key="index"
             :title="eventList.title"
-            :active="index === 0"
         >
             <VsContainer class="mt-300">
                 <VsRow>
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 /* eslint import/no-import-module-exports: 0 */
 
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import {
     VsContainer,
     VsHeading,
@@ -66,6 +66,8 @@ const configStore = useConfigStore();
 const module: any = props.module;
 
 const moduleId = computed(() => module.anchor || 'events-listing-module');
+
+const tabIndex = ref(0);
 </script>
 
 <style lang="scss">
