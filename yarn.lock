@@ -48,9 +48,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-rum/web-core@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@aws-rum/web-core@npm:3.1.0"
+"@aws-rum/web-core@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@aws-rum/web-core@npm:3.2.0"
   dependencies:
     "@aws-crypto/sha256-js": "npm:^5.2.0"
     "@rrweb/record": "npm:2.0.0-alpha.20"
@@ -63,16 +63,16 @@ __metadata:
     shimmer: "npm:^1.2.1"
     uuid: "npm:^9.0.0"
     web-vitals: "npm:^4.0.0"
-  checksum: 10c0/663c6ff234c584a70846fb72bfe54a33e961d55bf439f10ea970fb30c39259e035fefdb6c842a3daa1f0ee0be5031af04162ac547bc3b8cab7707ac9d0c64982
+  checksum: 10c0/69640bf3866c679326da73e23e2b523544cbceb84d3ca1e0e2886a5f86d9914bbd75d02c79d33390a8d32e58461a6a2694a976faa1e40ee39e3ebd6fd84e0671
   languageName: node
   linkType: hard
 
-"@aws-rum/web-slim@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@aws-rum/web-slim@npm:3.1.0"
+"@aws-rum/web-slim@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@aws-rum/web-slim@npm:3.2.0"
   dependencies:
-    "@aws-rum/web-core": "npm:3.1.0"
-  checksum: 10c0/2a24023d7738cde3a3d09ef2f99c7010e3d287170ab9421f79414f09aa4ad576092426a137a9f1a490d2b843610ec5e87f7b851f1754cecb48911d35882a94af
+    "@aws-rum/web-core": "npm:3.2.0"
+  checksum: 10c0/1707c89ed486beb7e3f25e688c30b6c3aa33ad00f97979b3e2ddd5a01e601bed2cc049e661cd3a57f7fd32a0cda3d004af40ebc9719cbc535c7ea104fd5fdfce
   languageName: node
   linkType: hard
 
@@ -5284,13 +5284,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-rum-web@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "aws-rum-web@npm:3.1.0"
+"aws-rum-web@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "aws-rum-web@npm:3.2.0"
   dependencies:
-    "@aws-rum/web-core": "npm:3.1.0"
-    "@aws-rum/web-slim": "npm:3.1.0"
-  checksum: 10c0/22276602d789b901d5687e52479bc750366d908cfad03c4824011c8726aee9083db3436596e1db42765fdac9bf7feb8664653e7100744d4068771e116263b10a
+    "@aws-rum/web-core": "npm:3.2.0"
+    "@aws-rum/web-slim": "npm:3.2.0"
+  checksum: 10c0/f8f28090d91c19e97f8dc7255e6fdbc2deadd7e3d6aa83ffbdb2b9ad66a174f363b8012251c47c6644105db74828f5491d5661f41b0f1a731d2704e37f1ed5db
   languageName: node
   linkType: hard
 
@@ -12109,7 +12109,7 @@ __metadata:
     "@unhead/vue": "npm:^3.1.6"
     "@visitscotland/component-library": "npm:5.76.1"
     "@vue/eslint-config-airbnb": "npm:^8.0.0"
-    aws-rum-web: "npm:^3.1.0"
+    aws-rum-web: "npm:^3.2.0"
     axios: "npm:^1.18.1"
     commitizen: "npm:^4.3.2"
     cz-conventional-changelog: "npm:^3.3.0"
