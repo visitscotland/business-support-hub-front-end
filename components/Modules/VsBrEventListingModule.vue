@@ -58,13 +58,14 @@ import VsBrRichText from './VsBrRichText.vue';
 import VsBrEventListing from './VsBrEventListing.vue';
 
 const props = defineProps<{
-    module: Object,
+    module: object,
 }>();
 
 const configStore = useConfigStore();
 const module: any = props.module;
 
 const moduleId = computed(() => module.anchor || 'events-listing-module');
+
 </script>
 
 <style lang="scss">
