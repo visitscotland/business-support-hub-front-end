@@ -81,7 +81,7 @@
                     >
                         <VsHeading level="3">
                             <VsLink
-                                href="{{ provider.url }}"
+                                :href="provider.url"
                                 type="external"
                                 icon-size="sm"
                             >
@@ -197,5 +197,6 @@ function toggleView() {
         justify-content: end;
         top: 100px;
         display: flex;
+        z-index: -1;
     }
 </style>
