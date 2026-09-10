@@ -25,6 +25,13 @@
                 <VsBrImageWithCaption :image="section.image.cmsImage" />
             </template>
         </template>
+
+        <template
+            #vs-article-sidebar-quote
+            v-if="section.quote"
+        >
+            <VsBrQuote :quote="section.quote" />
+        </template>
     </VsArticleSidebar>
 </template>
 
@@ -33,6 +40,7 @@ import { VsArticleSidebar } from '@visitscotland/component-library/components';
 
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
+import VsBrQuote from '~/components/Modules/VsBrQuote.vue';
 
 const configStore = useConfigStore();
 
