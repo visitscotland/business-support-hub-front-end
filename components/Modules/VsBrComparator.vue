@@ -8,6 +8,10 @@
                 <div v-else-if="matchingProviders.length === 0">
                     {{ labels['alert-no-matches'] }}
                 </div>
+                <div v-else-if="selectedFeatureValues.length > 0 && matchingProviders.length > 10">
+                    <!-- {{ labels['alert-excess-matches'] }} -->
+                    Select more features until your results are 10 or less
+                </div>
                 <div v-else>
                     {{ matchingProviders.length }} {{ labels['alert-result-count'] }}
                 </div>
@@ -52,7 +56,7 @@
                 <VsButton
                     :variant="view === 'results' ? 'secondary' : 'primary'"
                     :onclick="toggleView"
-                    :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
+                    :disabled="(matchingProviders.length === 0 || matchingProviders.length > 10) || selectedFeatureValues.length === 0"
                 >
                     <span v-if="view === 'features'">
                         {{ labels['viewToggle-results'] }}
