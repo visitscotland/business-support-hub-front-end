@@ -42,7 +42,6 @@
                                 :value="feature.id"
                                 :label="checkboxLabel(feature.name, feature.description)"
                                 :field-name="feature.id"
-                                @status-update="updateStore"
                             />
                         </div>
                     </fieldset>
@@ -70,7 +69,11 @@
                 lg="7"
                 class="col-xxl-6"
             >
-                <VsHeading level="2" class="mb-200">
+                <VsHeading
+                    class="mb-200"
+                    heading-style="heading-m"
+                    level="2"
+                >
                     {{ labels['results-heading'] }}
                 </VsHeading>
                 <div class="d-flex flex-column gap-200">
@@ -79,9 +82,9 @@
                         v-for="(provider, index) in matchingProviders"
                         :key="provider.name + index"
                     >
-                        <VsHeading level="3">
+                        <VsHeading heading-style="heading-xs" level="3">
                             <VsLink
-                                href="{{ provider.url }}"
+                                :href="provider.url"
                                 type="external"
                                 icon-size="sm"
                             >
@@ -197,5 +200,6 @@ function toggleView() {
         justify-content: end;
         top: 100px;
         display: flex;
+        z-index: -1;
     }
 </style>
