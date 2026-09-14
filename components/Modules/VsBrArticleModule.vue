@@ -22,9 +22,10 @@
                 v-if="module.image || module.video"
                 #vs-article-img
             >
-                <VsBrImageWithCaption
+                <VsBrMedia
                     v-if="module.image"
                     :image="module.image.cmsImage"
+                    :image-description="module.image.description"
                 />
 
                 <VsVideo
@@ -75,8 +76,6 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable import/no-import-module-exports */
-
 import {
     VsArticle,
     VsArticleSection,
@@ -87,7 +86,7 @@ import {
 import formatLink from '~/composables/formatLink.ts';
 
 import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
-import VsBrImageWithCaption from '~/components/Modules/VsBrImageWithCaption.vue';
+import VsBrMedia from '~/components/Modules/VsBrMedia.vue';
 import VsBrArticleSidebar from '~/components/Modules/VsBrArticleSidebar.vue';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import useConfigStore from '~/stores/configStore.ts';
@@ -95,7 +94,7 @@ import useConfigStore from '~/stores/configStore.ts';
 const configStore = useConfigStore();
 
 const props = defineProps<{
-    module: Object,
+    module: object,
 }>();
 const module: any = props.module;
 
