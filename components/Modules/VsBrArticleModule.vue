@@ -1,8 +1,11 @@
 <template>
-    <VsModuleWrapper
-        business-support
-        :class="module.nested ? 'py-0 mt-n500' : 'py-0'"
-        :theme="module.themeValue"
+    <section
+        :class="[
+            'vs-module-wrapper',
+            `vs-module-wrapper--${module.themeValue || 'light'}`,
+            'text-start',
+            module.nested ? 'py-0 mt-n500' : 'py-0',
+        ]"
     >
         <VsArticle
             :title="module.title"
@@ -72,14 +75,13 @@
                 />
             </VsArticleSection>
         </VsArticle>
-    </VsModuleWrapper>
+    </section>
 </template>
 
 <script lang="ts" setup>
 import {
     VsArticle,
     VsArticleSection,
-    VsModuleWrapper,
     VsVideo,
 } from '@visitscotland/component-library/components';
 
