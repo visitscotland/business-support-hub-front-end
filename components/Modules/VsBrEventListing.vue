@@ -71,7 +71,7 @@
             </div>
 
             <template v-if="data.results && data.results.length > 0">
-                <VsEventCard
+                <VsBrEventCard
                     v-for="(result, index) in data.results"
                     :cta-icon="setIcon(result.cta.type)"
                     :cta-label="result.cta.label"
@@ -96,7 +96,7 @@
                             <VsRow>
                                 <VsCol
                                     cols="12"
-                                    md="4"
+                                    :md="filterId === 'travel' ? 6 : 12"
                                 >
                                     <li v-if="result.times">
                                         <strong>{{ configStore.getLabel('events-listings-module', 'time') }}:</strong> {{ result.times }}
@@ -115,7 +115,7 @@
                                 <VsCol
                                     v-if="filterId === 'travel'"
                                     cols="12"
-                                    md="4"
+                                    md="6"
                                 >
                                     <li v-if="result.registrationDeadline">
                                         <strong>{{ configStore.getLabel('events-listings-module', 'registration') }}: </strong> {{ result.registrationDeadline }}
@@ -130,7 +130,7 @@
                             </VsRow>
                         </VsList>
                     </template>
-                </VsEventCard>
+                </VsBrEventCard>
             </template>
 
             <template v-else>
@@ -165,7 +165,6 @@ import {
     VsCol,
     VsDropdown,
     VsDropdownItem,
-    VsEventCard,
     VsList,
     VsPagination,
     VsRow,
@@ -174,6 +173,7 @@ import {
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrFilter from './VsBrFilter.vue';
+import VsBrEventCard from './VsBrEventCard.vue';
 
 const props = defineProps<{
     eventData: any,
@@ -194,6 +194,7 @@ const filter = ref();
 const { data }: { data: any } = await useFetch(props.eventData.baseEndPoint, {
     query: query.value,
 });
+
 const totalResults = computed(() => data.value.total);
 const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize));
 
@@ -216,6 +217,7 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
     if (queryIndex > -1) {
         query.value[key].splice(queryIndex, 1);
     } else {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete query.value[key];
     }
 
@@ -297,6 +299,7 @@ const clearAllFilters = () => {
     // Delete all parameters from the query.
     Object.keys(query.value).forEach((key) => {
         if (key !== 'sort') {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete query.value[key];
         } else {
             query.value[key] = 'date';
