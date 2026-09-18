@@ -1,25 +1,21 @@
 <template>
-    <VsModuleWrapper
-        :anchor-id="anchor || null"
-        business-support
-        :class="nested ? 'py-0 mt-n500' : 'py-0'"
-        :heading-level="nested ? 3 : 2"
-        :heading-style="nested ? 'heading-m' : 'heading-xl'"
-        :theme="themeValue"
+    <section
+        :class="[
+            'vs-module-wrapper',
+            `vs-module-wrapper--${themeValue || 'light'}`,
+            'text-start',
+            nested ? 'py-0 mt-n500' : 'py-0',
+        ]"
     >
-        <template
+        <VsBrSectionHeader
             v-if="title"
-            #vs-module-wrapper-heading
-        >
-            {{ title }}
-        </template>
-
-        <template
-            v-if="introduction.value && layout !== 'horizontal-list'"
-            #vs-module-wrapper-intro
-        >
-            <VsBrRichText :input-content="introduction.value" />
-        </template>
+            :anchor-id="anchor || undefined"
+            business-support
+            :heading="title"
+            :heading-level="nested ? 3 : 2"
+            :heading-style="nested ? 'heading-m' : 'heading-xl'"
+            :lede="layout !== 'horizontal-list' ? introduction.value : undefined"
+        />
 
         <VsStyledList
             :source="layout === 'horizontal-list' ? introduction.value : null"
@@ -49,18 +45,17 @@
                 <VsBrRichText :input-content="introduction.value" />
             </template>
         </VsStyledList>
-    </VsModuleWrapper>
+    </section>
 </template>
 
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import type { Page } from '@bloomreach/spa-sdk';
 import type { DownloadCardLink, LooseObject } from '~/types/types';
-import {
-    VsModuleWrapper, VsStyledList, VsStyledListItem,
-} from '@visitscotland/component-library/components';
+import { VsStyledList, VsStyledListItem } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
+import VsBrSectionHeader from '~/components/Modules/VsBrSectionHeader.vue';
 
 const props = defineProps<{
     module: LooseObject,

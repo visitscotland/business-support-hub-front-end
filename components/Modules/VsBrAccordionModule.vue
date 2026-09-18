@@ -1,22 +1,20 @@
 <template>
-    <VsModuleWrapper
-        :anchor-id="anchor || null"
-        business-support
-        :class="nested ? 'pt-0' : null"
-        :heading-level="nested ? 3 : 2"
-        :heading-style="nested ? 'heading-m' : 'heading-xl'"
-        :theme="themeValue"
+    <section
+        :class="[
+            'vs-module-wrapper',
+            `vs-module-wrapper--${themeValue || 'light'}`,
+            'text-start',
+            nested ? 'pt-0' : null,
+        ]"
     >
-        <template #vs-module-wrapper-heading>
-            {{ title }}
-        </template>
-
-        <template
-            #vs-module-wrapper-intro
-            v-if="introduction.value"
-        >
-            <VsBrRichText :input-content="introduction.value" />
-        </template>
+        <VsBrSectionHeader
+            :anchor-id="anchor || undefined"
+            business-support
+            :heading="title"
+            :heading-level="nested ? 3 : 2"
+            :heading-style="nested ? 'heading-m' : 'heading-xl'"
+            :lede="introduction.value"
+        />
 
         <VsContainer>
             <VsCol class="col-md-8">
@@ -45,7 +43,7 @@
                 </VsAccordion>
             </VsCol>
         </VsContainer>
-    </VsModuleWrapper>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -54,12 +52,12 @@ import {
     VsAccordion,
     VsAccordionItem,
     VsContainer,
-    VsModuleWrapper,
     VsCol,
     VsBody,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 import VsBrDownloadCard from '~/components/Modules/VsBrDownloadCard.vue';
+import VsBrSectionHeader from '~/components/Modules/VsBrSectionHeader.vue';
 
 const props = defineProps<{
     idPrefix: string,
