@@ -46,7 +46,7 @@
     "standard-version": "^9.5.0",
     "typescript": "^6.0.3",
     "unenv": "^1.10.0",
-    "vue": "^3.5.39",
+    "vue": "^3.5.42",
     "youtube-vue3": "^0.1.15"
   },
   "overrides": {
@@ -54,7 +54,7 @@
     "minimatch": "^10.2.5",
     "lodash": "^4.18.0",
     "axios": "^1.20.0",
-    "vue": "^3.5.39",
+    "vue": "^3.5.42",
     "@vue/compiler-core": "^3.5.38",
     "@vue/compiler-dom": "^3.5.38",
     "@vue/compiler-ssr": "^3.5.38",
@@ -69,7 +69,7 @@
     "minimatch": "^10.2.5",
     "lodash": "^4.18.0",
     "axios": "^1.20.0",
-    "vue": "^3.5.39",
+    "vue": "^3.5.42",
     "@vue/compiler-core": "^3.5.38",
     "@vue/compiler-dom": "^3.5.38",
     "@vue/compiler-ssr": "^3.5.38",
