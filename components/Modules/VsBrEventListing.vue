@@ -76,6 +76,7 @@
                     :cta-icon="setIcon(result.cta.type)"
                     :cta-label="result.cta.label"
                     :cta-href="result.cta.link"
+                    :is-featured="true"
                     :key="result.title + index"
                     data-event-listing="True"
                 >

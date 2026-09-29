@@ -3,12 +3,19 @@
         class="vs-event-card mt-100"
         data-test="vs-event-card"
         card-style="elevated"
-        :fill-color="highlight ? '#E5E5F0' : '#fff'"
+        :fill-color="props.isFeatured ? '#E5E5F0' : '#fff'"
     >
         <template #vs-card-header>
             <div
                 class="vs-event-card__header"
             >
+                <VsBadge
+                    v-if="props.isFeatured"
+                    class="vs-event-card__featured-badge"
+                    variant="highlight"
+                >
+                    Featured
+                </VsBadge>
                 <VsHeading
                     class="vs-event-card__heading"
                     heading-style="heading-xxs"
@@ -22,8 +29,8 @@
                     v-if="$slots['event-card-date']"
                     icon="fa-regular fa-calendar-range"
                     class="mb-100"
-                    :variant="highlight ? 'tertiary' : 'secondary'"
-                    :icon-variant="highlight ? 'tertiary' : 'secondary'"
+                    :variant="props.isFeatured ? 'tertiary' : 'secondary'"
+                    :icon-variant="props.isFeatured ? 'tertiary' : 'secondary'"
                 >
                     <slot name="event-card-date" />
                 </VsDetail>
@@ -62,6 +69,7 @@
 
 <script setup lang="ts">
 import {
+    VsBadge,
     VsButton,
     VsCard,
     VsDetail,
@@ -71,11 +79,9 @@ import {
 const props = defineProps<{
     ctaHref: string,
     ctaLabel: string,
-    ctaIcon: string,
+    ctaIcon: string | null,
     isFeatured: boolean,
 }>();
-
-const highlight = false;
 
 </script>
 
@@ -88,6 +94,11 @@ const highlight = false;
     //     width: 100%;
     //     border-bottom: 1px solid #E9E9E9;
     // }
+
+    &__featured-badge {
+        width: max-content;
+        border-radius: 0.25rem;
+    }
 
     &__date {
         margin: auto 0;
