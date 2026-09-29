@@ -37,16 +37,16 @@
                     </VsButton>
 
                     <VsButton
-                        v-for="(filter, index) in selectedFilters"
+                        v-for="(selectedFilter, index) in selectedFilters"
                         :key="index"
                         :rounded="false"
                         variant="secondary"
                         size="md"
                         icon="fa-regular fa-xmark"
                         icon-position="right"
-                        @click="removeSelectedFilter(filter.fieldId, filter.key, filter.value)"
+                        @click="removeSelectedFilter(selectedFilter.fieldId, selectedFilter.key, selectedFilter.value)"
                     >
-                        {{ filter.label }}
+                        {{ selectedFilter.label }}
                     </VsButton>
                 </div>
                 <div class="col2 event__results">
@@ -70,76 +70,65 @@
                 </div>
             </div>
 
-            <template v-if="data.results && data.results.length > 0">
-                <VsEventCard
-                    v-for="(result, index) in data.results"
-                    :cta-icon="setIcon(result.cta.type)"
-                    :cta-label="result.cta.label"
-                    :cta-href="result.cta.link"
-                    :key="result.title + index"
-                    data-event-listing="True"
-                >
-                    <template #event-card-header>
-                        {{ result.title }}
-                    </template>
+            <div
+                aria-live="polite"
+                class="mt-150"
+            >
+                <template v-if="data.results && data.results.length > 0">
+                    <!-- TODO: Add `is-featured` prop if set in the CMS. -->
+                    <VsBrEventCard
+                        v-for="(result, index) in data.results"
+                        :key="`${result.title}-${index}`"
+                        :cta-href="result.cta.link"
+                        :cta-icon="setIcon(result.cta.type)"
+                        :cta-label="result.cta.label"
+                        data-event-listing="True"
+                    >
+                        <template #event-card-header>
+                            {{ result.title }}
+                        </template>
 
-                    <template #event-card-date>
-                        {{ result.dates }}
-                    </template>
+                        <template #event-card-date>
+                            {{ result.dates }}
+                        </template>
 
-                    <template #event-card-content>
-                        <VsBody>
-                            <VsBrRichText :input-content="result.summary" />
-                        </VsBody>
+                        <template #event-card-content>
+                            <VsBody>
+                                <VsBrRichText :input-content="result.summary" />
+                            </VsBody>
 
-                        <VsList unstyled>
-                            <VsRow>
-                                <VsCol
-                                    cols="12"
-                                    md="4"
-                                >
-                                    <li v-if="result.times">
-                                        <strong>{{ configStore.getLabel('events-listings-module', 'time') }}:</strong> {{ result.times }}
-                                    </li>
-                                    <li v-if="result.price">
-                                        <strong>{{ configStore.getLabel('events-listings-module', 'price') }}:</strong> {{ result.price }}
-                                    </li>
-                                    <li v-if="result.location">
-                                        <strong>{{ configStore.getLabel('events-listings-module', 'location') }}:</strong> {{ result.location }}
-                                    </li>
-                                    <li v-if="result.organiser && filterId !== 'travel'">
-                                        <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organiser }}
-                                    </li>
-                                </VsCol>
+                            <VsList unstyled>
+                                <li v-if="result.times">
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'time') }}:</strong> {{ result.times }}
+                                </li>
+                                <li v-if="result.price">
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'price') }}:</strong> {{ result.price }}
+                                </li>
+                                <li v-if="result.location">
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'location') }}:</strong> {{ result.location }}
+                                </li>
+                                <li v-if="result.organiser">
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organiser }}
+                                </li>
+                                <li v-if="result.registrationDeadline">
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'registration') }}: </strong> {{ result.registrationDeadline }}
+                                </li>
+                                <li v-if="result.contact">
+                                    <strong>{{ configStore.getLabel('events-listings-module', 'contact') }}:</strong> {{ result.contact }}
+                                </li>
+                            </VsList>
+                        </template>
+                    </VsBrEventCard>
+                </template>
 
-                                <VsCol
-                                    v-if="filterId === 'travel'"
-                                    cols="12"
-                                    md="4"
-                                >
-                                    <li v-if="result.registrationDeadline">
-                                        <strong>{{ configStore.getLabel('events-listings-module', 'registration') }}: </strong> {{ result.registrationDeadline }}
-                                    </li>
-                                    <li v-if="result.organiser">
-                                        <strong>{{ configStore.getLabel('events-listings-module', 'organizer') }}:</strong> {{ result.organiser }}
-                                    </li>
-                                    <li v-if="result.contact">
-                                        <strong>{{ configStore.getLabel('events-listings-module', 'contact') }}:</strong> {{ result.contact }}
-                                    </li>
-                                </VsCol>
-                            </VsRow>
-                        </VsList>
-                    </template>
-                </VsEventCard>
-            </template>
-
-            <template v-else>
-                <VsEventCard>
-                    <template #event-card-content>
-                        {{ configStore.getLabel('essentials.pagination', 'no-results-message') }}
-                    </template>
-                </VsEventCard>
-            </template>
+                <template v-else>
+                    <VsBrEventCard>
+                        <template #event-card-content>
+                            {{ configStore.getLabel('essentials.pagination', 'no-results-message') }}
+                        </template>
+                    </VsBrEventCard>
+                </template>
+            </div>
 
             <VsPagination
                 v-if="numberOfPages > 1"
@@ -158,14 +147,12 @@
 
 <script setup lang="ts">
 /* eslint no-undef: 0 */
-
 import { ref, computed } from 'vue';
 import {
     VsButton,
     VsCol,
     VsDropdown,
     VsDropdownItem,
-    VsEventCard,
     VsList,
     VsPagination,
     VsRow,
@@ -174,11 +161,19 @@ import {
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrFilter from './VsBrFilter.vue';
+import VsBrEventCard from '../ProductComponents/VsBrEventCard.vue';
 
 const props = defineProps<{
     eventData: any,
     moduleId: string,
 }>();
+
+type SelectedFilter = {
+    fieldId: string;
+    key: string;
+    label: string;
+    value: boolean;
+};
 
 const configStore = useConfigStore();
 const query = ref<any>({
@@ -186,7 +181,7 @@ const query = ref<any>({
 });
 const currentPage = ref<number>(1);
 const selectedSortBy = ref(props.eventData.sortBy[0].label);
-const selectedFilters = ref<any>([]);
+const selectedFilters = ref<SelectedFilter[]>([]);
 const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
 
@@ -216,6 +211,7 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
     if (queryIndex > -1) {
         query.value[key].splice(queryIndex, 1);
     } else {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete query.value[key];
     }
 
@@ -297,6 +293,7 @@ const clearAllFilters = () => {
     // Delete all parameters from the query.
     Object.keys(query.value).forEach((key) => {
         if (key !== 'sort') {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete query.value[key];
         } else {
             query.value[key] = 'date';
@@ -320,7 +317,7 @@ const setIcon = (linkType: string) => {
         return 'internal-link';
     }
 
-    return null;
+    return undefined;
 };
 </script>
 
