@@ -16,6 +16,7 @@
                 </VsBadge>
 
                 <VsHeading
+                    v-if="hasHeaderSlot()"
                     class="vs-br-event-card__heading"
                     data-test="vs-event-card__heading"
                     heading-style="heading-xxs"
@@ -117,6 +118,7 @@ const cardProps = computed(() =>
 // Check if the named slots have content.
 const slots = useSlots();
 
+const hasHeaderSlot = () => !!slots['event-card-header']?.().length;
 const hasCardDateSlot = () => !!slots['event-card-date']?.().length;
 const hasCardContentSlot = () => !!slots['event-card-content']?.().length;
 </script>

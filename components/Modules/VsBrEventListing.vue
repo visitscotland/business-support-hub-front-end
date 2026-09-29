@@ -88,7 +88,10 @@
                             {{ result.title }}
                         </template>
 
-                        <template #event-card-date>
+                        <template
+                            v-if="result.dates"
+                            #event-card-date
+                        >
                             {{ result.dates }}
                         </template>
 
