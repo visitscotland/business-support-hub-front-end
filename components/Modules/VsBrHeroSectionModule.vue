@@ -7,18 +7,25 @@
         :img-caption="showHeroImage ? imageData.description : null"
         :img-credit="showHeroImage ? imageData.credit : null"
         :split="showHeroImage"
+    />
+
+    <VsContainer
+        v-if="tableOfContentsLinks"
+        class="mt-200"
     >
-        <template
-            v-if="tableOfContentsLinks"
-            #hero-section-article-details
-        >
-            <VsBrLinkListModule
-                :heading="configStore.getLabel('table-contents', 'title')"
-                :links="tableOfContentsLinks"
-                toc
-            />
-        </template>
-    </VsHeroSection>
+        <VsRow class="justify-content-end">
+            <VsCol
+                cols="6"
+                lg="4"
+            >
+                <VsBrLinkListModule
+                    :heading="configStore.getLabel('table-contents', 'title')"
+                    :links="tableOfContentsLinks"
+                    toc
+                />
+            </VsCol>
+        </VsRow>
+    </VsContainer>
 </template>
 
 <script setup lang="ts">
@@ -29,7 +36,9 @@ import {
 } from 'vue';
 import type { Page } from '@bloomreach/spa-sdk';
 import type { LooseObject, TableOfContentLink } from '~/types/types';
-import { VsHeroSection } from '@visitscotland/component-library/components';
+import {
+    VsCol, VsContainer, VsHeroSection, VsRow,
+} from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrLinkListModule from '~/components/Modules/VsBrLinkListModule.vue';
 
