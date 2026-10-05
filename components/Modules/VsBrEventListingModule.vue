@@ -26,6 +26,7 @@
                 <VsBrEventListing
                     :event-data="eventList"
                     :module-id="moduleId"
+                    :tab-index="index"
                 />
             </VsContainer>
         </VsTabItem>
@@ -38,6 +39,7 @@
             </VsWarning>
         </VsRow>
     </VsContainer>
+    
 </template>
 
 <script setup lang="ts">
