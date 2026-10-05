@@ -39,7 +39,6 @@
             </VsWarning>
         </VsRow>
     </VsContainer>
-    
 </template>
 
 <script setup lang="ts">
