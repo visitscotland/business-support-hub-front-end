@@ -30,17 +30,21 @@
         />
 
         <template v-else-if="documentData.theme === 'simple'">
-            <VsRow>
-                <VsCol
-                    cols="10"
-                    lg="8"
-                >
-                    <VsBrBreadcrumb
-                        :breadcrumb="breadcrumb"
-                        :is-home="false"
-                    />
-                </VsCol>
-            </VsRow>
+            <VsContainer
+                class="mt-075 mt-lg-200"
+            >
+                <VsRow>
+                    <VsCol
+                        cols="10"
+                        lg="8"
+                    >
+                        <VsBrBreadcrumb
+                            :breadcrumb="breadcrumb"
+                            :is-home="false"
+                        />
+                    </VsCol>
+                </VsRow>
+            </VsContainer>
 
             <VsBrHeroSectionModule
                 :content="documentData"
