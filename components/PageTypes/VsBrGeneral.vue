@@ -22,10 +22,16 @@
     />
 
     <template v-if="!isHomePage">
-        <VsBrHeroSectionModule
-            v-if="documentData.theme !== 'top-level'"
+        <VsBrPageIntro
+            v-if="documentData.theme === 'standard'"
             :content="documentData"
-            :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
+            :light-background="true"
+            :table-of-contents-links="tableOfContentsLinks"
+        />
+
+        <VsBrHeroSectionModule
+            v-else-if="documentData.theme === 'simple'"
+            :content="documentData"
         />
 
         <div
@@ -62,6 +68,7 @@ import type { Component, Page } from '@bloomreach/spa-sdk';
 import type { TableOfContentLink } from '~/types/types';
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrHeroSectionModule from '~/components/Modules/VsBrHeroSectionModule.vue';
+import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
 import VsBrModuleBuilder from '~/components/Modules/VsBrModuleBuilder.vue';
 import VsBrRelatedLinks from '~/components/Modules/VsBrRelatedLinks.vue';
 import VsBrArticleModule from '~/components/Modules/VsBrArticleModule.vue';
