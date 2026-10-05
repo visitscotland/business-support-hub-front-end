@@ -29,14 +29,27 @@
             :table-of-contents-links="tableOfContentsLinks"
         />
 
-        <VsBrHeroSectionModule
-            v-else-if="documentData.theme === 'simple'"
-            :content="documentData"
-        />
+        <template v-else-if="documentData.theme === 'simple'">
+            <VsRow>
+                <VsCol
+                    cols="10"
+                    lg="8"
+                >
+                    <VsBrBreadcrumb
+                        :breadcrumb="breadcrumb"
+                        :is-home="false"
+                    />
+                </VsCol>
+            </VsRow>
+
+            <VsBrHeroSectionModule
+                :content="documentData"
+            />
+        </template>
 
         <div
             class="my-n300"
-            v-if="documentData.theme === 'top-level'"
+            v-else-if="documentData.theme === 'top-level'"
         >
             <VsBrArticleModule
                 :module="topLevelArticleModule"
