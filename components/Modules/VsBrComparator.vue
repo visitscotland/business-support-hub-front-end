@@ -111,6 +111,7 @@
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                     :icon="view === 'results' ? 'fa-regular fa-arrow-left' : ''"
+                    v-if="(view === 'results' && matchingProviders.length > 3) || (view === 'features')"
                 >
                     <span v-if="view === 'features'">
                         {{ labels['viewToggle-results'] }}
