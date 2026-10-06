@@ -200,6 +200,6 @@ function toggleView() {
         justify-content: end;
         top: 100px;
         display: flex;
-        z-index: -1;
+        z-index: 1;
     }
 </style>
