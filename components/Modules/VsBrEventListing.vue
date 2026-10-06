@@ -29,6 +29,15 @@
                         :id="`modal-filter-target-${tabIndex}`"
                         class="event-filter__modal"
                     />
+                    <div class="modal__footer mt-100">
+                        <VsButton
+                            class="w-100"
+                            @click="modalClose(tabIndex)"
+                        >
+                            <!-- TODO: Add apply button label from CMS -->
+                            Apply
+                        </VsButton>
+                    </div>
                 </VsRow>
             </VsModal>
             <div
@@ -195,6 +204,7 @@ import {
     computed,
 } from 'vue';
 import {
+    VsBody,
     VsButton,
     VsCol,
     VsDropdown,
@@ -381,6 +391,7 @@ const updateWidth = () => {
 };
 
 onMounted(() => {
+    updateWidth();
     window.addEventListener('resize', updateWidth);
 });
 
@@ -391,18 +402,23 @@ onBeforeUnmount(() => {
 async function modalOpen(tabIndex: string | number) {
     emitter.emit('showModal', `filterModal-${tabIndex}`);
     isModalOpen.value = true;
-
     await nextTick();
-
     teleportTarget.value = `#modal-filter-target-${tabIndex}`;
 };
 
 async function modalClose(tabIndex: string | number) {
+    emitter.emit('hideModal');
     isModalOpen.value = false;
-
     await nextTick();
-    
-    teleportTarget.value = `#sidebar-filter-target-${tabIndex}`;
+
+    //If modal closes due to window resize, then snap into sidebar
+    if(windowWidth.value >= MODAL_BREAKPOINT) {
+        teleportTarget.value = `#sidebar-filter-target-${tabIndex}`;
+    } else { //otherwise stay in the modal until its unloaded
+        setTimeout(() => {
+            teleportTarget.value = `#sidebar-filter-target-${tabIndex}`;
+        }, 300); 
+    }
 }
 
 watch(windowWidth, (newWidth) => {
