@@ -10,6 +10,13 @@
             >
                 {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
             </div>
+            
+            <div
+                aria-live="polite"
+                class="sr-only"
+            >
+                {{ screenReaderResultsMessage }}
+            </div>
 
             <VsBrFilter
                 :filters="props.eventData.filters"
@@ -70,10 +77,7 @@
                 </div>
             </div>
 
-            <div
-                aria-live="polite"
-                class="mt-150"
-            >
+            <div class="mt-150">
                 <template v-if="data.results && data.results.length > 0">
                     <!-- TODO: Add `is-featured` prop if set in the CMS. -->
                     <VsBrEventCard
@@ -189,7 +193,7 @@ const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
 
 // Call the api to get the event card data.
-const { data }: { data: any } = await useFetch(props.eventData.baseEndPoint, {
+const { data }: { data: any } = await useFetch('https://support.visitscotland.org' + props.eventData.baseEndPoint, {
     query: query.value,
 });
 const totalResults = computed(() => data.value.total);
@@ -291,6 +295,9 @@ watch(currentPage, (newPage, oldPage) => {
     });
 });
 
+// Update the screen reader results message when the data changes.
+watch(data, () => updateScreenReaderResultsMessage());
+
 // Clear all filters and remove all query parameters.
 const clearAllFilters = () => {
     // Delete all parameters from the query.
@@ -322,6 +329,28 @@ const setIcon = (linkType: string) => {
 
     return undefined;
 };
+
+const screenReaderResultsMessage = ref('');
+// Set text to update screenreaders when the results change.
+function updateScreenReaderResultsMessage() { 
+    const selectedFilterLabels = selectedFilters.value.map((filter) => filter.label).join(', ');
+
+    /**
+     * TODO - Add CMS labels for "matching" and "found."
+     */
+    const numberOfResults = `${data.value.total} ${configStore.getLabel('essentials.pagination', 'results.result')} found`;
+    const sortedBy = `${configStore.getLabel('events-listings-module', 'sort-by')} ${selectedSortBy.value}`
+    const filters = selectedFilters.value.length > 0 ? `matching ${selectedFilterLabels}` : '';
+    const page = data.value.total > 0
+        ? `
+            ${configStore.getLabel('essentials.pagination', 'page.page')} ${currentPage.value} 
+            ${configStore.getLabel('essentials.pagination', 'page.of')} ${numberOfPages.value}.`
+        : '';
+
+    screenReaderResultsMessage.value = `${numberOfResults} ${filters}. ${sortedBy}. ${page}`;
+};
+
+onMounted(() => updateScreenReaderResultsMessage());
 </script>
 
 <style lang="scss">
