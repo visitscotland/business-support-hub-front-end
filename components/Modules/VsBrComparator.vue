@@ -194,14 +194,15 @@ const selectedProviders = computed(() => (
 
 const groups = new Set(props.features.map((feature) => feature.groupDescription));
 
-function toggleView() {
+async function toggleView() {
     if (view.value === 'features') {
         view.value = 'results';
     } else if (view.value === 'results') {
         view.value = 'features';
     };
 
-    document.querySelector('#vs-br-comparator').scrollIntoView();
+    await nextTick();
+    document.querySelector('#vs-br-comparator').scrollIntoView(true);
 }
 </script>
 
