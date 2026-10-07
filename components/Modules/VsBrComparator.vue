@@ -106,7 +106,7 @@
             </VsCol>
             <div class="button-wrapper w-lg-400">
                 <VsButton
-                    :class="view === 'results' ? 'mt-600' : 'mt-100'"
+                    :class="view === 'results' ? 'mt-300' : 'mt-100'"
                     :variant="view === 'results' ? 'secondary' : 'primary'"
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
