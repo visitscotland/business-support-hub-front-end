@@ -5,18 +5,52 @@
             lg="4"
             xxl="3"
         >
+            <VsButton
+                variant="secondary"
+                icon="fa-regular fa-sliders"
+                id="vsEventFilterModalToggleBtn"
+                class="event-filter__toggle"
+                @click.prevent="modalOpen(tabIndex)"
+            >
+                <!-- TODO: Add filter button label from CMS -->
+                Filters
+            </VsButton>
+            <!-- TODO: Add Close filters button label from CMS -->
+            <VsModal
+                :modal-id="`filterModal-${tabIndex}`"
+                :modal-aria-label="configStore.getLabel('events-listings-module', 'filter')"
+                close-btn-text="Close filters"
+                class="event-filter__modal"
+                :key="windowWidth >= MODAL_BREAKPOINT ? 'sidebar' : 'modal'"
+                @hide="modalClose(tabIndex)"
+            >
+                <VsRow>
+                    <div
+                        :id="`modal-filter-target-${tabIndex}`"
+                        class="event-filter__modal"
+                    />
+                    <div class="modal__footer mt-100">
+                        <VsButton
+                            class="w-100"
+                            @click="modalClose(tabIndex)"
+                        >
+                            <!-- TODO: Add apply button label from CMS -->
+                            Apply
+                        </VsButton>
+                    </div>
+                </VsRow>
+            </VsModal>
             <div
                 class="d-none d-lg-block event__results"
             >
                 {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
             </div>
 
-            <VsBrFilter
-                :filters="props.eventData.filters"
-                :filter-id="filterId"
-                ref="filter"
-                @filter-updated="updateSelectedFilters"
+            <div
+                :id="`sidebar-filter-target-${tabIndex}`"
+                class="event-filter__sidebar"
             />
+
         </VsCol>
 
         <VsCol
@@ -146,20 +180,39 @@
             />
         </VsCol>
     </VsRow>
+    <Teleport
+        :to="teleportTarget"
+    >
+        <VsBrFilter
+            :class="isModalOpen ? 'onMobile' : ''"
+            :filters="props.eventData.filters"
+            :filter-id="filterId"
+            ref="filter"
+            @filter-updated="updateSelectedFilters"
+        />
+    </Teleport>
 </template>
 
 <script setup lang="ts">
-/* eslint no-undef: 0 */
-import { ref, computed } from 'vue';
+/* eslint no-undef: 0*/
+/* eslint-disable @typescript-eslint/no-dynamic-delete */
+
 import {
+    onMounted,
+    onBeforeUnmount,
+    ref,
+    computed,
+} from 'vue';
+import {
+    VsBody,
     VsButton,
     VsCol,
     VsDropdown,
     VsDropdownItem,
     VsList,
+    VsModal,
     VsPagination,
     VsRow,
-    VsBody,
 } from '@visitscotland/component-library/components';
 import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
@@ -169,6 +222,7 @@ import VsBrEventCard from '../ProductComponents/VsBrEventCard.vue';
 const props = defineProps<{
     eventData: any,
     moduleId: string,
+    tabIndex: string | number,
 }>();
 
 type SelectedFilter = {
@@ -187,6 +241,15 @@ const selectedSortBy = ref(props.eventData.sortBy[0].label);
 const selectedFilters = ref<SelectedFilter[]>([]);
 const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
+
+// For the modal
+const app = getCurrentInstance();
+const emitter = app?.appContext.config.globalProperties.emitter;
+const isModalOpen = ref<boolean>(false);
+const windowWidth = ref<number>(0);
+const MODAL_BREAKPOINT = 991.98;
+
+const teleportTarget = ref(`#sidebar-filter-target-${props.tabIndex}`);
 
 // Call the api to get the event card data.
 const { data }: { data: any } = await useFetch(props.eventData.baseEndPoint, {
@@ -322,6 +385,47 @@ const setIcon = (linkType: string) => {
 
     return undefined;
 };
+
+const updateWidth = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateWidth);
+});
+
+async function modalOpen(tabIndex: string | number) {
+    emitter.emit('showModal', `filterModal-${tabIndex}`);
+    isModalOpen.value = true;
+    await nextTick();
+    teleportTarget.value = `#modal-filter-target-${tabIndex}`;
+};
+
+async function modalClose(tabIndex: string | number) {
+    emitter.emit('hideModal');
+    isModalOpen.value = false;
+    await nextTick();
+
+    //If modal closes due to window resize, then snap into sidebar
+    if(windowWidth.value >= MODAL_BREAKPOINT) {
+        teleportTarget.value = `#sidebar-filter-target-${tabIndex}`;
+    } else { //otherwise stay in the modal until its unloaded
+        setTimeout(() => {
+            teleportTarget.value = `#sidebar-filter-target-${tabIndex}`;
+        }, 300); 
+    }
+}
+
+watch(windowWidth, (newWidth) => {
+    if (newWidth >= MODAL_BREAKPOINT && isModalOpen.value) {
+        modalClose(props.tabIndex);
+    }
+});
 </script>
 
 <style lang="scss">
@@ -343,7 +447,6 @@ const setIcon = (linkType: string) => {
 
     @media (max-width: 991.98px) {
         grid-template-columns: 1fr;
-        margin-top: 2rem;
     }
 
     .col1 {
@@ -362,6 +465,28 @@ const setIcon = (linkType: string) => {
 .vs-filter {
     @media (max-width: 991.98px) {
         padding: 0 0.5rem;
+    }
+}
+
+.event-filter {
+    &__toggle {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+
+        @media(min-width: 991.98px) {
+            display: none;
+        }
+    }
+
+    &__sidebar {
+        @media(max-width: 991.98px) {
+            display: none;
+        }
+
+        @media(min-width: 991.98px) {
+            display: block;
+        }
     }
 }
 </style>
