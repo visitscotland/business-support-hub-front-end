@@ -76,6 +76,15 @@
                 >
                     {{ labels['results-heading'] }}
                 </VsHeading>
+                <VsButton
+                    class="mb-100"
+                    variant="secondary"
+                    :onclick="toggleView"
+                    icon="fa-regular fa-arrow-left"
+                    v-if="view === 'results'"
+                >
+                    {{ labels['viewToggle-features'] }}
+                </VsButton>
                 <div class="d-flex flex-column gap-200">
                     <div
                         class="comparator-result"
@@ -97,10 +106,12 @@
             </VsCol>
             <div class="button-wrapper w-lg-400">
                 <VsButton
-                    class="mt-100"
+                    :class="view === 'results' ? 'mt-300' : 'mt-100'"
                     :variant="view === 'results' ? 'secondary' : 'primary'"
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
+                    :icon="view === 'results' ? 'fa-regular fa-arrow-left' : ''"
+                    v-if="(view === 'results' && matchingProviders.length > 3) || (view === 'features')"
                 >
                     <span v-if="view === 'features'">
                         {{ labels['viewToggle-results'] }}
@@ -183,14 +194,15 @@ const selectedProviders = computed(() => (
 
 const groups = new Set(props.features.map((feature) => feature.groupDescription));
 
-function toggleView() {
+async function toggleView() {
     if (view.value === 'features') {
         view.value = 'results';
     } else if (view.value === 'results') {
         view.value = 'features';
     };
 
-    document.querySelector('#vs-br-comparator').scrollIntoView();
+    await nextTick();
+    document.querySelector('#vs-br-comparator').scrollIntoView(true);
 }
 </script>
 
