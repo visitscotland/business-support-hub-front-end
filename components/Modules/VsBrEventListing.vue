@@ -53,6 +53,8 @@
                         icon-position="right"
                         @click="removeSelectedFilter(selectedFilter.fieldId, selectedFilter.key, selectedFilter.value)"
                     >
+                        <!-- TODO: Add label from CMS -->
+                        <span class="sr-only">Remove filter</span>
                         {{ selectedFilter.label }}
                     </VsButton>
                 </div>
