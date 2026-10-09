@@ -91,16 +91,32 @@
                         v-for="(provider, index) in matchingProviders"
                         :key="provider.name + index"
                     >
-                        <VsHeading heading-style="heading-xs" level="3">
-                            <VsLink
-                                :href="provider.url"
-                                type="external"
-                                icon-size="sm"
-                            >
-                                {{ provider.name }}
-                            </VsLink>
-                        </VsHeading>
-                        <VsBrRichText :input-content="provider.description" />
+                        <VsCard
+                            card-style="elevated"
+                            fill-color="vs-color-background-secondary"
+                        >
+                            <template #vs-card-body>
+                                <div class="px-125">
+                                    <VsHeading
+                                        heading-style="heading-xs"
+                                        level="3"
+                                    >
+                                        <VsLink
+                                            class="stretched-link"
+                                            :href="provider.url"
+                                            icon-size="sm"
+                                            type="external"
+                                        >
+                                            {{ provider.name }}
+                                        </VsLink>
+                                    </VsHeading>
+
+                                    <VsBody>
+                                        <VsBrRichText :input-content="provider.description" />
+                                    </VsBody>
+                                </div>
+                            </template>
+                        </VsCard>
                     </div>
                 </div>
             </VsCol>
@@ -132,6 +148,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 import {
+    VsBody,
+    VsCard,
     VsRow,
     VsContainer,
     VsCol,
