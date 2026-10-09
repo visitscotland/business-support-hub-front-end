@@ -41,6 +41,8 @@
 
 .assistant-chat-form__input {
     --assistant-qa-input-outline-color: #535396 !important;
+    /* font size set to 16 to prevent ios auto-zooming */
+    font-size: 16px !important;
 }
 
 .cludo-assistant-button {
