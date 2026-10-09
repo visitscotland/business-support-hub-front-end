@@ -30,9 +30,7 @@
                     :video-btn="heroVideo.cta"
                 />
             </template>
-            <template
-                v-else
-            >
+            <template v-else>
                 <VsBrImageWithCaption
                     :is-video="false"
                     :is-hero="true"
@@ -61,9 +59,7 @@
             {{ content.title }}
         </template>
 
-        <template
-            #vs-article-data
-        >
+        <template #vs-article-data>
             <VsArticleDetails
                 v-if="content.readingTime !== 0"
                 :article-publish-date="lastPublished"
@@ -78,9 +74,7 @@
 
         <!-- TODO - Share Button -->
 
-        <template
-            #vs-intro-content
-        >
+        <template #vs-intro-content>
             <VsBrRichText :input-content="content.introduction.value" />
         </template>
 

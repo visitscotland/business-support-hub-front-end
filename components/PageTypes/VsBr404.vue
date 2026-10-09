@@ -1,7 +1,6 @@
 <template>
-    <VsBrPageIntro
+    <VsBrHeroSectionModule
         :content="documentData"
-        :light-background="true"
     />
 </template>
 
@@ -9,7 +8,7 @@
 import { toRefs } from 'vue';
 
 import type { Component, Page } from '@bloomreach/spa-sdk';
-import VsBrPageIntro from '~/components/Modules/VsBrPageIntro.vue';
+import VsBrHeroSectionModule from '~/components/Modules/VsBrHeroSectionModule.vue';
 
 const props = defineProps<{ component: Component, page: Page }>();
 

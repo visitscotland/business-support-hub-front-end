@@ -1,9 +1,7 @@
 <template comments>
     <!--cludooff: index-->
-    <VsModuleWrapper theme="neutral">
-        <template #vs-module-wrapper-heading>
-            {{ data.title }}
-        </template>
+    <section class="vs-module-wrapper vs-module-wrapper--neutral text-start">
+        <VsBrSectionHeader :heading="data.title" />
 
         <VsContainer>
             <VsRow>
@@ -46,7 +44,7 @@
                 </VsCol>
             </VsRow>
         </VsContainer>
-    </VsModuleWrapper>
+    </section>
     <!--cludoon: index-->
 </template>
 
@@ -54,7 +52,6 @@
 import formatLink from '~/composables/formatLink.ts';
 
 import {
-    VsModuleWrapper,
     VsContainer,
     VsRow,
     VsCol,
@@ -63,6 +60,7 @@ import {
     VsImg,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
+import VsBrSectionHeader from '~/components/Modules/VsBrSectionHeader.vue';
 
 const props = defineProps<{ data: any, }>();
 
