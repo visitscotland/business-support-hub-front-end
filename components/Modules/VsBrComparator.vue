@@ -13,6 +13,7 @@
                 </div>
             </VsAlert>
         </div>
+
         <VsRow v-if="view === 'features'">
             <VsCol
                 cols="12"
@@ -33,7 +34,7 @@
                         </legend>
                         <div
                             v-for="(feature) in features"
-                            :key="feature + index"
+                            :key="`${feature}${index}`"
                         >
                             <VsCheckbox
                                 v-if="feature.groupDescription === group"
@@ -49,19 +50,17 @@
             </VsCol>
             <div class="w-lg-400">
                 <VsButton
-                    :variant="view === 'results' ? 'secondary' : 'primary'"
+                    variant="primary"
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                 >
-                    <span v-if="view === 'features'">
+                    <span>
                         {{ labels['viewToggle-results'] }}
-                    </span>
-                    <span v-if="view === 'results'">
-                        {{ labels['viewToggle-features'] }}
                     </span>
                 </VsButton>
             </div>
         </VsRow>
+
         <VsRow v-if="view === 'results'">
             <VsCol
                 cols="12"
@@ -122,17 +121,14 @@
             </VsCol>
             <div class="button-wrapper w-lg-400">
                 <VsButton
-                    :class="view === 'results' ? 'mt-300' : 'mt-100'"
-                    :variant="view === 'results' ? 'secondary' : 'primary'"
+                    v-if="(matchingProviders.length > 3)"
+                    class="mt-300"
+                    variant="secondary"
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
-                    :icon="view === 'results' ? 'fa-regular fa-arrow-left' : ''"
-                    v-if="(view === 'results' && matchingProviders.length > 3) || (view === 'features')"
+                    icon="fa-regular fa-arrow-left"
                 >
-                    <span v-if="view === 'features'">
-                        {{ labels['viewToggle-results'] }}
-                    </span>
-                    <span v-if="view === 'results'">
+                    <span>
                         {{ labels['viewToggle-features'] }}
                     </span>
                 </VsButton>
@@ -145,7 +141,7 @@
     </VsContainer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue';
 import {
     VsBody,
@@ -165,25 +161,37 @@ import useConfigStore from '~/stores/configStore.ts';
 const configStore = useConfigStore();
 const labels = configStore.labels['online-booking-system-comparator'];
 
-const props = defineProps({
-    features: {
-        type: Array,
-        required: true,
-    },
-    providers: {
-        type: Array,
-        required: true,
-    },
-});
+type Feature = {
+    id: string;
+    name: string;
+    description: string;
+    group: string;
+    groupDescription: string;
+};
 
-const view = ref('features');
+type Provider = {
+    name: string;
+    url: string;
+    features: string[];
+    description: string;
+    contact: string;
+};
 
-function checkboxLabel(name, description) {
+type Props = {
+    features: Feature[];
+    providers: Provider[];
+};
+
+const props = defineProps<Props>();
+
+const view = ref<'features' | 'results'>('features');
+
+function checkboxLabel(name: string, description: string) {
     return description === null ? `${name}` : `${name} - ${description}`;
 }
 
 // Values from selected checkboxes
-const selectedFeatureValues = ref([]);
+const selectedFeatureValues = ref<string[]>([]);
 //  ...are used get a list of feature objects to add to the form payload
 const selectedFeatures = computed(() => (
     props.features.filter((feature) => selectedFeatureValues.value.includes(feature.id))
@@ -220,7 +228,7 @@ async function toggleView() {
     };
 
     await nextTick();
-    document.querySelector('#vs-br-comparator').scrollIntoView(true);
+    document.querySelector('#vs-br-comparator')?.scrollIntoView(true);
 }
 </script>
 
