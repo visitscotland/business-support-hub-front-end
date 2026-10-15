@@ -53,8 +53,7 @@
                         icon-position="right"
                         @click="removeSelectedFilter(selectedFilter.fieldId, selectedFilter.key, selectedFilter.value)"
                     >
-                        <!-- TODO: Add label from CMS -->
-                        <span class="sr-only">Remove filter</span>
+                        <span class="sr-only">{{ configStore.getLabel('events-listings-module', 'remove-filter') }}</span>
                         {{ selectedFilter.label }}
                     </VsButton>
                 </div>
@@ -337,12 +336,11 @@ const screenReaderResultsMessage = ref('');
 function updateScreenReaderResultsMessage() { 
     const selectedFilterLabels = selectedFilters.value.map((filter) => filter.label).join(', ');
 
-    /**
-     * TODO - Add CMS labels for "matching" and "found."
-     */
-    const numberOfResults = `${data.value.total} ${configStore.getLabel('essentials.pagination', 'results.result')} found`;
-    const sortedBy = `${configStore.getLabel('events-listings-module', 'sort-by')} ${selectedSortBy.value}`
-    const filters = selectedFilters.value.length > 0 ? `matching ${selectedFilterLabels}` : '';
+    const numberOfResults = `${data.value.total} ${configStore.getLabel('essentials.pagination', 'results.result')}
+        ${configStore.getLabel('events-listings-module', 'found')}`;
+    const sortedBy = `${configStore.getLabel('events-listings-module', 'sort-by')} ${selectedSortBy.value}`;
+    const filters = selectedFilters.value.length > 0 ? `${configStore.getLabel('events-listings-module', 'matching')} 
+        ${selectedFilterLabels}` : '';
     const page = data.value.total > 0
         ? `
             ${configStore.getLabel('essentials.pagination', 'page.page')} ${currentPage.value} 
