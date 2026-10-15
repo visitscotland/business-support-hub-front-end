@@ -2082,9 +2082,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/scripts@npm:^1.3.3":
-  version: 1.3.3
-  resolution: "@nuxt/scripts@npm:1.3.3"
+"@nuxt/scripts@npm:^1.3.12":
+  version: 1.3.12
+  resolution: "@nuxt/scripts@npm:1.3.12"
   dependencies:
     "@nuxt/devtools-kit": "npm:^3.2.4"
     "@vueuse/core": "npm:^14.3.0"
@@ -2103,6 +2103,7 @@ __metadata:
     std-env: "npm:^4.2.0"
     ufo: "npm:^1.6.4"
     ultrahtml: "npm:^1.7.0"
+    undici: "npm:^6.27.0"
     unplugin: "npm:^3.3.0"
     unstorage: "npm:^1.17.5"
     valibot: "npm:^1.4.2"
@@ -2137,7 +2138,7 @@ __metadata:
       optional: true
   bin:
     nuxt-scripts: ./bin/cli.mjs
-  checksum: 10c0/820569711df14f18ce80529d8294804c0310afef06fc2e93a9fd7d9f4d8ad5044b86951e36296bc84ab151780460ae974714285ba0a86bfef18254e58f504c8b
+  checksum: 10c0/05b8f6b9836e514013f2385b46004ba744ea1edc19110a35ad68b7ee00d0681fa539c0f297285a2e90972d9905171bb82545045e1322f4fa373cf9071e981a4c
   languageName: node
   linkType: hard
 
@@ -11791,7 +11792,7 @@ __metadata:
     "@bloomreach/spa-sdk": "npm:^28.1.0"
     "@bloomreach/vue3-sdk": "npm:^22.0.5"
     "@nuxt/eslint-config": "npm:^1.17.0"
-    "@nuxt/scripts": "npm:^1.3.3"
+    "@nuxt/scripts": "npm:^1.3.12"
     "@nuxtjs/eslint-config-typescript": "npm:^12.1.0"
     "@pinia/nuxt": "npm:^1.0.2"
     "@unhead/vue": "npm:^3.4.0"
@@ -15708,6 +15709,13 @@ __metadata:
   version: 6.28.0
   resolution: "undici@npm:6.28.0"
   checksum: 10c0/3029a70df06b38b5b2f30732932a1e92544c753cd82c8abdf0d35afad48e0ba91612e79fe3a442dbbb9434d6a9eba2b714d5ea28984c903dda2b5d5444f38354
+  languageName: node
+  linkType: hard
+
+"undici@npm:^6.27.0":
+  version: 6.29.0
+  resolution: "undici@npm:6.29.0"
+  checksum: 10c0/3fb2117985be977ba8b6bd6a242fec915e1b1d0f9681f5adb3f508fb1717352452d65bcfd3bed09e7c776cfda403a4e8edb24a318492f8b2d793439af2b8699b
   languageName: node
   linkType: hard
 
