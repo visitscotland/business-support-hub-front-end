@@ -65,6 +65,7 @@
     "@vue/shared": "^3.5.38"
   },
   "resolutions": {
+    "simple-git": "4.0.2",
     "minimist": "latest",
     "minimatch": "^10.2.5",
     "lodash": "^4.18.0",

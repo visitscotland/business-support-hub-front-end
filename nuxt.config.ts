@@ -13,6 +13,12 @@ const clVersion = bufferFile('.clversion');
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    devtools: {
+        // DevTools 3.4.2 imports the removed simple-git default export, so it
+        // cannot run with the security-patched simple-git 4 release.
+        enabled: false,
+    },
+
     runtimeConfig: {
         BR_RESOURCE_API_ENDPOINT: process.env.BR_RESOURCE_API_ENDPOINT,
         BR_X_FORWARDED_HOST: process.env.BR_X_FORWARDED_HOST,
