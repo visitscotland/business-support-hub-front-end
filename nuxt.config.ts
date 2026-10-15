@@ -19,6 +19,13 @@ export default defineNuxtConfig({
         enabled: false,
     },
 
+    // Keep Nuxt's renderer bundled: Nitro's string matcher misses Windows paths.
+    nitro: {
+        externals: {
+            inline: [/[\\/]node_modules[\\/]nuxt[\\/]dist[\\/]/],
+        },
+    },
+
     runtimeConfig: {
         BR_RESOURCE_API_ENDPOINT: process.env.BR_RESOURCE_API_ENDPOINT,
         BR_X_FORWARDED_HOST: process.env.BR_X_FORWARDED_HOST,
