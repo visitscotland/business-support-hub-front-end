@@ -5,7 +5,7 @@
     >
         <VsBrGtm />
 
-        <h1>Error</h1>
+        <VsBrHeroSectionModule :content="errorData" />
     </div>
 </template>
 
@@ -17,6 +17,7 @@ import type { Component, Page } from '@bloomreach/spa-sdk';
 
 import useConfigStore from '~/stores/configStore.ts';
 
+import VsBrHeroSectionModule from '~/components/Modules/VsBrHeroSectionModule.vue';
 import VsBrGtm from '~/components/Modules/VsBrGtm.vue';
 
 const props = defineProps<{ component: Component, page: Page }>();
@@ -27,8 +28,7 @@ let document : any = {
 };
 
 const errorData = {
-    introduction: {
-    },
+    teaser: '',
 };
 
 const configStore = useConfigStore();
@@ -46,7 +46,7 @@ if (page.value) {
 
     document = page.value.getDocument();
 
-    errorData.introduction.value = `<p>${configStore.getLabel('essentials.global', 'third-party-error')}</p>`;
+    errorData.teaser = configStore.getLabel('essentials.global', 'third-party-error');
 
     configStore.locale = document.model.data.localeString;
 

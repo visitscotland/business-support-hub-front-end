@@ -1,8 +1,6 @@
 <template>
-    <VsModuleWrapper>
-        <template #vs-module-wrapper-heading>
-            {{ title }}
-        </template>
+    <section class="vs-module-wrapper vs-module-wrapper--light text-start">
+        <VsBrSectionHeader :heading="title" />
         <VsContainer>
             <VsRow>
                 <VsCol
@@ -40,7 +38,7 @@
                 </VsCol>
             </VsRow>
         </VsContainer>
-    </VsModuleWrapper>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -48,10 +46,10 @@ import {
     VsBadge,
     VsCol,
     VsContainer,
-    VsModuleWrapper,
     VsRow,
     VsStretchedLinkCard,
 } from '@visitscotland/component-library/components';
+import VsBrSectionHeader from '~/components/Modules/VsBrSectionHeader.vue';
 
 const props = defineProps<{
     module: any,

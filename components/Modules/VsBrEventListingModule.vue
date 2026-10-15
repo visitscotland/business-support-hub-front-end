@@ -26,6 +26,7 @@
                 <VsBrEventListing
                     :event-data="eventList"
                     :module-id="moduleId"
+                    :tab-index="index"
                 />
             </VsContainer>
         </VsTabItem>
