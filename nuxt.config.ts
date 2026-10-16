@@ -19,13 +19,15 @@ export default defineNuxtConfig({
         enabled: false,
     },
 
-    // Keep Nuxt's renderer and Unhead bundled: Nitro's string matcher misses
-    // Windows paths, leaving Unhead subpath imports out of the traced output.
+    // Keep Nuxt's renderer bundled on Windows. Use a function for Unhead so
+    // Nitro gives it priority over node_modules external rules on Linux too.
+    // Match bare imports as well as resolved paths to include every subpath.
     nitro: {
         externals: {
             inline: [
                 /[\\/]node_modules[\\/]nuxt[\\/]dist[\\/]/,
-                /[\\/]node_modules[\\/](?:@unhead[\\/][^\\/]+|unhead)[\\/]/,
+                (id) => /^(?:@unhead\/[^/]+|unhead)(?:\/|$)/.test(id)
+                    || /[\\/]node_modules[\\/](?:@unhead[\\/][^\\/]+|unhead)[\\/]/.test(id),
             ],
         },
     },
