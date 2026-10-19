@@ -2,9 +2,9 @@
 
 Small standalone gate for dependency PRs: lint the site, build the production
 output, start Nitro with a local Bloomreach API, and check `/` over HTTP and in
-Chromium. The root feature-environment Jenkinsfile runs these checks and marks
-the build failed if validation fails. GitHub Actions, approval and merge
-automation are not wired up by this package.
+Chromium. GitHub Actions runs these checks on every PR update. Jenkins builds
+and deploys the preview independently. Approval and merge automation are not
+implemented by this package.
 
 ## Install and run
 
@@ -26,9 +26,8 @@ one or hiding that warning.
 ### Environment diagnostics
 
 Run `yarn test:smoke:diagnostics` inside the builder container to print and save
-`smoke-results/environment.json`. Jenkins runs it before and after downloading
-Chromium, so the log shows both existing system browsers and the downloaded
-binaries. It reports:
+`smoke-results/environment.json`. The GitHub workflow runs it after installing
+Chromium and its Linux dependencies. It reports:
 
 - Actual and pinned Node versions, OS distribution, architecture and libc.
 - Browser executables and versions, including Playwright's headless shell.
@@ -47,8 +46,8 @@ On a Linux CI image, install browser OS dependencies once using
 
 `test:smoke` stops at the first failing stage and exits nonzero. It runs the
 existing `yarn lint` (warnings permitted), `yarn build`, then the production
-HTTP and browser checks. Installation is an explicit prerequisite so an
-eventual CI integration can control registry access separately.
+HTTP and browser checks. Installation is an explicit prerequisite so CI can
+control dependency installation separately.
 
 Additional commands:
 
@@ -123,8 +122,8 @@ yarn playwright show-report smoke-results/report
 ```
 
 The full gate must be used for merge decisions. `result.json` explicitly records
-`buildSkipped` and `harnessOnly` for the development commands. No branch rules
-or existing pipeline statuses are changed by this initial package.
+`buildSkipped` and `harnessOnly` for the development commands. Branch rules
+must be configured separately to require the GitHub check described below.
 
 ## Harness verification
 
@@ -136,14 +135,28 @@ exist inside the test browser and do not modify production routes or bundles.
 
 ## CI integration
 
-The feature-environment Jenkinsfile runs the unit checks, installs Chromium,
-then runs the full smoke command. The builder image must already have the
-Chromium OS dependencies described above and permit browser downloads.
-Validation failures mark the build failed while allowing the feature build
-and preview deployment to proceed. The subsequent NPM Build stage rebuilds
-with the real feature CMS settings; if that build fails, deployment is skipped
-so the isolated fixture build cannot be published.
+`.github/workflows/dependency-smoke.yml` runs on all PRs when opened, updated,
+reopened or marked ready for review, and supports manual dispatch. There is no
+schedule, merge-queue trigger, path filter or author filter. New runs cancel
+older runs for the same PR.
 
-Before making this a required merge gate, run it on the default branch in the
-intended CI image. Use the full command for eligibility; the browser-only
-command deliberately skips lint and build validation.
+The workflow uses GitHub-hosted Ubuntu 24.04, Node from `.nvmrc`, the checked-in
+Yarn release and an immutable install. It runs the harness unit tests, installs
+Chromium together with Linux libraries, records diagnostics, and runs the full
+lint/build/HTTP/browser command. Steps fail normally; no test failure is ignored.
+Logs, screenshots, traces and reports are uploaded as `dependency-smoke-results`
+for seven days, including on failure. Only repository read permission is granted;
+no CMS credentials or Copilot configuration are required.
+
+After the workflow has run, configure the target branch ruleset or branch
+protection under **Require status checks to pass before merging** to require
+the uniquely named **Dependency smoke tests** job, selecting GitHub Actions
+as its source where available. This setting is necessary: adding the YAML
+alone does not prevent merging. Keep the Jenkins check required as well if a
+successful preview build is also a merge requirement. Review bypass settings
+according to the team's merge policy.
+
+The root feature-environment Jenkinsfile no longer runs lint, tests, diagnostics
+or browser installation. It builds with real feature CMS settings and deploys
+the preview; a failed production build still stops deployment. Other Jenkins
+pipeline files are unchanged.

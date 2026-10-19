@@ -164,33 +164,6 @@ pipeline {
             }
         } //end stage
 
-        stage ('Lint and smoke tests') {
-            agent {
-                docker {
-                    image "$VS_DOCKER_BUILDER_IMAGE_NAME"
-                    label thisAgent
-                    reuseNode true
-                }
-            }
-            steps {
-                echo "running stage $STAGE_NAME in $HOSTNAME on $NODE_NAME"
-                // Keep building the preview, but report validation failures to GitHub.
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    sh '''
-                        set +x
-                        export HOME=$WORKSPACE
-                        export npm_config_cache=$HOME/.npm
-                        if [ ! -d $npm_config_cache ]; then mkdir -p $npm_config_cache; fi
-                        yarn test:smoke:unit
-                        yarn test:smoke:diagnostics
-                        yarn test:smoke:install
-                        yarn test:smoke:diagnostics
-                        yarn test:smoke
-                    '''
-                }
-            }
-        } //end stage
-
         stage ('NPM Build') {
             agent {
                 docker {
@@ -201,9 +174,7 @@ pipeline {
             }
             steps {
                 echo "running stage $STAGE_NAME in $HOSTNAME on $NODE_NAME"
-                // Rebuild with the feature environment's CMS settings after the
-                // smoke tests, which build against their isolated local fixture.
-                // Stop on failure so fixture output can never be deployed.
+                // Stop on build failure rather than deploying stale output.
                 sh '''
                     set +x
                     export HOME=$WORKSPACE
