@@ -164,7 +164,7 @@ pipeline {
             }
         } //end stage
 
-        stage ('Run Tests') {
+        stage ('Lint and smoke tests') {
             agent {
                 docker {
                     image "$VS_DOCKER_BUILDER_IMAGE_NAME"
@@ -174,13 +174,16 @@ pipeline {
             }
             steps {
                 echo "running stage $STAGE_NAME in $HOSTNAME on $NODE_NAME"
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                // Keep building the preview, but report validation failures to GitHub.
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     sh '''
                         set +x
                         export HOME=$WORKSPACE
                         export npm_config_cache=$HOME/.npm
                         if [ ! -d $npm_config_cache ]; then mkdir -p $npm_config_cache; fi
-                        yarn test
+                        yarn test:smoke:unit
+                        yarn test:smoke:install
+                        yarn test:smoke
                     '''
                 }
             }
@@ -196,15 +199,16 @@ pipeline {
             }
             steps {
                 echo "running stage $STAGE_NAME in $HOSTNAME on $NODE_NAME"
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh '''
-                        set +x
-                        export HOME=$WORKSPACE
-                        export npm_config_cache=$HOME/.npm
-                        if [ ! -d $npm_config_cache ]; then mkdir -p $npm_config_cache; fi
-                        yarn build
-                    '''
-                }
+                // Rebuild with the feature environment's CMS settings after the
+                // smoke tests, which build against their isolated local fixture.
+                // Stop on failure so fixture output can never be deployed.
+                sh '''
+                    set +x
+                    export HOME=$WORKSPACE
+                    export npm_config_cache=$HOME/.npm
+                    if [ ! -d $npm_config_cache ]; then mkdir -p $npm_config_cache; fi
+                    yarn build
+                '''
             }
         } //end stage
 

@@ -2,8 +2,9 @@
 
 Small standalone gate for dependency PRs: lint the site, build the production
 output, start Nitro with a local Bloomreach API, and check `/` over HTTP and in
-Chromium. Jenkins, GitHub Actions, approval and merge automation are not wired
-up by this package.
+Chromium. The root feature-environment Jenkinsfile runs these checks and marks
+the build failed if validation fails. GitHub Actions, approval and merge
+automation are not wired up by this package.
 
 ## Install and run
 
@@ -110,6 +111,14 @@ exist inside the test browser and do not modify production routes or bundles.
 
 ## CI integration
 
-Before making this a required merge gate, run the complete command on the
-default branch in the intended CI image. Use the full command for eligibility;
-the browser-only command deliberately skips lint and build validation.
+The feature-environment Jenkinsfile runs the unit checks, installs Chromium,
+then runs the full smoke command. The builder image must already have the
+Chromium OS dependencies described above and permit browser downloads.
+Validation failures mark the build failed while allowing the feature build
+and preview deployment to proceed. The subsequent NPM Build stage rebuilds
+with the real feature CMS settings; if that build fails, deployment is skipped
+so the isolated fixture build cannot be published.
+
+Before making this a required merge gate, run it on the default branch in the
+intended CI image. Use the full command for eligibility; the browser-only
+command deliberately skips lint and build validation.
