@@ -8,14 +8,39 @@ automation are not wired up by this package.
 
 ## Install and run
 
-Use Node 24 to match the deployment containers, with the repository's pinned
-Yarn 4.14.1. From the repository root:
+Use Node **24.4.1**, pinned in `.nvmrc` to match the current Jenkins/production
+runtime, with the repository's pinned Yarn 4.14.1. Select it with `nvm use`
+(or `nvm use 24.4.1` on nvm-windows). The pin does not install or change Node in
+the Jenkins image. From the repository root:
 
 ```sh
 yarn install --immutable
 yarn test:smoke:install
 yarn test:smoke
 ```
+
+Nuxt currently warns that Node 24.4.1 is outside its supported range. The tests
+intentionally exercise the deployed runtime rather than switching to a newer
+one or hiding that warning.
+
+### Environment diagnostics
+
+Run `yarn test:smoke:diagnostics` inside the builder container to print and save
+`smoke-results/environment.json`. Jenkins runs it before and after downloading
+Chromium, so the log shows both existing system browsers and the downloaded
+binaries. It reports:
+
+- Actual and pinned Node versions, OS distribution, architecture and libc.
+- Browser executables and versions, including Playwright's headless shell.
+- `ldd` output and missing shared libraries for each Linux browser.
+- Shared-memory capacity, process limits and seccomp status.
+
+Missing tools or failed probes are recorded without failing the check. No
+environment dump, credentials, installation or browser session is performed.
+Browser version probes run only on Linux to avoid opening desktop windows.
+The smoke test still runs and fails normally if no working browser is present.
+Use a working installed Chrome/Chromium as a configuration option only after
+checking these results; a missing shared library cannot be fixed by a launch flag.
 
 On a Linux CI image, install browser OS dependencies once using
 `yarn playwright install --with-deps chromium` during image preparation.

@@ -18,6 +18,7 @@
     "test:smoke:harness": "node ci/dependency-smoke.mjs --skip-build --harness",
     "test:smoke:unit": "node --test tests/dependency-smoke/harness.test.mjs",
     "test:smoke:install": "playwright install chromium",
+    "test:smoke:diagnostics": "node ci/smoke-diagnostics.mjs",
     "prepare": "husky"
   },
   "lint-staged": {

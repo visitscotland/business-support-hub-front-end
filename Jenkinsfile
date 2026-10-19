@@ -182,7 +182,9 @@ pipeline {
                         export npm_config_cache=$HOME/.npm
                         if [ ! -d $npm_config_cache ]; then mkdir -p $npm_config_cache; fi
                         yarn test:smoke:unit
+                        yarn test:smoke:diagnostics
                         yarn test:smoke:install
+                        yarn test:smoke:diagnostics
                         yarn test:smoke
                     '''
                 }
