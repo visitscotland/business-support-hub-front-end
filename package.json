@@ -49,7 +49,7 @@
     "mitt": "^3.0.0",
     "nuxt-jsonld": "^3.0.0",
     "pinia": "^4.0.3",
-    "sass": "^1.101.7",
+    "sass": "^1.105.1",
     "standard-version": "^9.5.0",
     "typescript": "^6.0.3",
     "unenv": "^1.10.0",
