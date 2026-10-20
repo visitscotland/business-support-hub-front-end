@@ -21,12 +21,20 @@
                         {{ listFilter.label }}
                     </label>
                     <div>
+                        <!-- TODO use the VsInput component here -->
                         <input
                             type="date"
+                            class="form-control vs-input"
                             :id="`${props.filterId}-${listFilter.key}`"
                             :name="`${props.filterId}-${listFilter.key}`"
                             data-type="date"
+                            :ref="`${props.filterId}-${listFilter.key}`"
                             :data-label="listFilter.label"
+                            @input="handleDateInput(listFilter.key, $event)"
+                            :min="listFilter.key === 'end-date' 
+                                ? trainingEventStore.formatDate(trainingEventStore.selectedStartDate) 
+                                : trainingEventStore.formatDate(new Date())"
+                            :max="maxDate"
                         >
                     </div>
                 </div>
@@ -63,8 +71,11 @@
 import { ref, onMounted } from 'vue';
 import useConfigStore from '~/stores/configStore.ts';
 import {
-    VsFilter, VsFilterSection, VsCheckbox,
+    VsCheckbox,
+    VsFilter,
+    VsFilterSection,
 } from '@visitscotland/component-library/components';
+import useTrainingEventsStore from '~/stores/trainingEventsStore.ts';
 
 const props = defineProps<{
     filters: any,
@@ -76,6 +87,8 @@ const emit = defineEmits(['filter-updated']);
 const configStore = useConfigStore();
 const filter = ref();
 const filterGroups = ref<any>();
+
+const trainingEventStore = useTrainingEventsStore();
 
 onMounted(() => {
     // Group filters for use in filter sections.
@@ -169,6 +182,18 @@ const handleUpdate = (event: Event) => {
         type,
         value,
     });
+};
+
+const maxDate = computed(() => {
+    return new Date().setFullYear(new Date().getFullYear() + 2);
+});
+
+const handleDateInput = (key: string, event: any) => {
+    if (key === 'start-date') {
+        trainingEventStore.selectedStartDate = event.target.value;
+    } else if (key === 'end-date') {
+        trainingEventStore.selectedEndDate = event.target.value;
+    }
 };
 </script>
 

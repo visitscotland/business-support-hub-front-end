@@ -218,11 +218,12 @@ import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrFilter from './VsBrFilter.vue';
 import VsBrEventCard from '../ProductComponents/VsBrEventCard.vue';
+import useTrainingEventsStore from '~/stores/trainingEventsStore.ts';
 
 const props = defineProps<{
     eventData: any,
     moduleId: string,
-    tabIndex: string | number,
+    tabIndex: number,
 }>();
 
 type SelectedFilter = {
@@ -241,6 +242,7 @@ const selectedSortBy = ref(props.eventData.sortBy[0].label);
 const selectedFilters = ref<SelectedFilter[]>([]);
 const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
+const trainingEventsStore = useTrainingEventsStore();
 
 // For the modal
 const app = getCurrentInstance();
@@ -251,10 +253,17 @@ const MODAL_BREAKPOINT = 991.98;
 
 const teleportTarget = ref(`#sidebar-filter-target-${props.tabIndex}`);
 
+const tabIdMap: Record<number, string> = {
+    0: 'training',
+    1: 'industry',
+    2: 'travel',
+};
+
 // Call the api to get the event card data.
 const { data }: { data: any } = await useFetch(props.eventData.baseEndPoint, {
     query: query.value,
 });
+
 const totalResults = computed(() => data.value.total);
 const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize));
 
@@ -287,6 +296,10 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
         selectedFilters.value.splice(index, 1);
     }
 
+    if(key.endsWith('start-date')) {
+        trainingEventsStore.selectedStartDate = trainingEventsStore.CURRENT_DATE;
+    }
+
     // Clear the filter input field.
     filter.value.resetOne(fieldId);
 
@@ -314,6 +327,14 @@ const updateSelectedFilters = (payload: any) => {
             value,
         });
     } else if (value && (!query.value[key] || type === 'date')) {
+        // Remove end date if start date is after end date
+        if(trainingEventsStore.selectedStartDate && trainingEventsStore.selectedEndDate) {
+            if(trainingEventsStore.selectedStartDate > trainingEventsStore.selectedEndDate) {
+                const currentTabName: string = tabIdMap[props.tabIndex];
+                removeSelectedFilter(currentTabName, 'end-date', '');
+            }
+        }
+
         query.value[key] = [value];
 
         // If date input then remove any previous from or to filters before adding a new one.
@@ -370,6 +391,7 @@ const clearAllFilters = () => {
     currentPage.value = 1;
     selectedSortBy.value = props.eventData.sortBy[0].label;
     selectedFilters.value = [];
+    trainingEventsStore.selectedStartDate = trainingEventsStore.CURRENT_DATE;
 
     // Clear all filter input fields.
     filter.value.resetAll();
