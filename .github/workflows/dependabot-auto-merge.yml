@@ -52,15 +52,38 @@ jobs:
             appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${message}\n`);
           };
           const endpoint = `repos/${GH_REPO}/pulls/${PR_NUMBER}`;
+          const commentMarker = '<!-- dependabot-auto-merge-decision -->';
+          const updateDecisionComment = (message, create = true) => {
+            if (api(endpoint).head.sha !== EXPECTED_HEAD) {
+              throw new Error('PR changed during evaluation; wait for the next workflow run.');
+            }
+            const commentsEndpoint = `repos/${GH_REPO}/issues/${PR_NUMBER}/comments`;
+            const comments = api('--paginate', '--slurp', `${commentsEndpoint}?per_page=100`).flat();
+            const existing = comments.find(comment =>
+              comment.user?.login === 'github-actions[bot]' && comment.body?.startsWith(commentMarker));
+            const body = `${commentMarker}\n${message}\n\nEvaluated commit: ${EXPECTED_HEAD}`;
+            if (existing) {
+              if (existing.body !== body) {
+                gh('api', '--method', 'PATCH', `repos/${GH_REPO}/issues/comments/${existing.id}`, '-f', `body=${body}`);
+              }
+            } else if (create) {
+              gh('api', '--method', 'POST', commentsEndpoint, '-f', `body=${body}`);
+            }
+          };
+          const manualReview = reason => {
+            summary(`Manual review required: ${reason}`);
+            updateDecisionComment(`### Manual review required\n\n${reason}\n\nThis workflow has not approved or enabled auto-merge for this commit. Please review and remediate or merge manually once required checks pass.`);
+          };
           const pr = api(endpoint);
           if (pr.state !== 'open' || pr.draft || pr.user.login !== 'dependabot[bot]' ||
               pr.head.repo?.full_name !== GH_REPO || pr.head.sha !== EXPECTED_HEAD) {
             summary('Skipped: PR is no longer an eligible Dependabot PR at the evaluated commit.');
             return;
           }
-          if (PACKAGE_ECOSYSTEM !== 'npm' ||
+          // fetch-metadata uses Dependabot's internal name, not the config value "npm".
+          if (PACKAGE_ECOSYSTEM !== 'npm_and_yarn' ||
               !['version-update:semver-patch', 'version-update:semver-minor'].includes(UPDATE_TYPE)) {
-            summary('Manual review required: update is not an npm patch or minor update.');
+            manualReview(`Only npm/Yarn patch or minor updates qualify. Received ecosystem=${JSON.stringify(PACKAGE_ECOSYSTEM)}, update-type=${JSON.stringify(UPDATE_TYPE)}.`);
             return;
           }
           const pages = api('--paginate', '--slurp', `${endpoint}/files?per_page=100`);
@@ -68,7 +91,7 @@ jobs:
           const allowed = new Set(['package.json', 'yarn.lock']);
           if (!files.length || files.length !== pr.changed_files ||
               files.some(file => !allowed.has(file.filename) || file.status !== 'modified')) {
-            summary('Manual review required: changes extend beyond existing package.json and yarn.lock files.');
+            manualReview('The diff must contain only modifications to existing root package.json and yarn.lock files. It contains other file changes, unsupported file operations, or an incomplete file list.');
             return;
           }
           // Recheck the head after inspecting the diff, and bind approval to that commit.
@@ -86,5 +109,6 @@ jobs:
           gh('pr', 'merge', PR_NUMBER, '--repo', GH_REPO, '--auto', '--squash',
             '--match-head-commit', EXPECTED_HEAD);
           summary(`Approved PR #${PR_NUMBER} (${UPDATE_TYPE}) and enabled squash auto-merge. Required branch checks still apply.`);
+          updateDecisionComment('### Eligible for auto-merge\n\nThe previous manual-review decision is superseded. This commit qualifies as an npm/Yarn patch or minor update, has been approved, and auto-merge has been enabled subject to required branch checks.', false);
           })();
           NODE
