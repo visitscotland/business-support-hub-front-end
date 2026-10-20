@@ -11,6 +11,13 @@ change in grouped updates. Only npm patch/minor updates modifying existing root
 forks and changes to other files remain for human review. Dependabot metadata
 verification also rejects commits that are not from Dependabot.
 
+When an eligibility rule requires manual review, the workflow posts a PR comment
+explaining the reason and identifying the evaluated commit. Later evaluations
+update the same bot-owned comment rather than posting duplicates. If the PR
+subsequently qualifies, the comment is updated to show that the earlier decision
+has been superseded. Metadata-action failures remain workflow failures rather
+than eligibility decisions and do not produce this comment.
+
 Eligible PRs receive an approval tied to the evaluated commit and have squash
 auto-merge enabled. The workflow never checks out PR code or installs dependencies.
 The separate Dependency smoke tests workflow executes the untrusted build with
