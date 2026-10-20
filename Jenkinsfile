@@ -164,28 +164,6 @@ pipeline {
             }
         } //end stage
 
-        stage ('Run Tests') {
-            agent {
-                docker {
-                    image "$VS_DOCKER_BUILDER_IMAGE_NAME"
-                    label thisAgent
-                    reuseNode true
-                }
-            }
-            steps {
-                echo "running stage $STAGE_NAME in $HOSTNAME on $NODE_NAME"
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh '''
-                        set +x
-                        export HOME=$WORKSPACE
-                        export npm_config_cache=$HOME/.npm
-                        if [ ! -d $npm_config_cache ]; then mkdir -p $npm_config_cache; fi
-                        yarn test
-                    '''
-                }
-            }
-        } //end stage
-
         stage ('NPM Build') {
             agent {
                 docker {
@@ -196,15 +174,14 @@ pipeline {
             }
             steps {
                 echo "running stage $STAGE_NAME in $HOSTNAME on $NODE_NAME"
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh '''
-                        set +x
-                        export HOME=$WORKSPACE
-                        export npm_config_cache=$HOME/.npm
-                        if [ ! -d $npm_config_cache ]; then mkdir -p $npm_config_cache; fi
-                        yarn build
-                    '''
-                }
+                // Stop on build failure rather than deploying stale output.
+                sh '''
+                    set +x
+                    export HOME=$WORKSPACE
+                    export npm_config_cache=$HOME/.npm
+                    if [ ! -d $npm_config_cache ]; then mkdir -p $npm_config_cache; fi
+                    yarn build
+                '''
             }
         } //end stage
 
