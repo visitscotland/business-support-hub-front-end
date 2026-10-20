@@ -105,7 +105,6 @@
 
 <script lang="ts" setup>
 /* eslint no-undef: 0 */
-/* eslint vuejs-accessibility/aria-props: 0 */
 
 import {
     toRefs, ref, onMounted,

@@ -53,7 +53,6 @@ type Props = {
 };
 
 const props = withDefaults(defineProps<Props>(), {
-    link: undefined,
     withinNested: false,
 });
 

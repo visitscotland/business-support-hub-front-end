@@ -10,7 +10,7 @@
         :button-link="module.cta ? formatLink(module.cta.link) : undefined"
         :heading-level="module.nested ? 3 : 2"
         :heading-style="module.nested ? 'heading-m' : 'heading-xl'"
-        :sectionId="module.anchor"
+        :section-id="module.anchor"
     >
         <template
             v-if="module.introduction"
@@ -194,7 +194,6 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable import/no-import-module-exports */
 /* eslint no-undef: 0 */
 
 import { inject } from 'vue';
@@ -220,7 +219,7 @@ const page: Page | undefined = inject('page');
 const route = useRoute();
 const isHomePage = computed(() => route.path === '/');
 
-const props = defineProps<{ module: Object, theme: string }>();
+const props = defineProps<{ module: object, theme: string }>();
 const module: any = props.module;
 const theme: string = props.theme;
 

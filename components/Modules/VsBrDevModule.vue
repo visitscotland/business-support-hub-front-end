@@ -6,7 +6,7 @@
 /* eslint no-undef: 0 */
 
 const props = defineProps<{
-    module: Object,
+    module: object,
 }>();
 
 const module: any = props.module;
