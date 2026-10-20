@@ -3961,44 +3961,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unhead/bundler@npm:3.4.0":
-  version: 3.4.0
-  resolution: "@unhead/bundler@npm:3.4.0"
-  dependencies:
-    magic-string: "npm:^1.1.0"
-    oxc-walker: "npm:^1.1.1"
-    unplugin: "npm:^3.3.0"
-  peerDependencies:
-    "@unhead/cli": ^3.4.0
-    "@vitejs/devtools-kit": ^0.4.1
-    esbuild: ">=0.17.0"
-    lightningcss: ">=1.20.0"
-    oxc-parser: ">=0.98.0"
-    rolldown: ">=1.0.0"
-    unhead: ^3.4.0
-    vite: ">=6.4.2"
-    webpack: ">=5.0.0"
-  peerDependenciesMeta:
-    "@unhead/cli":
-      optional: true
-    "@vitejs/devtools-kit":
-      optional: true
-    esbuild:
-      optional: true
-    lightningcss:
-      optional: true
-    oxc-parser:
-      optional: true
-    rolldown:
-      optional: true
-    vite:
-      optional: true
-    webpack:
-      optional: true
-  checksum: 10c0/d86c48d376afdf35593c0c7dd8a2e99d50b7c21560abc8ac2da907f1d914b4125a27720e7d545cb47b2b9bca53e62be7c8938fbb196503a359d32c032c58e253
-  languageName: node
-  linkType: hard
-
 "@unhead/bundler@npm:3.4.2":
   version: 3.4.2
   resolution: "@unhead/bundler@npm:3.4.2"
@@ -4037,24 +3999,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unhead/vue@npm:^3.4.0":
-  version: 3.4.0
-  resolution: "@unhead/vue@npm:3.4.0"
+"@unhead/bundler@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@unhead/bundler@npm:3.4.3"
   dependencies:
-    "@unhead/bundler": "npm:3.4.0"
-    hookable: "npm:^6.1.1"
-    unhead: "npm:3.4.0"
+    magic-string: "npm:^1.3.1"
+    oxc-walker: "npm:^1.1.1"
     unplugin: "npm:^3.3.0"
   peerDependencies:
+    "@unhead/cli": ^3.4.3
+    "@vitejs/devtools-kit": ^0.7.6
+    esbuild: ">=0.17.0"
+    lightningcss: ">=1.20.0"
+    oxc-parser: ">=0.98.0"
+    rolldown: ">=1.0.0"
+    unhead: ^3.4.3
     vite: ">=6.4.2"
-    vue: ">=3.5.18"
     webpack: ">=5.0.0"
   peerDependenciesMeta:
+    "@unhead/cli":
+      optional: true
+    "@vitejs/devtools-kit":
+      optional: true
+    esbuild:
+      optional: true
+    lightningcss:
+      optional: true
+    oxc-parser:
+      optional: true
+    rolldown:
+      optional: true
     vite:
       optional: true
     webpack:
       optional: true
-  checksum: 10c0/bf9bb63b429ce509f870fd38fded70407fc726a3e00c0a80d762205696ea34c7328e6dc2860d019305673f6e877eede9ba0df422da80b6ae0dc95bcae26c1815
+  checksum: 10c0/a1523bbc93b49d28d5fb48b036abf775a2cd3048e94ea82d74163a6b18d09e8815ca64e05564610199cd5f219ee2d8b0d8f1917c13ca512d0ed77e6ac8c948fc
   languageName: node
   linkType: hard
 
@@ -4076,6 +4055,27 @@ __metadata:
     webpack:
       optional: true
   checksum: 10c0/f05b5261ea340871fcc89f88059e0e3ae30fb3e7bb620d0b75d25fbcb5ce97dbe8567668704463b052a4a584e129556bdda864f02d8d874dadefd6ddef435801
+  languageName: node
+  linkType: hard
+
+"@unhead/vue@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "@unhead/vue@npm:3.4.3"
+  dependencies:
+    "@unhead/bundler": "npm:3.4.3"
+    hookable: "npm:^6.1.1"
+    unhead: "npm:3.4.3"
+    unplugin: "npm:^3.3.0"
+  peerDependencies:
+    vite: ">=6.4.2"
+    vue: ">=3.5.18"
+    webpack: ">=5.0.0"
+  peerDependenciesMeta:
+    vite:
+      optional: true
+    webpack:
+      optional: true
+  checksum: 10c0/e5f7a94aea091a7efe2b437311165d7c4de8929b94d50e4a51e32f140a9508b8359959e857d2f35975d1f431d373cf7b3a99974c45073c694c9a9d1cb0c63067
   languageName: node
   linkType: hard
 
@@ -11176,7 +11176,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^1.0.0, magic-string@npm:^1.1.0":
+"magic-string@npm:^1.0.0":
   version: 1.1.0
   resolution: "magic-string@npm:1.1.0"
   dependencies:
@@ -11952,7 +11952,7 @@ __metadata:
     "@nuxtjs/eslint-config-typescript": "npm:^12.1.0"
     "@pinia/nuxt": "npm:^1.0.2"
     "@playwright/test": "npm:1.64.0"
-    "@unhead/vue": "npm:^3.4.0"
+    "@unhead/vue": "npm:^3.4.3"
     "@visitscotland/component-library": "npm:5.81.2"
     "@vue/devtools-api": "npm:^8.1.5"
     "@vue/eslint-config-airbnb": "npm:^8.0.0"
@@ -15992,21 +15992,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unhead@npm:3.4.0":
-  version: 3.4.0
-  resolution: "unhead@npm:3.4.0"
-  dependencies:
-    hookable: "npm:^6.1.1"
-    unplugin: "npm:^3.3.0"
-  peerDependencies:
-    vite: ">=6.4.2"
-  peerDependenciesMeta:
-    vite:
-      optional: true
-  checksum: 10c0/fbcabfb53f21097bdf54662e22d127608320b1c1f5ba0bcc11dff8a041dc3b6d3f86b0b97c15798de2d5ef9a627f3fd971883e074e7949d8fe9f33db1026acfc
-  languageName: node
-  linkType: hard
-
 "unhead@npm:3.4.2, unhead@npm:^3.4.2":
   version: 3.4.2
   resolution: "unhead@npm:3.4.2"
@@ -16019,6 +16004,21 @@ __metadata:
     vite:
       optional: true
   checksum: 10c0/7a49b795aac2aa35585a2c36bb07a5fa8429976831b95492c650d3c31565d899f46f0303431e7b94bb61dacfff3876c5c3d3e1b437131086f5ebd576bf27b1f6
+  languageName: node
+  linkType: hard
+
+"unhead@npm:3.4.3":
+  version: 3.4.3
+  resolution: "unhead@npm:3.4.3"
+  dependencies:
+    hookable: "npm:^6.1.1"
+    unplugin: "npm:^3.3.0"
+  peerDependencies:
+    vite: ">=6.4.2"
+  peerDependenciesMeta:
+    vite:
+      optional: true
+  checksum: 10c0/5d62a821686708247d723c157ceb33a954fc62d5ffd6704ddb939e8b769a58c7a2603a64ee84c2e14271bb3a8ead362fc3587c7d09080568a77483351c63e499
   languageName: node
   linkType: hard
 
