@@ -4236,9 +4236,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@visitscotland/component-library@npm:5.81.2":
-  version: 5.81.2
-  resolution: "@visitscotland/component-library@npm:5.81.2"
+"@visitscotland/component-library@npm:5.82.2":
+  version: 5.82.2
+  resolution: "@visitscotland/component-library@npm:5.82.2"
   dependencies:
     "@floating-ui/dom": "npm:^1.7.6"
     "@googlemaps/js-api-loader": "npm:^2.0.1"
@@ -4266,7 +4266,7 @@ __metadata:
   dependenciesMeta:
     husky:
       built: true
-  checksum: 10c0/85136366ae5e566ab5fddcf3bf49b1ce09d3322351a932a44e4024d1bf8e2e598d407ae5580a236324f745bf77f0372456b8d35674843d1c24f261f4dbbd199f
+  checksum: 10c0/36dbf4a884dd999bf161879a33009232897bfd3319cf4232b8d6b2456c03da2b37d086d145086f9582c883bfdc5e2f47d518140a0df348257480bd5752e18991
   languageName: node
   linkType: hard
 
@@ -11953,7 +11953,7 @@ __metadata:
     "@pinia/nuxt": "npm:^1.0.2"
     "@playwright/test": "npm:1.64.0"
     "@unhead/vue": "npm:^3.4.3"
-    "@visitscotland/component-library": "npm:5.81.2"
+    "@visitscotland/component-library": "npm:5.82.2"
     "@vue/devtools-api": "npm:^8.1.5"
     "@vue/eslint-config-airbnb": "npm:^8.0.0"
     aws-rum-web: "npm:^3.2.1"
