@@ -11,6 +11,19 @@ change in grouped updates. Only npm patch/minor updates modifying existing root
 forks and changes to other files remain for human review. Dependabot metadata
 verification also rejects commits that are not from Dependabot.
 
+Grouped indirect updates sometimes have no metadata update type. For these,
+if the only changed file is an existing root `yarn.lock`, the evaluator reads
+both complete lockfiles at the PR base and head SHAs. It permits stable npm
+patch/minor version increases with matching package resolutions and unchanged
+selectors, dependency/peer constraints and other structure; checksums may change.
+It rejects major updates, downgrades, prereleases, added/removed entries and
+changes it cannot parse. Checksum-only changes without a version increase do not
+qualify. An explicit major/unknown metadata classification is not overridden.
+This fallback does not execute or install PR code and still requires CI to pass.
+
+Run its local regression tests with:
+`node --test .github/workflows/dependabot-auto-merge.test.cjs`.
+
 When an eligibility rule requires manual review, the workflow posts a PR comment
 explaining the reason and identifying the evaluated commit. Later evaluations
 update the same bot-owned comment rather than posting duplicates. If the PR
