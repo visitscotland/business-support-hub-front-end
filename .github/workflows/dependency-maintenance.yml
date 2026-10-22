@@ -1,0 +1,75 @@
+name: Scheduled dependency maintenance
+
+on:
+  # Re-enable once Copilot is set up (09:00 UK time, Wednesday and Friday).
+  # schedule:
+  #   - cron: '0 9 * * 3,5'
+  #     timezone: Europe/London
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dependency-maintenance
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    if: >-
+      vars.DEPENDENCY_MAINTENANCE_ENABLED == 'true' &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .nvmrc
+      - name: Collect complete live evidence
+        env:
+          GH_TOKEN: ${{ secrets.DEPENDABOT_READ_TOKEN }}
+          TARGET_REPOSITORY: ${{ github.repository }}
+        run: node .github/skills/dependency-triage/scripts/collect.mjs --repo "$TARGET_REPOSITORY"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: dependency-evidence
+          path: triage-results/evidence.json
+          retention-days: 7
+
+  maintain:
+    needs: collect
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: read
+      copilot-requests: write
+    uses: ./.github/workflows/dependency-maintenance-agent.lock.yml
+    secrets:
+      GH_AW_CI_TRIGGER_TOKEN: ${{ secrets.GH_AW_CI_TRIGGER_TOKEN }}
+
+  replace_previous:
+    needs: maintain
+    if: >-
+      needs.maintain.result == 'success' &&
+      needs.maintain.outputs.created_pr_number != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .nvmrc
+      - name: Close superseded bot-owned PRs after successful replacement
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPLACEMENT_PR: ${{ needs.maintain.outputs.created_pr_number }}
+        run: node ci/replace-maintenance-pr.mjs
