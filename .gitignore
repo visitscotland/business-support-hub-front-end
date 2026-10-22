@@ -19,3 +19,4 @@ dist
 !.yarn/sdks
 !.yarn/versions
 smoke-results/
+triage-results/
