@@ -30,10 +30,8 @@
                             data-type="date"
                             :ref="`${props.filterId}-${listFilter.key}`"
                             :data-label="listFilter.label"
-                            @input="handleDateInput(listFilter.key, $event)"
-                            :min="listFilter.key === 'end-date' 
-                                ? trainingEventStore.formatDate(trainingEventStore.selectedStartDate) 
-                                : trainingEventStore.formatDate(new Date())"
+                            @input="handleDateInput(props.filterId, listFilter.key, $event)"
+                            :min="minDate"
                             :max="maxDate"
                         >
                     </div>
@@ -76,10 +74,11 @@ import {
     VsFilterSection,
 } from '@visitscotland/component-library/components';
 import useTrainingEventsStore from '~/stores/trainingEventsStore.ts';
+import type { EventsTabKey } from '~/types/types';
 
 const props = defineProps<{
     filters: any,
-    filterId: string,
+    filterId: keyof EventsTabKey,
 }>();
 
 const emit = defineEmits(['filter-updated']);
@@ -184,15 +183,25 @@ const handleUpdate = (event: Event) => {
     });
 };
 
-const maxDate = computed(() => {
-    return new Date().setFullYear(new Date().getFullYear() + 2);
+const minDate = computed(() => {
+    return trainingEventStore.formatDate(
+        trainingEventStore.selectedStartDate[props.filterId] 
+            ?? new Date(),
+    );
 });
 
-const handleDateInput = (key: string, event: any) => {
+const maxDate = computed(() => {
+    const targetDate = new Date();
+    targetDate.setFullYear(targetDate.getFullYear() + 2);
+    
+    return trainingEventStore.formatDate(targetDate);
+});
+
+const handleDateInput = (id: string, key: string, event: any) => {
     if (key === 'start-date') {
-        trainingEventStore.selectedStartDate = event.target.value;
+        trainingEventStore.selectedStartDate[id as keyof EventsTabKey] = event.target.value;
     } else if (key === 'end-date') {
-        trainingEventStore.selectedEndDate = event.target.value;
+        trainingEventStore.selectedEndDate[id as keyof EventsTabKey] = event.target.value;
     }
 };
 </script>

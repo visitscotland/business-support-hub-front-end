@@ -1,9 +1,16 @@
-const useTrainingEventsStore = defineStore('trainingEventsStore', () => {
+import type { EventsTabKey } from '~/types/types';
 
-    // The current date as reported by the client device
-    const CURRENT_DATE: Date = new Date();
-    const selectedStartDate = ref<Date>(CURRENT_DATE);
-    const selectedEndDate = ref<Date | null>(null);
+const useTrainingEventsStore = defineStore('trainingEventsStore', () => {
+    const selectedStartDate = ref<EventsTabKey>({
+        training: undefined,
+        industry: undefined,
+        travel: undefined,
+    });
+    const selectedEndDate = ref<EventsTabKey>({
+        training: undefined,
+        industry: undefined,
+        travel: undefined,
+    });
     
     const formatDate = (date: Date) => {
         const dateInput = typeof date === 'string' ? new Date(date) : date;
@@ -11,7 +18,6 @@ const useTrainingEventsStore = defineStore('trainingEventsStore', () => {
     };
 
     return {
-        CURRENT_DATE,
         selectedStartDate,
         selectedEndDate,
         formatDate,

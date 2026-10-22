@@ -253,7 +253,7 @@ const MODAL_BREAKPOINT = 991.98;
 
 const teleportTarget = ref(`#sidebar-filter-target-${props.tabIndex}`);
 
-const tabIdMap: Record<number, string> = {
+const tabIdMap: Record<number, 'training' | 'industry' | 'travel'> = {
     0: 'training',
     1: 'industry',
     2: 'travel',
@@ -297,7 +297,7 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
     }
 
     if(key.endsWith('start-date')) {
-        trainingEventsStore.selectedStartDate = trainingEventsStore.CURRENT_DATE;
+        trainingEventsStore.selectedStartDate[tabIdMap[props.tabIndex]] = new Date();
     }
 
     // Clear the filter input field.
@@ -327,14 +327,6 @@ const updateSelectedFilters = (payload: any) => {
             value,
         });
     } else if (value && (!query.value[key] || type === 'date')) {
-        // Remove end date if start date is after end date
-        if(trainingEventsStore.selectedStartDate && trainingEventsStore.selectedEndDate) {
-            if(trainingEventsStore.selectedStartDate > trainingEventsStore.selectedEndDate) {
-                const currentTabName: string = tabIdMap[props.tabIndex];
-                removeSelectedFilter(currentTabName, 'end-date', '');
-            }
-        }
-
         query.value[key] = [value];
 
         // If date input then remove any previous from or to filters before adding a new one.
@@ -391,7 +383,7 @@ const clearAllFilters = () => {
     currentPage.value = 1;
     selectedSortBy.value = props.eventData.sortBy[0].label;
     selectedFilters.value = [];
-    trainingEventsStore.selectedStartDate = trainingEventsStore.CURRENT_DATE;
+    trainingEventsStore.selectedStartDate[tabIdMap[props.tabIndex]] = new Date;
 
     // Clear all filter input fields.
     filter.value.resetAll();
