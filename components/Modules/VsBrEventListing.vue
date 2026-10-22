@@ -219,6 +219,7 @@ import VsBrRichText from './VsBrRichText.vue';
 import VsBrFilter from './VsBrFilter.vue';
 import VsBrEventCard from '../ProductComponents/VsBrEventCard.vue';
 import useTrainingEventsStore from '~/stores/trainingEventsStore.ts';
+import type { EventsCategories } from '~/types/types.ts';
 
 const props = defineProps<{
     eventData: any,
@@ -253,7 +254,7 @@ const MODAL_BREAKPOINT = 991.98;
 
 const teleportTarget = ref(`#sidebar-filter-target-${props.tabIndex}`);
 
-const tabIdMap: Record<number, 'training' | 'industry' | 'travel'> = {
+const tabIdMap: Record<number, EventsCategories> = {
     0: 'training',
     1: 'industry',
     2: 'travel',
@@ -297,7 +298,11 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
     }
 
     if(key.endsWith('start-date')) {
-        trainingEventsStore.selectedStartDate[tabIdMap[props.tabIndex]] = new Date();
+        trainingEventsStore.selectedStartDate[tabIdMap[props.tabIndex]] = undefined;
+    }
+
+    if(key.endsWith('end-date')) {
+        trainingEventsStore.selectedEndDate[tabIdMap[props.tabIndex]] = undefined;
     }
 
     // Clear the filter input field.
@@ -378,12 +383,13 @@ const clearAllFilters = () => {
             query.value[key] = 'date';
         }
     });
-
+    
     // Reset pagination, sort by and selected filters to defaults.
     currentPage.value = 1;
     selectedSortBy.value = props.eventData.sortBy[0].label;
     selectedFilters.value = [];
     trainingEventsStore.selectedStartDate[tabIdMap[props.tabIndex]] = new Date;
+    trainingEventsStore.selectedEndDate[tabIdMap[props.tabIndex]] = undefined;
 
     // Clear all filter input fields.
     filter.value.resetAll();

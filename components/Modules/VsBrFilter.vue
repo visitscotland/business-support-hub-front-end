@@ -31,7 +31,7 @@
                             :ref="`${props.filterId}-${listFilter.key}`"
                             :data-label="listFilter.label"
                             @input="handleDateInput(props.filterId, listFilter.key, $event)"
-                            :min="minDate"
+                            :min="minDate(listFilter.key)"
                             :max="maxDate"
                         >
                     </div>
@@ -183,12 +183,15 @@ const handleUpdate = (event: Event) => {
     });
 };
 
-const minDate = computed(() => {
-    return trainingEventStore.formatDate(
-        trainingEventStore.selectedStartDate[props.filterId] 
-            ?? new Date(),
-    );
-});
+const minDate = (key: string) => {
+    if(key.endsWith('end-date') && trainingEventStore.selectedStartDate[props.filterId]) {
+        return trainingEventStore.formatDate(
+            trainingEventStore.selectedStartDate[props.filterId]!,
+        );
+    } else {
+        return trainingEventStore.formatDate(new Date());
+    }
+};
 
 const maxDate = computed(() => {
     const targetDate = new Date();
@@ -198,9 +201,9 @@ const maxDate = computed(() => {
 });
 
 const handleDateInput = (id: string, key: string, event: any) => {
-    if (key === 'start-date') {
+    if (key.endsWith('start-date')) {
         trainingEventStore.selectedStartDate[id as keyof EventsTabKey] = event.target.value;
-    } else if (key === 'end-date') {
+    } else if (key.endsWith('end-date')) {
         trainingEventStore.selectedEndDate[id as keyof EventsTabKey] = event.target.value;
     }
 };
