@@ -147,6 +147,15 @@ function validate() {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+    if (['render', 'validate'].includes(process.argv[2])) {
+        const { validateTriage, renderTriage } = await import('./prepare-dependency-triage.mjs');
+        const evidence = JSON.parse(readFileSync('triage-results/evidence.json', 'utf8'));
+        const triage = JSON.parse(readFileSync('triage-results/triage.json', 'utf8'));
+
+        validateTriage(evidence, triage);
+        assert.equal(readFileSync('triage-results/weekly-report.md', 'utf8'), renderTriage(triage), 'Run the triage check before rendering or validating');
+    }
+
     if (process.argv[2] === 'render') {
         const e = JSON.parse(readFileSync('triage-results/evidence.json', 'utf8'));
         const t = JSON.parse(readFileSync('triage-results/triage.json', 'utf8'));
