@@ -1,10 +1,10 @@
 import { spawnSync } from 'node:child_process';
 import {
-    access, mkdir, readFile, readdir, writeFile, 
+    access, mkdir, readFile, readdir, writeFile,
 } from 'node:fs/promises';
 import { delimiter, join } from 'node:path';
 import {
-    homedir, platform, release, arch, 
+    homedir, platform, release, arch,
 } from 'node:os';
 import { chromium } from '@playwright/test';
 
@@ -19,6 +19,7 @@ const command = (executable, args) => {
         maxBuffer: 64 * 1024,
         windowsHide: true,
     });
+
     return {
         command: [executable, ...args],
         exitCode: result.status,
@@ -31,24 +32,37 @@ const command = (executable, args) => {
 async function findOnPath(name) {
     for (const directory of (process.env.PATH || '').split(delimiter)) {
         const candidate = join(directory, process.platform === 'win32' ? `${name}.exe` : name);
-        if (await exists(candidate)) return candidate;
+
+        if (await exists(candidate)) {
+            return candidate;
+        }
     }
+
     return null;
 }
 
 async function findBundledBrowsers(directory, depth = 0) {
-    if (depth > 3) return [];
+    if (depth > 3) {
+        return [];
+    }
+
     const entries = await readdir(directory, {
-        withFileTypes: true, 
+        withFileTypes: true,
     }).catch(() => []);
     const paths = [];
+
     for (const entry of entries) {
         const path = join(directory, entry.name);
-        if (entry.isFile() && /^(?:chrome|chrome-headless-shell)(?:\.exe)?$/.test(entry.name)) paths.push(path);
+
+        if (entry.isFile() && /^(?:chrome|chrome-headless-shell)(?:\.exe)?$/.test(entry.name)) {
+            paths.push(path);
+        }
+
         if (entry.isDirectory() && (depth > 0 || entry.name.startsWith('chromium'))) {
             paths.push(...await findBundledBrowsers(path, depth + 1));
         }
     }
+
     return paths;
 }
 
@@ -63,18 +77,32 @@ const cache = process.env.PLAYWRIGHT_BROWSERS_PATH && process.env.PLAYWRIGHT_BRO
             ? join(homedir(), 'Library', 'Caches', 'ms-playwright')
             : join(process.env.XDG_CACHE_HOME || join(homedir(), '.cache'), 'ms-playwright');
 const systemBrowsers = [];
+
 for (const name of ['chromium', 'chromium-browser', 'google-chrome', 'google-chrome-stable', 'firefox']) {
     const path = await findOnPath(name);
-    if (path) systemBrowsers.push(path);
+
+    if (path) {
+        systemBrowsers.push(path);
+    }
 }
+
 for (const path of ['/opt/google/chrome/chrome', '/usr/lib/chromium/chromium']) {
-    if (process.platform === 'linux' && await exists(path)) systemBrowsers.push(path);
+    if (process.platform === 'linux' && await exists(path)) {
+        systemBrowsers.push(path);
+    }
 }
+
 const bundledBrowsers = await findBundledBrowsers(cache);
-if (await exists(expectedBrowser)) bundledBrowsers.push(expectedBrowser);
+
+if (await exists(expectedBrowser)) {
+    bundledBrowsers.push(expectedBrowser);
+}
+
 const browsers = [];
+
 for (const path of new Set([...systemBrowsers, ...bundledBrowsers])) {
     const libraries = process.platform === 'linux' ? command('ldd', [path]) : null;
+
     browsers.push({
         path,
         source: systemBrowsers.includes(path) ? 'system' : 'playwright',
@@ -85,6 +113,7 @@ for (const path of new Set([...systemBrowsers, ...bundledBrowsers])) {
         missingLibraries: libraries ? `${libraries.stdout}\n${libraries.stderr}`.split('\n').filter((line) => /not found/.test(line)) : [],
     });
 }
+
 const report = {
     collectedAt: new Date().toISOString(),
     runtime: {
@@ -114,10 +143,15 @@ const report = {
     } : null,
     browsers,
 };
+
 await mkdir('smoke-results', {
-    recursive: true, 
+    recursive: true,
 });
 await writeFile('smoke-results/environment.json', `${JSON.stringify(report, null, 2)}\n`);
 console.log(JSON.stringify(report, null, 2));
-if (!report.runtime.matchesPin) console.warn(`Node differs from .nvmrc: running ${process.version}, expected ${pinnedNode}. Diagnostics do not change the runtime.`);
+
+if (!report.runtime.matchesPin) {
+    console.warn(`Node differs from .nvmrc: running ${process.version}, expected ${pinnedNode}. Diagnostics do not change the runtime.`);
+}
+
 console.log('Diagnostics saved to smoke-results/environment.json. Smoke tests must still run.');

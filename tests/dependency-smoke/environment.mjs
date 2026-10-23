@@ -1,14 +1,23 @@
 export function smokeEnvironment(source = process.env) {
     const port = (name, fallback) => {
         const value = Number(source[name] || fallback);
-        if (!Number.isInteger(value) || value < 1024 || value > 65535) throw new Error(`Invalid ${name}`);
+
+        if (!Number.isInteger(value) || value < 1024 || value > 65535) {
+            throw new Error(`Invalid ${name}`);
+        }
+
         return value;
     };
     const appPort = port('SMOKE_APP_PORT', 4317);
     const cmsPort = port('SMOKE_CMS_PORT', 4318);
-    if (appPort === cmsPort) throw new Error('Smoke ports must be different');
+
+    if (appPort === cmsPort) {
+        throw new Error('Smoke ports must be different');
+    }
+
     const appOrigin = `http://127.0.0.1:${appPort}`;
     const cmsOrigin = `http://127.0.0.1:${cmsPort}`;
+
     return {
         appPort,
         cmsPort,
