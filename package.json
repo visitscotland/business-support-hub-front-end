@@ -33,7 +33,7 @@
     "eslint": "^10.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
-    "nuxt": "^4.6.1"
+    "nuxt": "^4.6.2"
   },
   "dependencies": {
     "@bloomreach/spa-sdk": "^28.1.0",
