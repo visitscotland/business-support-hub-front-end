@@ -21,10 +21,12 @@ jobs:
       github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version-file: .nvmrc
@@ -33,6 +35,7 @@ jobs:
           GH_TOKEN: ${{ secrets.DEPENDABOT_READ_TOKEN }}
           TARGET_REPOSITORY: ${{ github.repository }}
         run: node .github/skills/dependency-triage/scripts/collect.mjs --repo "$TARGET_REPOSITORY"
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: dependency-evidence
@@ -61,10 +64,12 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version-file: .nvmrc
