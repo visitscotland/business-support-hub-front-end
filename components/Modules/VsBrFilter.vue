@@ -21,12 +21,18 @@
                         {{ listFilter.label }}
                     </label>
                     <div>
+                        <!-- TODO use the VsInput component here -->
                         <input
                             type="date"
+                            class="form-control vs-input"
                             :id="`${props.filterId}-${listFilter.key}`"
                             :name="`${props.filterId}-${listFilter.key}`"
                             data-type="date"
+                            :ref="`${props.filterId}-${listFilter.key}`"
                             :data-label="listFilter.label"
+                            @input="handleDateInput(props.filterId, listFilter.key, $event)"
+                            :min="minDate(listFilter.key)"
+                            :max="maxDate"
                         >
                     </div>
                 </div>
@@ -63,12 +69,16 @@
 import { ref, onMounted } from 'vue';
 import useConfigStore from '~/stores/configStore.ts';
 import {
-    VsFilter, VsFilterSection, VsCheckbox,
+    VsCheckbox,
+    VsFilter,
+    VsFilterSection,
 } from '@visitscotland/component-library/components';
+import useTrainingEventsStore from '~/stores/trainingEventsStore.ts';
+import type { EventsTabKey } from '~/types/types';
 
 const props = defineProps<{
     filters: any,
-    filterId: string,
+    filterId: keyof EventsTabKey,
 }>();
 
 const emit = defineEmits(['filter-updated']);
@@ -76,6 +86,8 @@ const emit = defineEmits(['filter-updated']);
 const configStore = useConfigStore();
 const filter = ref();
 const filterGroups = ref<any>();
+
+const trainingEventStore = useTrainingEventsStore();
 
 onMounted(() => {
     // Group filters for use in filter sections.
@@ -169,6 +181,31 @@ const handleUpdate = (event: Event) => {
         type,
         value,
     });
+};
+
+const minDate = (key: string) => {
+    if(key.endsWith('end-date') && trainingEventStore.selectedStartDate[props.filterId]) {
+        return trainingEventStore.formatDate(
+            trainingEventStore.selectedStartDate[props.filterId]!,
+        );
+    } else {
+        return trainingEventStore.formatDate(new Date());
+    }
+};
+
+const maxDate = computed(() => {
+    const targetDate = new Date();
+    targetDate.setFullYear(targetDate.getFullYear() + 2);
+    
+    return trainingEventStore.formatDate(targetDate);
+});
+
+const handleDateInput = (id: string, key: string, event: any) => {
+    if (key.endsWith('start-date')) {
+        trainingEventStore.selectedStartDate[id as keyof EventsTabKey] = event.target.value;
+    } else if (key.endsWith('end-date')) {
+        trainingEventStore.selectedEndDate[id as keyof EventsTabKey] = event.target.value;
+    }
 };
 </script>
 
