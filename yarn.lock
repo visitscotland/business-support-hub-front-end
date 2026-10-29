@@ -14180,9 +14180,9 @@ __metadata:
   linkType: hard
 
 "seroval@npm:^1.6.9":
-  version: 1.6.9
-  resolution: "seroval@npm:1.6.9"
-  checksum: 10c0/92d8df0cee6d9bd5dbeb947868eb676ff71114de27b6094f439c7e37f7dcdcbb4a49b8d81415e6cf98c39ee46b27cf197f977518d6a6e75a98cd6a8320649bb7
+  version: 1.7.0
+  resolution: "seroval@npm:1.7.0"
+  checksum: 10c0/13d560b08add3d62a49ddf7581b4bf975fcc2adb23abf9b005616adfeb951d02429f81bb99379479bd702f364463fab9cf2121fc7970e6df37a2e3a303539721
   languageName: node
   linkType: hard
 
