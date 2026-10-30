@@ -249,6 +249,14 @@ function validate() {
     assert.ok(Buffer.byteLength(body, 'utf8') < 60000, 'PR body exceeds the reviewable size budget');
 
     if (changed.length) {
+        const candidate = JSON.parse(readFileSync('triage-results/candidate/state.json', 'utf8'));
+        const result = JSON.parse(readFileSync('triage-results/candidate/result.json', 'utf8'));
+        assert.equal(candidate.baselineSha, base);
+        assert.equal(candidate.fingerprint, generated.input.fingerprint);
+        assert.ok(candidate.attempts > 0 && candidate.attempts <= 3, 'Candidate repair budget exceeded');
+        assert.equal(readFileSync('package.json', 'utf8'), candidate.manifest, 'Use the candidate helper for final manifest edits');
+        assert.equal(readFileSync('yarn.lock', 'utf8'), candidate.lock, 'Use the candidate helper for final lockfile edits');
+        assert.ok(result.passed || result.rolledBack, 'Candidate execution did not complete');
         execFileSync(process.execPath, ['.yarn/releases/yarn-4.14.1.cjs', 'install', '--immutable', '--mode=skip-build'], {
             stdio: 'inherit',
         });
