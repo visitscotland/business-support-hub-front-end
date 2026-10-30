@@ -1,37 +1,47 @@
 import {
-    mkdir, readFile, writeFile, 
+    mkdir, readFile, writeFile,
 } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readJson } from '../../../../ci/dependency-http.mjs';
 
 // GET-only transport; never follows redirects with credentials or logs response bodies.
 export function githubReader(token, fetcher = fetch) {
     return async(path) => {
         const url = new URL(path, 'https://api.github.com');
         if (url.origin !== 'https://api.github.com') throw new Error('Unsupported API origin');
-        const response = await fetcher(url, {
-            method: 'GET',
-            redirect: 'error',
-            signal: AbortSignal.timeout(30000),
-            headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: `Bearer ${token}`,
-                'X-GitHub-Api-Version': '2022-11-28',
-            },
-        });
-        if (!response.ok) throw new Error(`GitHub HTTP ${response.status}`);
+        let response;
+        try {
+            response = await readJson(url, {
+                headers: {
+                    Accept: 'application/vnd.github+json',
+                    Authorization: `Bearer ${token}`,
+                    'X-GitHub-Api-Version': '2022-11-28',
+                },
+            }, {
+                fetcher,
+            });
+        } catch (error) {
+            if (/^HTTP \d{3}$/.test(error.message)) throw new Error(`GitHub ${error.message}`, {
+                cause: error,
+            });
+            throw error;
+        }
         return {
-            data: await response.json(),
-            next: response.headers.get('link')?.match(/<([^>]+)>; rel="next"/)?.[1], 
+            data: response.data,
+            next: response.headers.get('link')?.match(/<([^>]+)>; rel="next"/)?.[1],
         };
     };
 }
 
-export async function collect(repo, read) {
+export async function collect(repo, read, { profile = 'full' } = {
+}) {
+    if (!['full', 'maintenance'].includes(profile)) throw new Error('Unknown collection profile');
     if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) throw new Error('Expected repository as owner/name');
     const root = `/repos/${repo}`;
     const evidence = {
         schemaVersion: 1,
+        profile,
         repository: repo,
         collectedAt: new Date().toISOString(),
         status: 'complete',
@@ -48,19 +58,19 @@ export async function collect(repo, read) {
         try {
             return {
                 status: 'complete',
-                data: await operation(), 
+                data: await operation(),
             };
         } catch (error) {
             // Do not serialize arbitrary exception text: it may contain credentials or response data.
             const message = /^GitHub HTTP \d{3}$/.test(error.message) ? error.message : 'Collection failed; check access, connectivity or response shape';
             evidence.errors.push({
                 source,
-                message, 
+                message,
             });
             evidence.status = 'incomplete';
             return {
                 status: 'unavailable',
-                data: null, 
+                data: null,
             };
         }
     }
@@ -87,7 +97,7 @@ export async function collect(repo, read) {
             if (!/^[a-f0-9]{40}$/.test(commit.sha)) throw new Error('Expected commit SHA');
             return {
                 branch,
-                sha: commit.sha, 
+                sha: commit.sha,
             };
         });
     } else {
@@ -104,11 +114,19 @@ export async function collect(repo, read) {
             const content = Buffer.from(file.content, 'base64').toString('utf8');
             return {
                 sha: file.sha,
-                content: name === 'package.json' ? JSON.parse(content) : content, 
+                content: name === 'package.json' ? JSON.parse(content) : content,
             };
         });
     }
     evidence.alerts = await capture('alerts', () => pages(`${root}/dependabot/alerts?state=open&per_page=100`));
+    if (profile === 'maintenance') {
+        evidence.pullRequests = {
+            status: 'not-requested',
+            data: null,
+        };
+        evidence.limitations.push('Maintenance profile intentionally omits PR evidence; PR eligibility is not assessed.');
+        return evidence;
+    }
     evidence.pullRequests = await capture('pullRequests', async() => {
         const prs = await pages(`${root}/pulls?state=open&per_page=100`);
         return prs.filter((pr) => pr.user?.login === 'dependabot[bot]');
@@ -133,8 +151,8 @@ export async function main(args = process.argv.slice(2)) {
     const options = {
     };
     for (let index = 0; index < args.length; index += 2) {
-        if (!['--repo', '--out', '--fixture'].includes(args[index]) || !args[index + 1] || options[args[index]]) {
-            throw new Error('Usage: node collect.mjs --repo owner/name [--out triage-results/evidence.json] [--fixture path]');
+        if (!['--repo', '--out', '--fixture', '--profile'].includes(args[index]) || !args[index + 1] || options[args[index]]) {
+            throw new Error('Usage: node collect.mjs --repo owner/name [--out path] [--fixture path] [--profile full|maintenance]');
         }
         options[args[index]] = args[index + 1];
     }
@@ -153,11 +171,13 @@ export async function main(args = process.argv.slice(2)) {
         if (!token) throw new Error('Set GH_TOKEN or GITHUB_TOKEN through your credential manager; do not put tokens in arguments or files');
         read = githubReader(token);
     }
-    const evidence = await collect(options['--repo'], read);
+    const evidence = await collect(options['--repo'], read, {
+        profile: options['--profile'] || 'full',
+    });
     evidence.mode = options['--fixture'] ? 'fixture' : 'live';
     const output = resolve(options['--out'] || 'triage-results/evidence.json');
     await mkdir(dirname(output), {
-        recursive: true, 
+        recursive: true,
     });
     await writeFile(output, `${JSON.stringify(evidence, null, 2)}\n`);
     console.log(`Saved ${evidence.mode} evidence (${evidence.status}) to ${output}`);

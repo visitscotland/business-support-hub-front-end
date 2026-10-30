@@ -7,6 +7,12 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
 import semver from 'semver';
+import {
+    advisoryRanges, pinTarget, fingerprint,
+} from './prepare-dependency-maintenance.mjs';
+import {
+    assertPinEvidence, installedGraph, verifyGraphChanges,
+} from './dependency-graph.mjs';
 
 export const marker = '<!-- bsh-dependency-maintenance:v1 -->';
 
@@ -48,9 +54,9 @@ export function assess(evidence, triage, afterLock) {
 
     return evidence.alerts.data.map((alert) => {
         const name = alert.dependency.package.name;
-        const ranges = alert.security_advisory.vulnerabilities.filter((v) => v.package.name === name)
-            .map((v) => v.vulnerable_version_range.replace(/,\s*/g, ' '));
-        const valid = ranges.length > 0 && ranges.every((r) => semver.validRange(r));
+        const ranges = advisoryRanges(alert);
+        const valid = alert.dependency.package.ecosystem === 'npm' && ranges.length > 0
+            && ranges.every((r) => r && semver.validRange(r));
         const affected = (entries) => entries.filter((v) => v?.resolution?.startsWith(`${name}@npm:`)
             && semver.valid(String(v.version)) && ranges.some((r) => semver.satisfies(String(v.version), r)))
             .map((v) => String(v.version));
@@ -76,6 +82,117 @@ export function assess(evidence, triage, afterLock) {
 }
 
 const cell = (value) => String(value).replaceAll('|', '\\|').replace(/[\r\n]+/g, ' ');
+
+export function applyProposal(input, proposal, afterManifest) {
+    assert.equal(proposal.schemaVersion, 1);
+    const triage = structuredClone(input.triage);
+    const seen = new Set();
+    for (const decision of proposal.packages || []) {
+        const key = `${decision.ecosystem}:${decision.name}`;
+        assert.ok(!seen.has(key), 'Duplicate package decision');
+        seen.add(key);
+        const p = triage.packages.find((entry) => entry.name === decision.name && entry.ecosystem === decision.ecosystem);
+        assert.ok(p, 'Unknown package decision');
+        assert.ok(Array.isArray(decision.recommendations) && decision.recommendations.length > 0);
+        for (const recommendation of decision.recommendations) {
+            assert.equal(typeof recommendation.action, 'string');
+            assert.ok(recommendation.action.trim(), 'Explain proposed or unresolved work');
+            for (const version of [recommendation.targetVersion, recommendation.pinVersion].filter((v) => v != null)) {
+                const candidate = input.releases[p.name]?.find((r) => r.version === version);
+                assert.ok(candidate, 'Target must have prepared registry evidence');
+                const from = recommendation.applicableFromVersions || p.affectedVersions;
+                assert.ok(from.length && from.every((v) => semver.valid(v) && semver.gte(version, v)
+                    && candidate.applicableFromVersions.includes(v)), 'Recommendation must match a prepared forward-fix branch');
+            }
+        }
+        p.recommendations = decision.recommendations;
+        for (const version of new Set(decision.recommendations.flatMap((r) => [r.targetVersion, r.pinVersion]).filter(Boolean))) {
+            p.sources.push({
+                url: input.releases[p.name].find((r) => r.version === version).source,
+                retrievedAt: input.preparedAt,
+            });
+        }
+    }
+    triage.upgradeNotes = [];
+    for (const field of ['dependencies', 'devDependencies', 'resolutions', 'overrides']) {
+        for (const name of new Set([...Object.keys(input.manifest[field] || {
+        }), ...Object.keys(afterManifest[field] || {
+        })])) {
+            const before = input.manifest[field]?.[name];
+            const after = afterManifest[field]?.[name];
+            if (before === after) continue;
+            assertPinEvidence(input, field, name, after);
+            const explanation = (proposal.changes || []).find((c) => c.field === field && c.name === name);
+            assert.ok(explanation?.reason?.trim(), `Explain ${field}.${name}`);
+            assert.ok(explanation?.compatibility?.trim(), `Disclose compatibility for ${field}.${name}`);
+            if (after !== undefined) {
+                const target = ['dependencies', 'devDependencies'].includes(field)
+                    ? name : pinTarget(name, Object.keys(input.releases));
+                assert.ok(typeof after === 'string' && semver.validRange(after)
+                    && input.releases[target]?.some((r) => semver.satisfies(r.version, after)),
+                `Changed ${field}.${name} must admit a prepared registry candidate`);
+            }
+            const pin = input.pins.find((p) => p.selector === name);
+            triage.upgradeNotes.push(`${field}.${name}: ${before ?? '(absent)'} → ${after ?? '(removed)'}. ${explanation.reason}. Compatibility: ${explanation.compatibility}.${pin ? ` Parent constraints: ${pin.parents.map((p) => `${p.name}@${p.version}: ${p.constraint}`).join('; ') || 'unverified'}.` : ''}`);
+        }
+    }
+    return triage;
+}
+
+export function renderReport(triage) {
+    const table = (headers, rows) => [
+        `| ${headers.join(' | ')} |`, `| ${headers.map(() => '---').join(' | ')} |`,
+        ...rows.map((row) => `| ${row.map(cell).join(' | ')} |`),
+    ].join('\n');
+    const pins = triage.laggingPins.map((p) => [p.name, `${p.configuredPin} → ${p.effectiveVersions.join(', ')}`,
+        p.parentRequirements.map((parent) => `${parent.name}@${parent.version}: ${parent.constraint}`).join('; '),
+        p.evidenceLevel, p.recommendedAction]);
+    return [`${triage.repository} | ${triage.collectedAt} | ${triage.baselineSha} | ${triage.collectionStatus}`, '',
+        '## Packages needing updates', '', table(['Package', 'Current affected versions', 'Highest severity',
+            'Direct/transitive (parent)', 'Recommended patched version / pin', 'Action / constraint caveat', 'Alerts'],
+        triage.packages.map((p) => [p.name, p.affectedVersions.join(', ') || 'Unverified', p.highestSeverity,
+            `${p.relationship}; ${p.parents.map((parent) => `${parent.name}@${parent.version}`).join(', ')}`,
+            p.recommendations.map((r) => r.targetVersion || r.pinVersion || 'Unverified — investigate').join('; '),
+            p.recommendations.map((r) => `${r.action}${r.compatibility ? ` (${r.compatibility})` : ''}`).join('; '),
+            p.alerts.map((a) => `[#${a.number}](${a.url})`).join(', ')])), '',
+        '## Pins behind parent requirements or unpinned resolution', '',
+        `Pin assessment: ${triage.pinAssessmentStatus || 'partial'} (parent constraints; unpinned installs are not inferred).`, '',
+        pins.length ? table(['Package / mechanism', 'Configured pin → effective version', 'Parent requirement', 'Evidence', 'Recommended action'], pins)
+            : triage.gaps.some((gap) => gap.startsWith('Pin ')) ? 'Pin assessment incomplete; see gaps.' : 'None found.', '',
+        ...triage.gaps.map((gap) => `Gap: ${gap}`),
+        ...(triage.pinAssessments?.some((p) => p.status === 'unused')
+            ? [`Unused resolution selectors: ${triage.pinAssessments.filter((p) => p.status === 'unused').map((p) => p.selector).join(', ')}.`] : []),
+        ...(triage.pinAssessments?.some((p) => p.status === 'constraint-override')
+            ? [`Existing selectors outside parent constraints: ${triage.pinAssessments.filter((p) => p.status === 'constraint-override').map((p) => p.selector).join(', ')}.`] : []),
+        ...(triage.inactiveOverrides?.length ? [`Inactive npm overrides under Yarn: ${triage.inactiveOverrides.join(', ')}.`] : []), '',
+        ...(triage.upgradeNotes || []).map((note) => `Review: ${note}`), '',
+    ].join('\n');
+}
+
+function currentReports() {
+    const evidence = JSON.parse(readFileSync('triage-results/evidence.json', 'utf8'));
+    const input = JSON.parse(readFileSync('triage-results/agent-input.json', 'utf8'));
+    if (input.pathEvidence) {
+        assert.equal(input.pathEvidence.path, 'triage-results/dependency-paths.json');
+        const proof = JSON.parse(readFileSync('triage-results/dependency-paths.json', 'utf8'));
+        assert.equal(proof.fingerprint, input.fingerprint);
+        assert.equal(proof.baselineSha, input.baselineSha);
+        assert.equal(fingerprint(proof.paths), input.pathEvidence.hash, 'Authoritative dependency paths changed');
+        input.paths = proof.paths;
+    }
+    assert.equal(input.baselineSha, evidence.baseline.data.sha);
+    const proposal = JSON.parse(readFileSync('triage-results/proposal.json', 'utf8'));
+    const triage = applyProposal(input, proposal, JSON.parse(readFileSync('package.json', 'utf8')));
+    const report = renderReport(triage);
+    const outcomes = assess(evidence, triage, readFileSync('yarn.lock', 'utf8'));
+    return {
+        input,
+        triage,
+        report,
+        outcomes,
+        body: renderBody(evidence, report, outcomes),
+    };
+}
 
 export function renderBody(evidence, triageReport, outcomes) {
     const pending = outcomes.filter((o) => o.outcome === 'unresolved');
@@ -103,7 +220,8 @@ function validate() {
     assert.match(base || '', /^[a-f0-9]{40}$/);
 
     const evidence = JSON.parse(readFileSync('triage-results/evidence.json', 'utf8'));
-    const triage = JSON.parse(readFileSync('triage-results/triage.json', 'utf8'));
+    const generated = currentReports();
+    const { triage, outcomes, body } = generated;
 
     assert.equal(evidence.baseline.data.sha, base, 'Default branch moved after the run began; recollect on a fresh run');
 
@@ -122,9 +240,8 @@ function validate() {
         }
     }
 
-    const outcomes = assess(evidence, triage, readFileSync('yarn.lock', 'utf8'));
-    const body = renderBody(evidence, readFileSync('triage-results/weekly-report.md', 'utf8'), outcomes);
-
+    assert.deepEqual(JSON.parse(readFileSync('triage-results/triage.json', 'utf8')), triage);
+    assert.equal(readFileSync('triage-results/weekly-report.md', 'utf8'), generated.report);
     assert.equal(readFileSync('triage-results/pr-body.md', 'utf8'), body, 'PR body must be generated from the final candidate');
     assert.ok(Buffer.byteLength(body, 'utf8') < 60000, 'PR body exceeds the reviewable size budget');
 
@@ -132,6 +249,7 @@ function validate() {
         execFileSync(process.execPath, ['.yarn/releases/yarn-4.14.1.cjs', 'install', '--immutable', '--mode=skip-build'], {
             stdio: 'inherit',
         });
+        verifyGraphChanges(generated.input, after, installedGraph());
         execFileSync(process.execPath, ['ci/dependency-smoke.mjs'], {
             stdio: 'inherit',
         });
@@ -143,16 +261,22 @@ function validate() {
         changed,
         outcomes,
         testsRun: changed.length > 0,
+        fingerprint: generated.input.fingerprint,
     }, null, 2)}\n`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
     if (process.argv[2] === 'render') {
-        const e = JSON.parse(readFileSync('triage-results/evidence.json', 'utf8'));
-        const t = JSON.parse(readFileSync('triage-results/triage.json', 'utf8'));
-        const outcomes = assess(e, t, readFileSync('yarn.lock', 'utf8'));
-
-        writeFileSync('triage-results/pr-body.md', renderBody(e, readFileSync('triage-results/weekly-report.md', 'utf8'), outcomes));
+        const generated = currentReports();
+        writeFileSync('triage-results/triage.json', `${JSON.stringify(generated.triage, null, 2)}\n`);
+        writeFileSync('triage-results/weekly-report.md', generated.report);
+        writeFileSync('triage-results/pr-body.md', generated.body);
+    } else if (process.argv[2] === 'initialize') {
+        writeFileSync('triage-results/proposal.json', `${JSON.stringify({
+            schemaVersion: 1,
+            packages: [],
+            changes: [],
+        })}\n`);
     } else if (process.argv[2] === 'validate') {
         if (existsSync('triage-results/validation.json')) {
             writeFileSync('triage-results/validation.json', '{"passed":false}\n');
@@ -160,6 +284,6 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
 
         validate();
     } else {
-        throw new Error('Use render or validate');
+        throw new Error('Use initialize, render or validate');
     }
 }
