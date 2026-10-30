@@ -1,9 +1,54 @@
 {
   "entries": {
+    "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683": {
+      "repo": "actions/checkout",
+      "sha": "11bd71901bbe5b1630ceea73d27597364c9af683",
+      "version": "11bd71901bbe5b1630ceea73d27597364c9af683"
+    },
+    "actions/checkout@v7.0.1": {
+      "repo": "actions/checkout",
+      "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "version": "v7.0.1"
+    },
+    "actions/download-artifact@v8.0.2": {
+      "repo": "actions/download-artifact",
+      "sha": "9000827ccba6bdab643e8b6fd33ac0654aef8333",
+      "version": "v8.0.2"
+    },
+    "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093": {
+      "repo": "actions/download-artifact",
+      "sha": "d3f86a106a0bac45b974a628896c90dbdf5c8093",
+      "version": "d3f86a106a0bac45b974a628896c90dbdf5c8093"
+    },
+    "actions/github-script@v9.0.0": {
+      "repo": "actions/github-script",
+      "sha": "3a2844b7e9c422d3c10d287c895573f7108da1b3",
+      "version": "v9.0.0"
+    },
+    "actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020": {
+      "repo": "actions/setup-node",
+      "sha": "49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "version": "49933ea5288caeca8642d1e84afbd3f7d6820020"
+    },
+    "actions/setup-node@v7.1.0": {
+      "repo": "actions/setup-node",
+      "sha": "949feb2413d6458794dcd2491c4babbbce0c15c1",
+      "version": "v7.1.0"
+    },
+    "actions/upload-artifact@v7.0.2": {
+      "repo": "actions/upload-artifact",
+      "sha": "cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+      "version": "v7.0.2"
+    },
+    "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02": {
+      "repo": "actions/upload-artifact",
+      "sha": "ea165f8d65b6e75b540449e92b4886f43607fa02",
+      "version": "ea165f8d65b6e75b540449e92b4886f43607fa02"
+    },
     "github/gh-aw-actions/setup@v0.92.0": {
       "repo": "github/gh-aw-actions/setup",
-      "version": "v0.92.0",
-      "sha": "458b269006dcf88e3b5496b6fbecabe4b9a0f954"
+      "sha": "458b269006dcf88e3b5496b6fbecabe4b9a0f954",
+      "version": "v0.92.0"
     }
   }
 }
