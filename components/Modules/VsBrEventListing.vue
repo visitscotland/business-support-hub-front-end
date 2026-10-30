@@ -218,11 +218,13 @@ import useConfigStore from '~/stores/configStore.ts';
 import VsBrRichText from './VsBrRichText.vue';
 import VsBrFilter from './VsBrFilter.vue';
 import VsBrEventCard from '../ProductComponents/VsBrEventCard.vue';
+import useTrainingEventsStore from '~/stores/trainingEventsStore.ts';
+import type { EventsCategories } from '~/types/types.ts';
 
 const props = defineProps<{
     eventData: any,
     moduleId: string,
-    tabIndex: string | number,
+    tabIndex: number,
 }>();
 
 type SelectedFilter = {
@@ -241,6 +243,7 @@ const selectedSortBy = ref(props.eventData.sortBy[0].label);
 const selectedFilters = ref<SelectedFilter[]>([]);
 const filterId = props.eventData.title.split(' ')[0].toLowerCase();
 const filter = ref();
+const trainingEventsStore = useTrainingEventsStore();
 
 // For the modal
 const app = getCurrentInstance();
@@ -251,10 +254,17 @@ const MODAL_BREAKPOINT = 991.98;
 
 const teleportTarget = ref(`#sidebar-filter-target-${props.tabIndex}`);
 
+const tabIdMap: Record<number, EventsCategories> = {
+    0: 'training',
+    1: 'industry',
+    2: 'travel',
+};
+
 // Call the api to get the event card data.
 const { data }: { data: any } = await useFetch(props.eventData.baseEndPoint, {
     query: query.value,
 });
+
 const totalResults = computed(() => data.value.total);
 const numberOfPages = computed(() => Math.ceil(totalResults.value / data.value.pageSize));
 
@@ -284,6 +294,14 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
     const index = selectedFilters.value.findIndex((el) => el.key === key);
     if (index > -1) {
         selectedFilters.value.splice(index, 1);
+    }
+
+    if(key.endsWith('start-date')) {
+        trainingEventsStore.selectedStartDate[tabIdMap[props.tabIndex]] = undefined;
+    }
+
+    if(key.endsWith('end-date')) {
+        trainingEventsStore.selectedEndDate[tabIdMap[props.tabIndex]] = undefined;
     }
 
     // Clear the filter input field.
@@ -363,11 +381,13 @@ const clearAllFilters = () => {
             query.value[key] = 'date';
         }
     });
-
+    
     // Reset pagination, sort by and selected filters to defaults.
     currentPage.value = 1;
     selectedSortBy.value = props.eventData.sortBy[0].label;
     selectedFilters.value = [];
+    trainingEventsStore.selectedStartDate[tabIdMap[props.tabIndex]] = new Date;
+    trainingEventsStore.selectedEndDate[tabIdMap[props.tabIndex]] = undefined;
 
     // Clear all filter input fields.
     filter.value.resetAll();
