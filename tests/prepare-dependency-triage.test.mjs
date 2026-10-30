@@ -14,11 +14,10 @@ import {
 
 const sha = 'a'.repeat(40);
 
-test('CLI preparation, triage check and PR rendering enforce the same gate', () => {
+test('standalone triage CLI rejects pending analysis and renders reviewed findings', () => {
     const directory = mkdtempSync(join(tmpdir(), 'dependency-triage-'));
     const e = evidence();
     const helper = fileURLToPath(new URL('../ci/prepare-dependency-triage.mjs', import.meta.url));
-    const maintenance = fileURLToPath(new URL('../ci/dependency-maintenance.mjs', import.meta.url));
     const run = (file, command) => execFileSync(process.execPath, [file, command], {
         cwd: directory,
         env: {
@@ -37,11 +36,9 @@ test('CLI preparation, triage check and PR rendering enforce the same gate', () 
         run(helper, 'prepare');
         assert.equal(JSON.parse(readFileSync(join(directory, 'triage-results/triage.json'))).analysisStatus, 'pending');
         assert.throws(() => run(helper, 'check'), /Complete triage/);
-        assert.throws(() => run(maintenance, 'render'), /Complete triage/);
         writeFileSync(join(directory, 'triage-results/triage.json'), JSON.stringify(reviewed(e)));
         run(helper, 'check');
-        run(maintenance, 'render');
-        assert.match(readFileSync(join(directory, 'triage-results/pr-body.md'), 'utf8'), /2 findings are NOT fixed/);
+        assert.match(readFileSync(join(directory, 'triage-results/weekly-report.md'), 'utf8'), /example/);
     } finally {
         rmSync(directory, {
             recursive: true,

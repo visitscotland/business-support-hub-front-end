@@ -1,6 +1,12 @@
 # Local operation and migration
 
-Run from the repository root with Node 24.4.1. No new npm packages, GitHub CLI,
+For the hosted maintenance workflow, see `ci/dependency-maintenance.md` from the
+repository root. It consumes a lean collector profile plus deterministic prepared
+facts and structured decisions; the local report-only procedure below remains
+available. `--profile maintenance` intentionally omits PR evidence and does not
+assess PR checks or auto-merge eligibility.
+
+Run from the repository root with the exact Node version in `.nvmrc`. No new npm packages, GitHub CLI,
 Copilot access or scheduled workflow are required.
 The skill now produces two compact tables: affected packages with highest alert
 severity and exact patch/pin recommendations, followed by evidenced lagging pins.

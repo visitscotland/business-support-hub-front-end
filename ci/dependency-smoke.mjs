@@ -3,6 +3,7 @@ import { createWriteStream } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { smokeEnvironment } from '../tests/dependency-smoke/environment.mjs';
 import { terminateTree } from '../tests/dependency-smoke/processes.mjs';
+import { prepareSmokeRuntime } from './dependency-runtime.mjs';
 
 const allowed = new Set(['--skip-build', '--harness']);
 
@@ -77,6 +78,7 @@ async function stage(name, args, timeoutMs) {
 }
 
 try {
+    console.log(`Dependency smoke setup: ${JSON.stringify(await prepareSmokeRuntime())}`);
     if (!process.argv.includes('--skip-build')) {
         await stage('lint', ['.yarn/releases/yarn-4.14.1.cjs', 'lint'], 180_000);
         await stage('build', ['.yarn/releases/yarn-4.14.1.cjs', 'build'], 600_000);

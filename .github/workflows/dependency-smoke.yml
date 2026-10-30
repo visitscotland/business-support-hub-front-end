@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies from lockfile
         run: node .yarn/releases/yarn-4.14.1.cjs install --immutable
 
+      - name: Verify the installed Nuxt runtime requirements
+        run: node ci/dependency-runtime.mjs check-installed
+
       - name: Run smoke harness unit tests
         run: node .yarn/releases/yarn-4.14.1.cjs test:smoke:unit
 
