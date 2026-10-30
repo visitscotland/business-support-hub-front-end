@@ -3,11 +3,11 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-// The deployment version check deliberately uses only Node built-ins.
+// The version check uses only Node built-ins.
 export function checkNodeVersion(root = process.cwd(), actual = process.versions.node) {
     const expected = readFileSync(join(root, '.nvmrc'), 'utf8').trim();
     assert.match(expected, /^\d+\.\d+\.\d+$/, '.nvmrc must pin an exact Node release');
-    assert.equal(actual, expected, `Node ${actual} differs from .nvmrc ${expected}; update the runtime/image before continuing`);
+    assert.equal(actual, expected, `Node ${actual} differs from .nvmrc ${expected}; use the pinned runtime before continuing`);
     return expected;
 }
 

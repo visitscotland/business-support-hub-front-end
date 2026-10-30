@@ -46,12 +46,6 @@ from the installed component-library manifest without running lifecycle scripts.
 Changed resolutions require verified baseline paths, actual effect after install,
 and no downgrade on unchanged parent paths.
 
-Jenkins builder and deployment checks use the same pin. `check-runtime-image.sh`
-checks the deployment image before any container replacement; the version check
-inside the new container provides an additional startup guard. The external
-`vs/vs-brxm15:node24` and builder images must contain the pinned Node release;
-their Dockerfiles/registry publishing are managed outside this repository.
-
 The agent has 30 model turns, a 100-credit ceiling, three candidate groups and two
 repair attempts across the run. Its harness allows one continuation retry after
 30 seconds; Copilot's own transport owns inference retries and server backoff.
