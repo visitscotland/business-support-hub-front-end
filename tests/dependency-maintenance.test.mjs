@@ -679,21 +679,26 @@ test('replacement cleanup rechecks ownership and replacement before closing olde
 });
 
 
-test('bounded context reconstructs complete evidence without duplicated triage and handles unicode', async() => {
+test('package context files are independently parseable, bounded and retain candidates and parent constraints', async() => {
     const input = await prepare(sample(), options);
-    input.gaps = ['界'.repeat(15000)];
+    input.gaps = Array.from({
+        length: 150,
+    }, () => '界'.repeat(100));
     const pages = agentContextPages(input);
-    assert.ok(pages.length > 1);
+    assert.ok(pages.length > 2);
     assert.ok(pages.every((p) => Buffer.byteLength(p) <= 10000));
-    const reconstructed = JSON.parse(pages.join(''));
-    assert.deepEqual(reconstructed.releases, input.releases);
-    assert.deepEqual(reconstructed.gaps, input.gaps);
-    assert.equal(reconstructed.triage, undefined);
+    const sections = pages.map((p) => JSON.parse(p));
+    const records = sections.filter((p) => p.package === 'thing').flatMap((p) => p.records);
+    assert.ok(records.some((r) => r.section === 'parent'));
+    assert.ok(records.some((r) => r.section === 'candidate' && r.value.version === '1.0.2'));
+    assert.equal(sections.flatMap((p) => p.records).filter((r) => r.section === 'gap').length, 150);
     const directory = await mkdtemp(join(tmpdir(), 'agent-context-'));
     try {
         writeAgentContext(input, directory);
         assert.match(await readFile(join(directory, 'index.md'), 'utf8'), /Required package decisions: thing/);
-        assert.equal(await readFile(join(directory, 'page-001.txt'), 'utf8'), pages[0]);
+        assert.equal(await readFile(join(directory, 'context-001.json'), 'utf8'), pages[0]);
+        input.gaps = ['界'.repeat(10000)];
+        assert.throws(() => agentContextPages(input), /One evidence record exceeds/);
     } finally { await rm(directory, {
         recursive: true,
         force: true,

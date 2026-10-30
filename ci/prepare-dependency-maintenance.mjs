@@ -14,28 +14,94 @@ import {
 } from './dependency-graph.mjs';
 import { checkInstalledRuntime } from './dependency-runtime.mjs';
 
-// Machine input remains authoritative; model pages omit its duplicated report skeleton.
+// Every file is valid standalone JSON; split only between complete evidence records.
 export function agentContextPages(input) {
-    const context = {
-        ...input,
-    };
-    delete context.triage;
-    delete context.paths;
-    const text = JSON.stringify(context);
-    const pages = [];
-    let page = '';
-    let bytes = 0;
-    for (const character of text) {
-        const size = Buffer.byteLength(character);
-        if (bytes + size > 10000) {
-            pages.push(page);
-            page = '';
-            bytes = 0;
-        }
-        page += character;
-        bytes += size;
+    const groups = [{
+        package: null,
+        records: [{
+            section: 'overview',
+            value: {
+                repository: input.repository,
+                baselineSha: input.baselineSha,
+                nodeVersion: input.nodeVersion,
+                limits: input.limits,
+                registryComplete: input.registryComplete,
+            },
+        }, ...input.pins.map((p) => ({
+            section: 'pin-audit',
+            value: {
+                selector: p.selector,
+                configuredPin: p.configuredPin,
+                status: p.status,
+            },
+        })), ...(input.gaps || []).map((value) => ({
+            section: 'gap',
+            value,
+        }))],
+    }];
+    for (const p of input.triage.packages) {
+        const names = new Set([p.name, ...p.parents.map((parent) => parent.name)]);
+        groups.push({
+            package: p.name,
+            records: [
+                {
+                    section: 'finding',
+                    value: {
+                        name: p.name,
+                        ecosystem: p.ecosystem,
+                        affectedVersions: p.affectedVersions,
+                        highestSeverity: p.highestSeverity,
+                        relationship: p.relationship,
+                        uncertainties: p.uncertainties,
+                    },
+                },
+                ...p.parents.map((value) => ({
+                    section: 'parent',
+                    value,
+                })),
+                ...input.alerts.filter((a) => a.package.name === p.name).map((value) => ({
+                    section: 'advisory',
+                    value,
+                })),
+                ...[...names].flatMap((name) => (input.releases[name] || []).map((value) => ({
+                    section: 'candidate',
+                    package: name,
+                    value,
+                }))),
+                ...input.pins.filter((pin) => pin.name === p.name || names.has(pin.selector))
+                    .map((value) => ({
+                        section: 'pin',
+                        value,
+                    })),
+                ...['dependencies', 'devDependencies', 'resolutions', 'overrides'].flatMap((field) =>
+                    Object.entries(input.manifest[field] || {
+                    }).filter(([name]) => names.has(name)
+                        || pinTarget(name, [...names])).map(([name, value]) => ({
+                        section: 'manifest',
+                        field,
+                        name,
+                        value,
+                    }))),
+            ],
+        });
     }
-    if (page) pages.push(page);
+    const pages = [];
+    for (const group of groups) {
+        let records = [];
+        const serialize = (items) => JSON.stringify({
+            package: group.package,
+            records: items,
+        });
+        for (const record of group.records) {
+            assert.ok(Buffer.byteLength(serialize([record])) <= 10000, 'One evidence record exceeds the context limit; shorten it before model execution');
+            if (Buffer.byteLength(serialize([...records, record])) > 10000) {
+                pages.push(serialize(records));
+                records = [];
+            }
+            records.push(record);
+        }
+        if (records.length) pages.push(serialize(records));
+    }
     return pages;
 }
 
@@ -45,13 +111,14 @@ export function writeAgentContext(input, directory = 'triage-results/agent-conte
     });
     const pages = agentContextPages(input);
     const files = pages.map((page, i) => {
-        const name = `page-${String(i + 1).padStart(3, '0')}.txt`;
+        const name = `context-${String(i + 1).padStart(3, '0')}.json`;
         writeFileSync(`${directory}/${name}`, page);
-        return `- ${directory}/${name}`;
+        return `- ${directory}/${name} (${JSON.parse(page).package || 'overview'})`;
     });
     writeFileSync(`${directory}/index.md`, [
         `Baseline: ${input.baselineSha}`,
-        'Read every page in order. Pages are consecutive JSON fragments, each at most 10 KB.',
+        'Read these standalone JSON files once in one batch. Each is at most 10 KB.',
+        'Each package file contains its findings, candidates, parents and matching selectors.',
         `Required package decisions: ${input.triage.packages.map((p) => p.name).join(', ') || '(none)'}.`,
         ...files, '',
     ].join('\n'));
@@ -380,7 +447,7 @@ export async function main() {
     const yarnConfig = YAML.parse(readFileSync('.yarnrc.yml', 'utf8'));
     assert.equal(yarnConfig.npmMinimalAgeGate, '7d', 'Review preparation when changing the Yarn age gate');
     const policyFiles = ['ci/prepare-dependency-maintenance.mjs', 'ci/dependency-maintenance.mjs',
-        'ci/dependency-http.mjs', 'ci/dependency-graph.mjs', 'ci/dependency-runtime.mjs', 'ci/dependency-maintenance-state.mjs', '.github/workflows/dependency-maintenance-agent.md',
+        'ci/dependency-candidate.mjs', 'ci/dependency-http.mjs', 'ci/dependency-graph.mjs', 'ci/dependency-runtime.mjs', 'ci/dependency-maintenance-state.mjs', '.github/workflows/dependency-maintenance-agent.md',
         '.github/workflows/dependency-maintenance.yml', '.github/skills/dependency-remediation/SKILL.md',
         '.github/skills/dependency-triage/SKILL.md', '.yarnrc.yml'];
     const result = await prepare(evidence, {

@@ -17,8 +17,9 @@ pins, constraint overrides and unknown paths distinguished. Peer virtualisations
 are deduplicated. None of this claims a verified unpinned installation.
 
 The full relevant paths are retained in `dependency-paths.json` with an integrity
-hash, separately from the compact `agent-input.json`. Copilot reads the numbered 10 KB pages listed in `agent-context/index.md`;
-the pages omit the duplicated report skeleton and preserve UTF-8 boundaries; the validator consumes the authoritative paths. Registry reads are
+hash, separately from the compact `agent-input.json`. Copilot reads the standalone JSON files listed in `agent-context/index.md` once
+in a single batch. Each file is under 10 KB and groups complete package records
+with their candidates, parents and selectors; no JSON token is split between files. The validator consumes the authoritative paths. Registry reads are
 sequential, deduplicated and limited to alert targets, evidenced lagging pins, and
 parents for which a compatible security fix is unavailable. Unaffected pins do not
 cause speculative registry searches.
@@ -31,8 +32,19 @@ the seven-day Yarn age gate and Node-incompatible versions are excluded. Constra
 overrides and parent updates remain explicit review cases. Unselected new releases
 do not invalidate an otherwise identical result's fingerprint.
 
-Copilot reads the bounded context pages, modifies only the root manifest/lockfile and
-writes `proposal.json` decisions. Code generates the inventory JSON, two-table
+Copilot reads the bounded package context and writes `proposal.json` decisions
+and edits. Each edit supplies field, name, exact candidate value (or null for an
+evidenced resolution removal), reason and compatibility.
+`node ci/dependency-candidate.mjs apply` validates the whole proposal, applies
+JSON edits and regenerates the lockfile in one call. It rejects unsupported values,
+unknown selectors and downgrade pins before install. Full install logs stay local;
+the same call returns the exit code and a diagnostic capped at 4,000 characters.
+The persisted budget permits one initial install and two repairs; identical
+manifest attempts are rejected. Failed installs and timeouts consume an attempt
+and restore the last installed manifest/lockfile (initially the baseline).
+The restore command never resets the budget. Final validation verifies these
+retained files before running the authoritative immutable install and smoke gate.
+Code generates the inventory JSON, two-table
 report, upgrade disclosures and exact PR body. The post-agent steps restore the
 authoritative evidence/input, check the diff and rendered reports, and retain the
 existing immutable-install and full production smoke gate. Threat detection and
