@@ -11,7 +11,7 @@ import YAML from 'yaml';
 import { collect } from '../.github/skills/dependency-triage/scripts/collect.mjs';
 import { readJson } from '../ci/dependency-http.mjs';
 import {
-    inventory, prepare, fingerprint, advisoryRanges, pinTarget, releaseCandidates,
+    inventory, prepare, fingerprint, advisoryRanges, pinTarget, releaseCandidates, agentContextPages, writeAgentContext,
 } from '../ci/prepare-dependency-maintenance.mjs';
 import { shouldRun, completedState } from '../ci/dependency-maintenance-state.mjs';
 import {
@@ -227,6 +227,7 @@ test('registry failures remain explicit and cannot suppress subsequent runs', as
     assert.ok(!JSON.stringify(input).includes('private error'));
     assert.throws(() => completedState(input, {
         passed: true,
+        analysisComplete: true,
         base,
         fingerprint: input.fingerprint,
         changed: [],
@@ -273,6 +274,13 @@ test('manifest changes must admit a verified candidate even without package reco
     manifest.resolutions.thing = '99.0.0';
     const proposal = {
         schemaVersion: 1,
+        packages: [{
+            name: 'thing',
+            ecosystem: 'npm',
+            recommendations: [{
+                action: 'Review thing parent compatibility',
+            }],
+        }],
         changes: [{
             field: 'resolutions',
             name: 'thing',
@@ -287,6 +295,7 @@ test('unchanged gate reuses only recent successful identical results and honours
     const input = await prepare(sample(), options);
     const validation = {
         passed: true,
+        analysisComplete: true,
         base,
         fingerprint: input.fingerprint,
         changed: [],
@@ -351,6 +360,7 @@ test('closed, modified or inaccessible maintenance PRs never suppress a fresh ru
     const input = await prepare(sample(), options);
     const previous = completedState(input, {
         passed: true,
+        analysisComplete: true,
         base,
         fingerprint: input.fingerprint,
         changed: ['yarn.lock'],
@@ -435,7 +445,7 @@ test('structured decisions cannot change inventory and must explain changed pins
     assert.throws(() => applyProposal(input, proposal, manifest), /forward-fix branch/);
     assert.throws(() => applyProposal(input, {
         schemaVersion: 1,
-    }, manifest), /Explain/);
+    }, manifest), /missing explicit decisions/);
 });
 
 test('reports include every unresolved alert and assess all lockfile copies', async() => {
@@ -443,6 +453,13 @@ test('reports include every unresolved alert and assess all lockfile copies', as
     const input = await prepare(e, options);
     const t = applyProposal(input, {
         schemaVersion: 1,
+        packages: [{
+            name: 'thing',
+            ecosystem: 'npm',
+            recommendations: [{
+                action: 'Defer thing pending parent compatibility review',
+            }],
+        }],
     }, input.manifest);
     const unchanged = assess(e, t, e.files['yarn.lock'].data.content);
     const body = renderBody(e, renderReport(t), unchanged);
@@ -471,7 +488,13 @@ test('render CLI generates JSON, Markdown and exact PR body from one proposal', 
             'agent-input.json': input,
             'proposal.json': {
                 schemaVersion: 1,
-                packages: [],
+                packages: input.triage.packages.map((p) => ({
+                    name: p.name,
+                    ecosystem: p.ecosystem,
+                    recommendations: [{
+                        action: 'Deferred thing upgrade: parent compatibility requires a separate review',
+                    }],
+                })),
                 changes: [],
             },
         })) {
@@ -522,7 +545,13 @@ test('post-agent validation accepts a no-change report and rejects report tamper
             'agent-input.json': input,
             'proposal.json': {
                 schemaVersion: 1,
-                packages: [],
+                packages: [{
+                    name: 'thing',
+                    ecosystem: 'npm',
+                    recommendations: [{
+                        action: 'Deferred thing: parent compatibility needs review',
+                    }],
+                }],
                 changes: [],
             },
         })) {
@@ -647,4 +676,58 @@ test('replacement cleanup rechecks ownership and replacement before closing olde
         ...pr(1),
         state: 'closed',
     }, 'example/demo', 'main'), false);
+});
+
+
+test('bounded context reconstructs complete evidence without duplicated triage and handles unicode', async() => {
+    const input = await prepare(sample(), options);
+    input.gaps = ['界'.repeat(15000)];
+    const pages = agentContextPages(input);
+    assert.ok(pages.length > 1);
+    assert.ok(pages.every((p) => Buffer.byteLength(p) <= 10000));
+    const reconstructed = JSON.parse(pages.join(''));
+    assert.deepEqual(reconstructed.releases, input.releases);
+    assert.deepEqual(reconstructed.gaps, input.gaps);
+    assert.equal(reconstructed.triage, undefined);
+    const directory = await mkdtemp(join(tmpdir(), 'agent-context-'));
+    try {
+        writeAgentContext(input, directory);
+        assert.match(await readFile(join(directory, 'index.md'), 'utf8'), /Required package decisions: thing/);
+        assert.equal(await readFile(join(directory, 'page-001.txt'), 'utf8'), pages[0]);
+    } finally { await rm(directory, {
+        recursive: true,
+        force: true,
+    }); }
+});
+
+test('empty, missing and placeholder package decisions cannot establish complete analysis', async() => {
+    const input = await prepare(sample(), options);
+    for (const packages of [[], [{
+        name: 'thing',
+        ecosystem: 'npm',
+        recommendations: [{
+            action: 'Not attempted; requires human investigation',
+        }],
+    }]]) {
+        assert.throws(() => applyProposal(input, {
+            schemaVersion: 1,
+            packages,
+        }, input.manifest), /missing explicit decisions|package-specific decision/);
+    }
+    assert.throws(() => completedState(input, {
+        passed: true,
+    }, {
+        runId: '1',
+    }), /Incomplete analysis/);
+    assert.equal(await shouldRun(input, {
+        schemaVersion: 1,
+        fingerprint: input.fingerprint,
+        repository: input.repository,
+        baselineSha: input.baselineSha,
+        validated: true,
+        completedAt: new Date(now).toISOString(),
+        outcome: 'noop',
+    }, {
+        now,
+    }), true);
 });

@@ -11,7 +11,7 @@ export async function shouldRun(input, previous, { force = false, now = Date.now
 }) {
     if (force || !input.registryComplete || !previous || previous.schemaVersion !== 1
         || previous.fingerprint !== input.fingerprint || previous.repository !== input.repository
-        || previous.baselineSha !== input.baselineSha || previous.validated !== true
+        || previous.baselineSha !== input.baselineSha || previous.validated !== true || previous.analysisComplete !== true
         || !Number.isFinite(Date.parse(previous.completedAt)) || now < Date.parse(previous.completedAt)
         || now - Date.parse(previous.completedAt) >= lifetimeMs) return true;
     if (previous.prNumber) {
@@ -28,6 +28,7 @@ export async function shouldRun(input, previous, { force = false, now = Date.now
 
 export function completedState(input, validation, { prNumber = '', prHeadSha = '', staged = false, runId, now = Date.now() }) {
     assert.equal(validation.passed, true);
+    assert.equal(validation.analysisComplete, true, 'Incomplete analysis must not suppress future runs');
     assert.equal(validation.fingerprint, input.fingerprint);
     assert.equal(validation.base, input.baselineSha);
     assert.equal(input.registryComplete, true, 'Incomplete registry evidence must not suppress future runs');
@@ -48,6 +49,7 @@ export function completedState(input, validation, { prNumber = '', prHeadSha = '
         fingerprint: input.fingerprint,
         completedAt: new Date(now).toISOString(),
         validated: true,
+        analysisComplete: true,
         runId: String(runId),
         prNumber: String(prNumber),
         prHeadSha,

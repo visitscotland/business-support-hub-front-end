@@ -97,6 +97,7 @@ export function applyProposal(input, proposal, afterManifest) {
         for (const recommendation of decision.recommendations) {
             assert.equal(typeof recommendation.action, 'string');
             assert.ok(recommendation.action.trim(), 'Explain proposed or unresolved work');
+            assert.ok(!/^(?:not attempted;?\s*)?(?:requires human investigation|not attempted)[.!]?$/i.test(recommendation.action.trim()), 'Replace default text with a package-specific decision');
             for (const version of [recommendation.targetVersion, recommendation.pinVersion].filter((v) => v != null)) {
                 const candidate = input.releases[p.name]?.find((r) => r.version === version);
                 assert.ok(candidate, 'Target must have prepared registry evidence');
@@ -113,6 +114,8 @@ export function applyProposal(input, proposal, afterManifest) {
             });
         }
     }
+    assert.deepEqual([...seen].sort(), triage.packages.map((p) => `${p.ecosystem}:${p.name}`).sort(), 'Review every package: missing explicit decisions');
+    triage.analysisComplete = true;
     triage.upgradeNotes = [];
     for (const field of ['dependencies', 'devDependencies', 'resolutions', 'overrides']) {
         for (const name of new Set([...Object.keys(input.manifest[field] || {
@@ -257,6 +260,7 @@ function validate() {
 
     writeFileSync('triage-results/validation.json', `${JSON.stringify({
         passed: true,
+        analysisComplete: triage.analysisComplete === true,
         base,
         changed,
         outcomes,

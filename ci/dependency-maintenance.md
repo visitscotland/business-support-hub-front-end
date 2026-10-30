@@ -1,9 +1,8 @@
 # Dependency maintenance execution
 
 `dependency-maintenance.yml` remains manual and opt-in through
-`DEPENDENCY_MAINTENANCE_ENABLED`. Publication remains staged. To publish later,
-change both `safe-outputs.staged` in the agent source and `MAINTENANCE_STAGED` in
-the caller, then recompile the agent with gh-aw v0.92.0.
+`DEPENDENCY_MAINTENANCE_ENABLED`. Validated changes now publish a live PR for human
+review; merging remains manual. Both publication settings are false for staged mode.
 
 The maintenance collector omits PR inventories, diffs, check runs and statuses.
 The full collector remains available for interactive triage. Complete alert access
@@ -18,8 +17,8 @@ pins, constraint overrides and unknown paths distinguished. Peer virtualisations
 are deduplicated. None of this claims a verified unpinned installation.
 
 The full relevant paths are retained in `dependency-paths.json` with an integrity
-hash, separately from the compact `agent-input.json`. Copilot reads only the compact
-summary; the validator consumes the authoritative paths. Registry reads are
+hash, separately from the compact `agent-input.json`. Copilot reads the numbered 10 KB pages listed in `agent-context/index.md`;
+the pages omit the duplicated report skeleton and preserve UTF-8 boundaries; the validator consumes the authoritative paths. Registry reads are
 sequential, deduplicated and limited to alert targets, evidenced lagging pins, and
 parents for which a compatible security fix is unavailable. Unaffected pins do not
 cause speculative registry searches.
@@ -32,7 +31,7 @@ the seven-day Yarn age gate and Node-incompatible versions are excluded. Constra
 overrides and parent updates remain explicit review cases. Unselected new releases
 do not invalidate an otherwise identical result's fingerprint.
 
-Copilot reads `agent-input.json`, modifies only the root manifest/lockfile and
+Copilot reads the bounded context pages, modifies only the root manifest/lockfile and
 writes `proposal.json` decisions. Code generates the inventory JSON, two-table
 report, upgrade disclosures and exact PR body. The post-agent steps restore the
 authoritative evidence/input, check the diff and rendered reports, and retain the
@@ -81,3 +80,9 @@ When evaluating hosted runs, include both the main agent and detection artifacts
 model requests, input/output/cached tokens, credits, tool calls, repair attempts,
 429s and successful inventory coverage. Local fixtures verify correctness and
 input size; they cannot establish live Copilot savings or provider rate limits.
+
+Every affected package requires an explicit, package-specific proposal decision.
+Untouched proposals and default investigation text fail validation. Successful
+validation records `analysisComplete`; the cache requires that marker and ignores
+older entries without it, so the earlier empty noop cannot suppress a fresh run.
+No-change decisions still avoid unnecessary install/build/browser runs.
