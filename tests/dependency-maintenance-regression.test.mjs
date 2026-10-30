@@ -294,7 +294,7 @@ test('a replacement closed after lookup leaves the previous PR open', async() =>
     assert.deepEqual(writes, []);
 });
 
-test('workflows remain manual, gated, preview-only and require successful validation', () => {
+test('workflows remain manual, gated, live publication and require successful validation', () => {
     const read = (file) => readFileSync(new URL(`../.github/workflows/${file}`, import.meta.url), 'utf8');
     const caller = YAML.parse(read('dependency-maintenance.yml'));
     const source = YAML.parse(read('dependency-maintenance-agent.md').split('---')[1]);
@@ -304,7 +304,7 @@ test('workflows remain manual, gated, preview-only and require successful valida
     assert.ok(Object.hasOwn(caller.on, 'workflow_dispatch'));
     assert.match(caller.jobs.collect.if, /DEPENDENCY_MAINTENANCE_ENABLED/);
     assert.match(source.if, /DEPENDENCY_MAINTENANCE_ENABLED/);
-    assert.equal(source['safe-outputs'].staged, true);
+    assert.equal(source['safe-outputs'].staged, false);
     assert.equal(source.permissions.contents, 'read');
     assert.equal(source.permissions['pull-requests'], 'read');
     assert.match(compiled.jobs.safe_outputs.if, /needs\.agent\.result == 'success'/);

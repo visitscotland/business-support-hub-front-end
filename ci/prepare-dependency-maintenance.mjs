@@ -14,6 +14,49 @@ import {
 } from './dependency-graph.mjs';
 import { checkInstalledRuntime } from './dependency-runtime.mjs';
 
+// Machine input remains authoritative; model pages omit its duplicated report skeleton.
+export function agentContextPages(input) {
+    const context = {
+        ...input,
+    };
+    delete context.triage;
+    delete context.paths;
+    const text = JSON.stringify(context);
+    const pages = [];
+    let page = '';
+    let bytes = 0;
+    for (const character of text) {
+        const size = Buffer.byteLength(character);
+        if (bytes + size > 10000) {
+            pages.push(page);
+            page = '';
+            bytes = 0;
+        }
+        page += character;
+        bytes += size;
+    }
+    if (page) pages.push(page);
+    return pages;
+}
+
+export function writeAgentContext(input, directory = 'triage-results/agent-context') {
+    mkdirSync(directory, {
+        recursive: true,
+    });
+    const pages = agentContextPages(input);
+    const files = pages.map((page, i) => {
+        const name = `page-${String(i + 1).padStart(3, '0')}.txt`;
+        writeFileSync(`${directory}/${name}`, page);
+        return `- ${directory}/${name}`;
+    });
+    writeFileSync(`${directory}/index.md`, [
+        `Baseline: ${input.baselineSha}`,
+        'Read every page in order. Pages are consecutive JSON fragments, each at most 10 KB.',
+        `Required package decisions: ${input.triage.packages.map((p) => p.name).join(', ') || '(none)'}.`,
+        ...files, '',
+    ].join('\n'));
+}
+
 const unique = (values) => [...new Set(values)].sort();
 export const normalizedRange = (range) => typeof range === 'string' ? range.replace(/,\s*/g, ' ') : '';
 export function advisoryRanges(alert) {
@@ -379,6 +422,7 @@ export async function main() {
         fingerprint: result.fingerprint,
         paths,
     })}\n`);
+    writeAgentContext(agentInput);
     writeFileSync('triage-results/agent-input.json', `${JSON.stringify(agentInput)}\n`);
     if (process.env.GITHUB_OUTPUT) writeFileSync(process.env.GITHUB_OUTPUT, `fingerprint=${result.fingerprint}\n`, {
         flag: 'a',
