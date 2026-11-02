@@ -17,24 +17,35 @@
                     :key="listIndex"
                     class="date-picker"
                 >
-                    <label :for="`${props.filterId}-${listFilter.key}`">
-                        {{ listFilter.label }}
-                    </label>
-                    <div>
-                        <!-- TODO use the VsInput component here -->
-                        <input
-                            type="date"
-                            class="form-control vs-input"
-                            :id="`${props.filterId}-${listFilter.key}`"
-                            :name="`${props.filterId}-${listFilter.key}`"
-                            data-type="date"
-                            :ref="`${props.filterId}-${listFilter.key}`"
-                            :data-label="listFilter.label"
-                            @input="handleDateInput(props.filterId, listFilter.key, $event)"
-                            :min="minDate(listFilter.key)"
-                            :max="maxDate"
-                        >
-                    </div>
+                    <fieldset>
+                        <label :for="`${props.filterId}-${listFilter.key}`">
+                            {{ listFilter.label }}
+                        </label>
+                        <div>
+                            <!-- TODO use the VsInput component here -->
+                            <input
+                                type="date"
+                                class="form-control vs-input"
+                                :class="!getValidationState(props.filterId, listFilter.key) ? 'vs-input--error' : ''"
+                                :id="`${props.filterId}-${listFilter.key}`"
+                                :name="`${props.filterId}-${listFilter.key}`"
+                                data-type="date"
+                                :ref="setDateFilterRefs(`${props.filterId}-${listFilter.key}`)"
+                                :data-label="listFilter.label"
+                                @input="handleDateInput(props.filterId, listFilter.key, $event)"
+                                :min="trainingEventStore.formatDate(minDate(props.filterId, listFilter.key))"
+                                :max="trainingEventStore.formatDate(maxDate)"
+                            >
+                            <VsDetail
+                                v-if="!getValidationState(props.filterId, listFilter.key)"
+                                class="date-input--error-msg"
+                                no-margins
+                            >
+                                <!--@TODO Needs a proper error message-->
+                                Error. Date outside of acceptable range
+                            </VsDetail>
+                        </div>
+                    </fieldset>
                 </div>
             </template>
             <template v-else-if="getGroupType(group) === 'list'">
@@ -70,11 +81,13 @@ import { ref, onMounted } from 'vue';
 import useConfigStore from '~/stores/configStore.ts';
 import {
     VsCheckbox,
+    VsDetail,
     VsFilter,
     VsFilterSection,
 } from '@visitscotland/component-library/components';
 import useTrainingEventsStore from '~/stores/trainingEventsStore.ts';
 import type { EventsTabKey } from '~/types/types';
+import debounceAsync from '~/utls/debounceAsync.ts';
 
 const props = defineProps<{
     filters: any,
@@ -88,6 +101,19 @@ const filter = ref();
 const filterGroups = ref<any>();
 
 const trainingEventStore = useTrainingEventsStore();
+
+const dateFiltersRefs = ref<Record<string, HTMLInputElement>>({
+});
+
+// Valid = true, Invalid = false
+const validationStates = {
+    'training-start-date': ref(true),
+    'training-end-date': ref(true),
+    'industry-start-date': ref(true),
+    'industry-end-date': ref(true),
+    'travel-start-date': ref(true),
+    'travel-end-date': ref(true),
+};
 
 onMounted(() => {
     // Group filters for use in filter sections.
@@ -129,13 +155,27 @@ const getSectionKey = (group: any) => {
     return null;
 };
 
+const resetAllValidationStates = () => {
+    for (const key in validationStates) {
+        const state = validationStates[key as keyof typeof validationStates];
+        state.value = true;
+    };
+};
+
+const resetOneValidationState = (id: string) => {
+    const state = validationStates[id as keyof typeof validationStates];
+    state.value = true;
+};
+
 // Reset all input fields.
 const resetAll = () => {
     filter.value.resetAll();
+    resetAllValidationStates();
 };
 
 // Reset one input field.
 const resetOne = (id: string) => {
+    resetOneValidationState(id);
     filter.value.resetOne(id);
 };
 
@@ -154,7 +194,97 @@ const formatDate = (value: string) => value.split('-').reverse().join('/');
 // set and emit a payload when a filter input has change.
 // This payload will be used by the parent to set the
 // selected filters list and api query parameters.
-const handleUpdate = (event: Event) => {
+
+
+const minDate = (id: string, key: string): Date => {
+    if(key.endsWith('end-date') && trainingEventStore.selectedStartDate[props.filterId] && getValidationState(id, key)) {
+        return trainingEventStore.selectedStartDate[props.filterId]!;
+    } else {
+        return new Date();
+    }
+};
+
+const maxDate = computed((): Date => {
+    const targetDate = new Date();
+    targetDate.setFullYear(targetDate.getFullYear() + 2);
+    
+    return targetDate;
+});
+
+const handleDateInput = (id: string, key: string, event: any): void => {
+    if (key.endsWith('start-date')) {
+        trainingEventStore.selectedStartDate[id as keyof EventsTabKey] = event.target.value;
+    } else if (key.endsWith('end-date')) {
+        trainingEventStore.selectedEndDate[id as keyof EventsTabKey] = event.target.value;
+    }
+};
+
+const setDateFilterRefs = (key: string) => (element: any): void => {
+    if(element) {
+        dateFiltersRefs.value[key] = element;
+    }
+};
+
+function validateDateInput(fieldId: string, value: string): {isValid: boolean} {
+    if (!value) return {
+        isValid: false,
+    };
+
+    const inputtedDate = new Date(value);
+    inputtedDate.setHours(0, 0, 0, 0);
+
+    if(Number.isNaN(inputtedDate.getTime())) {
+        return {
+            isValid: false,
+        };
+    }
+
+    const isStartDate = fieldId.includes('start');
+    const isEndDate = fieldId.includes('end');
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const maximum = new Date(maxDate.value);
+    maximum.setHours(0, 0, 0, 0);
+
+    if(
+        isStartDate
+        && inputtedDate <= today 
+        || inputtedDate > maximum
+    ) {
+        return {
+            isValid: false,
+        };
+    }
+
+    const startFieldId = `${fieldId.split('-')[0]}-start-date`;
+    const inputtedStartDate = dateFiltersRefs.value[startFieldId].valueAsDate;
+
+
+    console.log(inputtedStartDate);
+
+    if (
+        isEndDate 
+        && inputtedDate > maximum
+        || inputtedDate < today
+        || (inputtedStartDate && inputtedDate < inputtedStartDate)
+    ) {
+        return {
+            isValid: false,
+        };
+    }
+
+    return {
+        isValid: true,
+    };
+}
+
+const debounceValidation = debounceAsync((fieldId: string, value: string) => {
+    return validateDateInput(fieldId, value);
+}, 750);
+
+const handleUpdate = async(event: Event) => {
     if (!event.target) return;
 
     const type: string = event.target.dataset.type;
@@ -165,8 +295,16 @@ const handleUpdate = (event: Event) => {
     let value: string | boolean;
 
     if (type === 'date') {
-        value = formatDate(event.target.value);
-        label = `${label}: ${value}`;
+        const target: HTMLInputElement = event.target;
+        const state = validationStates[target.id as keyof typeof validationStates];
+        state.value = true;
+        const validity = await debounceValidation(target.id, target.value);
+        if(!validity.isValid) {
+            state.value = false;
+        } else{
+            value = formatDate(event.target.value);
+            label = `${label}: ${value}`;
+        }
     } else if (type === 'boolean') {
         value = !!event.target.checked;
     } else {
@@ -174,45 +312,35 @@ const handleUpdate = (event: Event) => {
         value = cleanKey(event.target.id);
     }
 
-    emit('filter-updated', {
-        fieldId,
-        key,
-        label,
-        type,
-        value,
-    });
-};
-
-const minDate = (key: string) => {
-    if(key.endsWith('end-date') && trainingEventStore.selectedStartDate[props.filterId]) {
-        return trainingEventStore.formatDate(
-            trainingEventStore.selectedStartDate[props.filterId]!,
-        );
-    } else {
-        return trainingEventStore.formatDate(new Date());
+    if(value) {
+        emit('filter-updated', {
+            fieldId,
+            key,
+            label,
+            type,
+            value,
+        });
     }
+
 };
 
-const maxDate = computed(() => {
-    const targetDate = new Date();
-    targetDate.setFullYear(targetDate.getFullYear() + 2);
-    
-    return trainingEventStore.formatDate(targetDate);
-});
-
-const handleDateInput = (id: string, key: string, event: any) => {
-    if (key.endsWith('start-date')) {
-        trainingEventStore.selectedStartDate[id as keyof EventsTabKey] = event.target.value;
-    } else if (key.endsWith('end-date')) {
-        trainingEventStore.selectedEndDate[id as keyof EventsTabKey] = event.target.value;
-    }
+const getValidationState = (filterId: string, filterKey: string) => {
+    const target = `${filterId}-${filterKey}`;
+    return validationStates[target as keyof typeof validationStates]?.value;
 };
+
 </script>
 
 <style lang="scss">
 .vs-filter {
     .date-picker {
         margin-bottom: 0.75rem;
+    }
+}
+
+.date-input {
+    &--error-msg {
+        color: #940F2C; //vs-color-support-error
     }
 }
 </style>
