@@ -1,109 +1,73 @@
 # Dependency maintenance execution
 
-`dependency-maintenance.yml` remains manual and opt-in through
-`DEPENDENCY_MAINTENANCE_ENABLED`. Validated changes now publish a live PR for human
-review; merging remains manual. Both publication settings are false for staged mode.
+The workflow remains manual and opt-in through DEPENDENCY_MAINTENANCE_ENABLED.
+Live publication creates a PR for human review; merging remains manual. Jenkins
+and repository Yarn settings are outside this workflow's scope.
 
-The maintenance collector omits PR inventories, diffs, check runs and statuses.
-The full collector remains available for interactive triage. Complete alert access
-and an exact checkout/evidence baseline match are still mandatory.
+## Trusted preparation
 
-`prepare-dependency-maintenance.mjs` combines the authoritative lockfile with one
-offline `yarn info --all --recursive --virtuals --json` export. The graph supplies
-effective versions even when resolution overrides rewrite descriptors; the lockfile
-preserves each parent's declared constraint. Global, parent-scoped, descriptor and
-scoped-package selectors are assessed separately, with unused selectors, lagging
-pins, constraint overrides and unknown paths distinguished. Peer virtualisations
-are deduplicated. None of this claims a verified unpinned installation.
+The maintenance collector omits PR inventories, diffs and checks. Preparation uses
+one offline Yarn graph export plus the authoritative lockfile to identify affected
+copies, parent constraints, pins and inactive overrides. Registry reads are targeted,
+deduplicated and sequential. Prepared candidates preserve the seven-day age gate,
+Node compatibility, release branches and advisory ranges; no target is invented.
 
-The full relevant paths are retained in `dependency-paths.json` with an integrity
-hash, separately from the compact `agent-input.json`. Copilot reads the standalone JSON files listed in `agent-context/index.md` once
-in a single batch. Each file is under 10 KB and groups complete package records
-with their candidates, parents and selectors; no JSON token is split between files. The validator consumes the authoritative paths. Registry reads are
-sequential, deduplicated and limited to alert targets, evidenced lagging pins, and
-parents for which a compatible security fix is unavailable. Unaffected pins do not
-cause speculative registry searches.
+ci/dependency-host.mjs prepare runs BEFORE Copilot:
 
-Candidates use the smallest forward security fix for each affected release branch;
-pre-1.0 minor branches are separate. Existing safe versions can be reused through
-parent upgrades. Parent upgrade candidates retain a bounded earliest/latest choice
-where useful. Downgrades, prereleases, deprecated releases, releases younger than
-the seven-day Yarn age gate and Node-incompatible versions are excluded. Constraint
-overrides and parent updates remain explicit review cases. Unselected new releases
-do not invalidate an otherwise identical result's fingerprint.
+1. Verify complete registry evidence and the recorded baseline/path proof.
+2. Generate structured package decisions and at most three evidenced candidate groups.
+   Prefer groups addressing more alerts and lower-complexity fixes. Use vulnerable
+   descriptor selectors; prefer a prepared parent upgrade across incompatible ranges.
+   Disclose any remaining parent override. Include supported lagging-pin refreshes.
+3. Validate every edit before changing files. Return all rejected selectors with
+   their package, matched/affected versions and prepared candidates. Every failed
+   command is persisted in candidate/history.json; validation calls and installs
+   both have an initial-plus-two-repairs limit. Identical installs are rejected.
+4. Run the checked-in Yarn with lifecycle scripts disabled. Map the sandbox proxy
+   variables to Yarn child settings, preserving explicit Yarn proxy configuration.
+   Classify network/TLS/timeout failures separately. Extract primary errors, omitting
+   bundled-source crash dumps and redacting URL credentials. Network failures stop
+   the run; dependency/proposal failures can remove only rejected/least-preferred groups.
+5. Restore retained files after failure, render a report even when execution fails,
+   and run immutable install, installed graph checks, lint, production build and
+   homepage browser tests. Reject edits without evidenced security or pin progress.
+6. Create and commit the bounded dependency patch on a fresh local automation branch.
+   Capture a hash of the prepared files, reports, validation and execution history as
+   a trusted Actions step output. The model cannot rewrite this step output.
 
-Copilot reads the bounded package context and writes `proposal.json` decisions
-and edits. Each edit supplies field, name, exact candidate value (or null for an
-evidenced resolution removal), reason and compatibility.
-`node ci/dependency-candidate.mjs apply` validates the whole proposal, applies
-JSON edits and regenerates the lockfile in one call. It rejects unsupported values,
-unknown selectors and downgrade pins before install. Full install logs stay local;
-the same call returns the exit code and a diagnostic capped at 4,000 characters.
-The persisted budget permits one initial install and two repairs; identical
-manifest attempts are rejected. Failed installs and timeouts consume an attempt
-and restore the last installed manifest/lockfile (initially the baseline).
-The restore command never resets the budget. Final validation verifies these
-retained files before running the authoritative immutable install and smoke gate.
-Code generates the inventory JSON, two-table
-report, upgrade disclosures and exact PR body. The post-agent steps restore the
-authoritative evidence/input, check the diff and rendered reports, and retain the
-existing immutable-install and full production smoke gate. Threat detection and
-human review remain in place.
+## Read-only review and publication
 
-Node is pinned to 24.22.2 in `.nvmrc`. Preparation and the agent pre-steps reject
-runtime drift or an incompatible installed Nuxt engine before model execution.
-The smoke runner checks the final candidate runtime and regenerates `.clversion`
-from the installed component-library manifest without running lifecycle scripts.
-Changed resolutions require verified baseline paths, actual effect after install,
-and no downgrade on unchanged parent paths.
+Copilot reads the ready PR body, proposal and validation in one batch. It does not
+select versions, execute helpers, regenerate the lockfile, run tests, render reports
+or commit. Shell and CLI-proxy tools are disabled. The primary 30-call/100-credit
+budget remains unchanged; deterministic host work consumes no inference calls.
 
-The agent has 30 model turns, a 100-credit ceiling, three candidate groups and two
-repair attempts across the run. Its harness allows one continuation retry after
-30 seconds; Copilot's own transport owns inference retries and server backoff.
-There is no outer workflow retry that would restart a rate-limited session. The
-separate detection pass has ten turns, 50 credits and no whole-pass retries.
-These initial caps should be calibrated against observed successful runs.
+After review, host steps reject protected-source edits, restore collector evidence,
+verify the complete plan hash and require the correct output type. Successful no-op
+messages must exactly match the host's unresolved-finding summary. PR publication
+requires the exact host report (allowing standard runtime sanitization).
 
-The read-only HTTP helper retries 429, rate-limited 403 and transient gateway
-errors at most twice with exponential delay and jitter. It honours `Retry-After`
-and exhausted GitHub reset headers. A server delay exceeding 60 seconds fails the
-read rather than retrying early. Ordinary authentication/permission errors are
-not retried. Error bodies and credentials are never logged.
+Independent threat detection runs only for a successful, publishable patch. Both
+engines explicitly use gpt-4.1, verified against the live Copilot catalog captured
+by the reviewer without an additional network lookup. Detector errors fail closed;
+publication requires detection_success=true, not just a successful job. Detector
+logs, structured result and terminal execution status are retained even on failure.
+The detector keeps its separate ten-call/50-credit budget and no whole-pass retry.
 
-Only successful, validated runs write a completion marker into Actions cache.
-The fingerprint includes the baseline SHA, dependency files, advisory facts,
-prepared candidates and policy/helper contents. Retrieval timestamps are excluded.
-An identical result can be reused for six days, within the seven-day report
-artifact retention. Incomplete registry evidence, a missing/expired marker, a
-closed or changed published PR, a changed fingerprint, or the dispatch `force`
-input always allows a new attempt. Cache errors cannot establish success.
-The Actions summary identifies the previous report's run when Copilot is skipped.
-Concurrency serializes this workflow in this repository; cross-repository
-coordination would require an organization-level queue.
+A failed attempt cannot become a successful noop by removing its edits. Validated
+results can enter the six-day cache only after the host accepts the review and the
+entire reusable workflow succeeds. Missing review/status markers invalidate older
+cache entries. Previous bot PRs are closed only after successful replacement publication.
 
-Validation:
+## Local verification
 
-```sh
-node --test tests/dependency-maintenance.test.mjs tests/dependency-maintenance-graph.test.mjs .github/skills/dependency-triage/scripts/collect.test.mjs
-gh aw compile dependency-maintenance-agent --no-check-update
-```
+Run the checked-in Node version and the dependency-maintenance, graph, candidate,
+execution, host protocol and smoke harness tests. The host protocol fixture exercises
+actual Git branches/commits, the candidate command and renderer, while substituting
+application validation at its explicit test seam. Separate graph/runtime/browser
+checks cover their real implementations. A local HTTP CONNECT proxy fixture proves
+Yarn consumes the mapped proxy settings without contacting an external registry.
 
-When evaluating hosted runs, include both the main agent and detection artifacts:
-model requests, input/output/cached tokens, credits, tool calls, repair attempts,
-429s and successful inventory coverage. Local fixtures verify correctness and
-input size; they cannot establish live Copilot savings or provider rate limits.
-
-Every affected package requires an explicit, package-specific proposal decision.
-Untouched proposals and default investigation text fail validation. Successful
-validation records `analysisComplete`; the cache requires that marker and ignores
-older entries without it, so the earlier empty noop cannot suppress a fresh run.
-No-change decisions still avoid unnecessary install/build/browser runs.
-
-Sandbox Yarn inherits explicit YARN_HTTP_PROXY/YARN_HTTPS_PROXY settings, or maps
-the firewall's HTTP_PROXY/HTTPS_PROXY environment into them for child processes.
-Repository Yarn configuration and Jenkins are unchanged. Primary Yarn errors are
-extracted before bundled-code crash dumps; networking failures are classified
-separately from dependency failures. Safe-only selectors are rejected before install.
-A failed, fully rolled-back batch fails final validation even with an empty diff;
-reports mark all proposed upgrades not applied. Cache entries require an explicit
-completed remediation status; older entries and failed results cannot suppress runs.
+Compile dependency-maintenance-agent with pinned gh-aw v0.92.0 and validation enabled.
+Tests assert fail-closed detector conditions, exact publication-body checks, no-op
+message checks, immutable review snapshots and durable pre-install failures.

@@ -228,6 +228,7 @@ test('registry failures remain explicit and cannot suppress subsequent runs', as
     assert.throws(() => completedState(input, {
         passed: true,
         analysisComplete: true,
+        reviewAccepted: true,
         remediationStatus: 'not-attempted',
         base,
         fingerprint: input.fingerprint,
@@ -297,6 +298,7 @@ test('unchanged gate reuses only recent successful identical results and honours
     const validation = {
         passed: true,
         analysisComplete: true,
+        reviewAccepted: true,
         remediationStatus: 'not-attempted',
         base,
         fingerprint: input.fingerprint,
@@ -363,6 +365,7 @@ test('closed, modified or inaccessible maintenance PRs never suppress a fresh ru
     const previous = completedState(input, {
         passed: true,
         analysisComplete: true,
+        reviewAccepted: true,
         remediationStatus: 'not-attempted',
         base,
         fingerprint: input.fingerprint,
