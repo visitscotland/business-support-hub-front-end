@@ -6,12 +6,14 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readJson } from './dependency-http.mjs';
 
+import { completedRemediation } from './dependency-execution.mjs';
+
 const lifetimeMs = 6 * 86400_000; // Shorter than the report artifact's seven-day retention.
 export async function shouldRun(input, previous, { force = false, now = Date.now(), readPR } = {
 }) {
     if (force || !input.registryComplete || !previous || previous.schemaVersion !== 1
         || previous.fingerprint !== input.fingerprint || previous.repository !== input.repository
-        || previous.baselineSha !== input.baselineSha || previous.validated !== true || previous.analysisComplete !== true
+        || previous.baselineSha !== input.baselineSha || previous.validated !== true || previous.analysisComplete !== true || !completedRemediation(previous.remediationStatus)
         || !Number.isFinite(Date.parse(previous.completedAt)) || now < Date.parse(previous.completedAt)
         || now - Date.parse(previous.completedAt) >= lifetimeMs) return true;
     if (previous.prNumber) {
@@ -29,6 +31,7 @@ export async function shouldRun(input, previous, { force = false, now = Date.now
 export function completedState(input, validation, { prNumber = '', prHeadSha = '', staged = false, runId, now = Date.now() }) {
     assert.equal(validation.passed, true);
     assert.equal(validation.analysisComplete, true, 'Incomplete analysis must not suppress future runs');
+    assert.ok(completedRemediation(validation.remediationStatus), 'Failed or unverified remediation must not enter the success cache');
     assert.equal(validation.fingerprint, input.fingerprint);
     assert.equal(validation.base, input.baselineSha);
     assert.equal(input.registryComplete, true, 'Incomplete registry evidence must not suppress future runs');
@@ -50,6 +53,7 @@ export function completedState(input, validation, { prNumber = '', prHeadSha = '
         completedAt: new Date(now).toISOString(),
         validated: true,
         analysisComplete: true,
+        remediationStatus: validation.remediationStatus,
         runId: String(runId),
         prNumber: String(prNumber),
         prHeadSha,

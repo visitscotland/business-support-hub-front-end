@@ -228,6 +228,7 @@ test('registry failures remain explicit and cannot suppress subsequent runs', as
     assert.throws(() => completedState(input, {
         passed: true,
         analysisComplete: true,
+        remediationStatus: 'not-attempted',
         base,
         fingerprint: input.fingerprint,
         changed: [],
@@ -296,6 +297,7 @@ test('unchanged gate reuses only recent successful identical results and honours
     const validation = {
         passed: true,
         analysisComplete: true,
+        remediationStatus: 'not-attempted',
         base,
         fingerprint: input.fingerprint,
         changed: [],
@@ -361,6 +363,7 @@ test('closed, modified or inaccessible maintenance PRs never suppress a fresh ru
     const previous = completedState(input, {
         passed: true,
         analysisComplete: true,
+        remediationStatus: 'not-attempted',
         base,
         fingerprint: input.fingerprint,
         changed: ['yarn.lock'],
@@ -574,10 +577,33 @@ test('post-agent validation accepts a no-change report and rejects report tamper
         const validation = JSON.parse(await readFile(join(directory, 'triage-results/validation.json'), 'utf8'));
         assert.equal(validation.passed, true);
         assert.equal(validation.testsRun, false);
+        assert.equal(validation.remediationStatus, 'not-attempted');
         assert.equal(validation.fingerprint, input.fingerprint);
         await writeFile(join(directory, 'triage-results/weekly-report.md'), 'Invented success');
         assert.notEqual(run('validate').status, 0);
         assert.equal(JSON.parse(await readFile(join(directory, 'triage-results/validation.json'), 'utf8')).passed, false);
+        await mkdir(join(directory, 'triage-results/candidate'));
+        await writeFile(join(directory, 'triage-results/candidate/result.json'), JSON.stringify({
+            passed: false,
+            rolledBack: true,
+            failureClass: 'network',
+            diagnostic: 'ERR_SOCKET_CLOSED_BEFORE_CONNECTION',
+        }));
+        result = run('render');
+        assert.equal(result.status, 0, result.stderr);
+        result = run('validate');
+        assert.notEqual(result.status, 0);
+        assert.match(result.stderr, /Remediation did not complete/);
+        const failed = JSON.parse(await readFile(join(directory, 'triage-results/validation.json'), 'utf8'));
+        assert.equal(failed.remediationStatus, 'failed');
+        assert.equal(failed.passed, false);
+        assert.throws(() => completedState(input, {
+            ...validation,
+            remediationStatus: 'failed',
+        }, {
+            runId: '1',
+        }), /success cache/);
+
     } finally { await rm(directory, {
         recursive: true,
         force: true,

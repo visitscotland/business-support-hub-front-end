@@ -14,6 +14,8 @@ import {
     assertPinEvidence, installedGraph, verifyGraphChanges,
 } from './dependency-graph.mjs';
 
+import { completedRemediation, remediationStatus } from './dependency-execution.mjs';
+
 export const marker = '<!-- bsh-dependency-maintenance:v1 -->';
 
 export function assess(evidence, triage, afterLock) {
@@ -186,6 +188,26 @@ function currentReports() {
     assert.equal(input.baselineSha, evidence.baseline.data.sha);
     const proposal = JSON.parse(readFileSync('triage-results/proposal.json', 'utf8'));
     const triage = applyProposal(input, proposal, JSON.parse(readFileSync('package.json', 'utf8')));
+    const resultPath = 'triage-results/candidate/result.json';
+    const result = existsSync(resultPath) ? JSON.parse(readFileSync(resultPath, 'utf8')) : null;
+    const changed = JSON.stringify(JSON.parse(readFileSync('package.json', 'utf8'))) !== JSON.stringify(input.manifest)
+        || readFileSync('yarn.lock', 'utf8') !== evidence.files['yarn.lock'].data.content;
+    triage.remediationStatus = remediationStatus(result, changed || (!result && proposal.changes?.length) ? ['candidate'] : []);
+    if (triage.remediationStatus === 'failed') {
+        for (const p of triage.packages) {
+            const names = [p.name, ...(p.parents || []).map((parent) => parent.name)];
+            const attempted = p.recommendations.some((r) => r.targetVersion || r.pinVersion)
+                || proposal.changes?.some((edit) => pinTarget(edit.name, names));
+            if (!attempted) continue;
+            p.recommendations = p.recommendations.map((r) => ({
+                ...r,
+                targetVersion: null,
+                pinVersion: null,
+                action: `Not applied: candidate batch rolled back (${result.failureClass || 'install'} failure). ${result.diagnostic.split('\n')[0]}`,
+            }));
+        }
+        triage.gaps.push(`Remediation failed: ${result.diagnostic.split('\n')[0]}`);
+    }
     const report = renderReport(triage);
     const outcomes = assess(evidence, triage, readFileSync('yarn.lock', 'utf8'));
     return {
@@ -225,6 +247,14 @@ function validate() {
     const evidence = JSON.parse(readFileSync('triage-results/evidence.json', 'utf8'));
     const generated = currentReports();
     const { triage, outcomes, body } = generated;
+    if (!completedRemediation(triage.remediationStatus)) {
+        writeFileSync('triage-results/validation.json', JSON.stringify({
+            passed: false,
+            analysisComplete: triage.analysisComplete,
+            remediationStatus: triage.remediationStatus,
+        }));
+        throw new Error('Remediation did not complete; rolled-back or unexecuted changes cannot pass as a noop');
+    }
 
     assert.equal(evidence.baseline.data.sha, base, 'Default branch moved after the run began; recollect on a fresh run');
 
@@ -269,6 +299,7 @@ function validate() {
     writeFileSync('triage-results/validation.json', `${JSON.stringify({
         passed: true,
         analysisComplete: triage.analysisComplete === true,
+        remediationStatus: triage.remediationStatus,
         base,
         changed,
         outcomes,

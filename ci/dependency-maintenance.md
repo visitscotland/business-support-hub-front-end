@@ -98,3 +98,12 @@ Untouched proposals and default investigation text fail validation. Successful
 validation records `analysisComplete`; the cache requires that marker and ignores
 older entries without it, so the earlier empty noop cannot suppress a fresh run.
 No-change decisions still avoid unnecessary install/build/browser runs.
+
+Sandbox Yarn inherits explicit YARN_HTTP_PROXY/YARN_HTTPS_PROXY settings, or maps
+the firewall's HTTP_PROXY/HTTPS_PROXY environment into them for child processes.
+Repository Yarn configuration and Jenkins are unchanged. Primary Yarn errors are
+extracted before bundled-code crash dumps; networking failures are classified
+separately from dependency failures. Safe-only selectors are rejected before install.
+A failed, fully rolled-back batch fails final validation even with an empty diff;
+reports mark all proposed upgrades not applied. Cache entries require an explicit
+completed remediation status; older entries and failed results cannot suppress runs.

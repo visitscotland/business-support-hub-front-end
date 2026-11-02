@@ -6,6 +6,7 @@ import {
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import semver from 'semver';
+import { yarnEnvironment, installDiagnostic } from './dependency-execution.mjs';
 import { matchingPaths } from './dependency-graph.mjs';
 import { applyProposal } from './dependency-maintenance.mjs';
 import { fingerprint, pinTarget } from './prepare-dependency-maintenance.mjs';
@@ -33,6 +34,9 @@ export function candidateManifest(input, proposal, current) {
                 && candidate.applicableFromVersions.every((v) => semver.gte(edit.value, v)), 'No downgrade candidates');
             if (edit.field === 'resolutions') {
                 const paths = matchingPaths(edit.name, input.paths || []);
+                const affected = input.triage.packages.find((p) => p.name === target)?.affectedVersions || [];
+                assert.ok(!affected.length || paths?.some((p) => p.effectiveVersions.some((v) => affected.includes(v))),
+                    'Selector only targets already-safe copies; target the affected branch or update its parent');
                 assert.ok(paths && paths.every((p) => p.effectiveVersions.every((v) =>
                     semver.valid(v) && semver.gte(edit.value, v))), 'Selector would downgrade an installed branch; narrow the selector');
             }
@@ -75,6 +79,7 @@ export function installCandidate(root, state, run = spawnSync) {
             cwd: root,
             stdio: ['ignore', fd, fd],
             timeout: 180000,
+            env: yarnEnvironment(),
         });
     } finally { closeSync(fd); }
     const passed = result.status === 0 && !result.error;
@@ -95,8 +100,9 @@ export function installCandidate(root, state, run = spawnSync) {
         error: result.error?.code || null,
         rolledBack: !passed,
         log: logPath,
-        diagnostic: readFileSync(logPath, 'utf8').split(/\r?\n/).slice(-30).join('\n').slice(-4000),
+        ...installDiagnostic(readFileSync(logPath, 'utf8'), result.error?.code),
     };
+    if (passed) summary.failureClass = null;
     writeFileSync(resolve(directory, 'result.json'), JSON.stringify(summary, null, 2));
     return summary;
 }
