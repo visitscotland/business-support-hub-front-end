@@ -12,7 +12,8 @@ export function planGroups(input) {
         const targets = new Set();
         const caveats = new Set();
         let blocker;
-        if (!affected.length || affected.some((path) => !path.pathVerified)) blocker = 'unknown-path';
+        if (!p.affectedVersions.length) blocker = 'not-affected';
+        else if (!affected.length || affected.some((path) => !path.pathVerified)) blocker = 'unknown-path';
         for (const path of affected) {
             const versions = path.effectiveVersions.filter((v) => p.affectedVersions.includes(v));
             const candidates = (input.releases[p.name] || []).filter((r) => versions.every((v) => r.applicableFromVersions.includes(v)));
@@ -59,8 +60,9 @@ export function planGroups(input) {
                 pinVersion: null,
                 applicableFromVersions: blocker ? [] : p.affectedVersions.filter((v) => (input.releases[p.name] || []).find((r) => r.version === [...targets][0])?.applicableFromVersions.includes(v)),
                 compatibility: [...caveats].join('; ') || 'unavailable',
-                action: blocker ? `${p.name}: ${blocker}; no unverified change attempted`
-                    : `${p.name}: apply verified affected-path fixes; ${[...caveats].join('; ')}`,
+                action: blocker === 'not-affected' ? `${p.name}: no affected versions recorded in the prepared baseline; alert remains unresolved pending reconciliation`
+                    : blocker ? `${p.name}: ${blocker}; no unverified change attempted`
+                        : `${p.name}: apply verified affected-path fixes; ${[...caveats].join('; ')}`,
             }],
         };
         if (!blocker) decision.recommendations = [...targets].map((version) => ({

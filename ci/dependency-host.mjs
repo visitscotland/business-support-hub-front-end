@@ -10,7 +10,7 @@ import { planGroups, proposalFor } from './dependency-plan.mjs';
 
 const read = (path) => JSON.parse(readFileSync(path, 'utf8'));
 const files = ['package.json', 'yarn.lock', ...['proposal.json', 'triage.json', 'weekly-report.md', 'pr-body.md',
-    'validation.json', 'status.json', 'candidate/state.json', 'candidate/result.json', 'candidate/history.json']
+    'validation.json', 'status.json', 'planning.json', 'candidate/state.json', 'candidate/result.json', 'candidate/history.json']
     .map((p) => `triage-results/${p}`)];
 
 export function snapshot(root) {
@@ -77,7 +77,16 @@ export function prepareHost(root, run = spawnSync) {
             input.paths = proof.paths;
         }
         const plan = planGroups(input);
-        assert.ok(!plan.packages.some((p) => ['unknown-path', 'conflicting-targets'].includes(p.disposition)), 'Unverified paths or conflicting targets require investigation, not a successful no-op');
+        const blockers = plan.packages.filter((p) => ['unknown-path', 'conflicting-targets'].includes(p.disposition));
+        writeFileSync(resolve(directory, 'planning.json'), JSON.stringify({
+            packages: plan.packages,
+            selectedGroups: plan.groups.slice(0, 3).map((g) => g.name),
+            blockers: blockers.map((p) => ({
+                name: p.name,
+                reason: p.disposition,
+            })),
+        }, null, 2));
+        if (blockers.length) console.warn(`Unresolved planning evidence: ${blockers.map((p) => `${p.name}: ${p.disposition}`).join('; ')}`);
         let groups = plan.groups.slice(0, 3);
         const failures = [];
         let installed = false;
@@ -98,6 +107,7 @@ export function prepareHost(root, run = spawnSync) {
         }
         phase('reporting', 'started');
         command('./dependency-maintenance.mjs', 'render');
+        assert.ok(plan.groups.length || !blockers.length, `No verified remediation available; unresolved planning evidence: ${blockers.map((p) => `${p.name}: ${p.disposition}`).join('; ')}`);
         assert.ok(installed || !plan.groups.length, `Remediation failed: ${failures.at(-1) || 'no candidate completed'}`);
         phase('validation', 'started');
         command('./dependency-maintenance.mjs', 'validate');

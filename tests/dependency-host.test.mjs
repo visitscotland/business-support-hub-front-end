@@ -225,6 +225,61 @@ test('host applies, renders, validates and commits before review; wrong output o
     }); }
 });
 
+test('empty affected lists are not missing paths and genuine blockers do not suppress verified groups', () => {
+    const { root, input, run } = fixture();
+    try {
+        const safe = structuredClone(input.triage.packages[0]);
+        safe.name = 'already-safe';
+        safe.affectedVersions = [];
+        safe.alerts = [{
+            number: 2,
+        }];
+        const blocked = structuredClone(input.triage.packages[0]);
+        blocked.name = 'missing-path';
+        blocked.alerts = [{
+            number: 3,
+        }];
+        input.triage.packages.push(safe, blocked);
+        const evidencePath = join(root, 'triage-results/evidence.json');
+        const evidence = JSON.parse(readFileSync(evidencePath));
+        for (const p of [safe, blocked]) {
+            const alert = structuredClone(evidence.alerts.data[0]);
+            alert.number = p.alerts[0].number;
+            alert.dependency.package.name = p.name;
+            evidence.alerts.data.push(alert);
+        }
+        writeFileSync(evidencePath, JSON.stringify(evidence));
+        writeFileSync(join(root, 'triage-results/agent-input.json'), JSON.stringify(input));
+        const plan = planGroups(input);
+        assert.equal(plan.packages.find((p) => p.name === safe.name).disposition, 'not-affected');
+        assert.equal(plan.packages.find((p) => p.name === blocked.name).disposition, 'unknown-path');
+        prepareHost(root, run);
+        const diagnostics = JSON.parse(readFileSync(join(root, 'triage-results/planning.json')));
+        assert.deepEqual(diagnostics.blockers, [{
+            name: 'missing-path',
+            reason: 'unknown-path',
+        }]);
+        assert.deepEqual(diagnostics.selectedGroups, ['thing']);
+    } finally { rmSync(root, {
+        recursive: true,
+        force: true,
+    }); }
+});
+
+test('only blocked packages produce a diagnostic report and cannot claim a successful no-op', () => {
+    const { root, input, run } = fixture();
+    try {
+        input.paths = [];
+        writeFileSync(join(root, 'triage-results/agent-input.json'), JSON.stringify(input));
+        assert.throws(() => prepareHost(root, run), /No verified remediation available.*thing: unknown-path/);
+        assert.equal(JSON.parse(readFileSync(join(root, 'triage-results/validation.json'))).passed, false);
+        assert.ok(readFileSync(join(root, 'triage-results/weekly-report.md'), 'utf8').includes('unknown-path'));
+    } finally { rmSync(root, {
+        recursive: true,
+        force: true,
+    }); }
+});
+
 test('failed host execution always records failure and produces a diagnostic report without invoking a model', () => {
     const { root } = fixture();
     try {
