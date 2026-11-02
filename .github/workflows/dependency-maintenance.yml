@@ -1,10 +1,9 @@
 name: Scheduled dependency maintenance
 
 on:
-  # Re-enable once Copilot is set up (09:00 UK time, Wednesday and Friday).
-  # schedule:
-  #   - cron: '0 9 * * 3,5'
-  #     timezone: Europe/London
+  schedule:
+    - cron: '0 9 * * 3,5'
+      timezone: Europe/London
   workflow_dispatch:
     inputs:
       force:

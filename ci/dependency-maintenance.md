@@ -57,6 +57,12 @@ results can enter the six-day cache only after the host accepts the review and t
 entire reusable workflow succeeds. Missing review/status markers invalidate older
 cache entries. Previous bot PRs are closed only after successful replacement publication.
 
+The not-fixed table distinguishes missing published fixes (manual upstream
+investigation) from published fixes deferred only by the seven-day age gate
+(version and eligibility time, then wait and rerun or explicitly approve an override
+for critical issues). Runtime/deprecation restrictions and incomplete registry
+evidence remain separate investigation outcomes. Reporting never overrides policy.
+
 ## Local verification
 
 Run the checked-in Node version and the dependency-maintenance, graph, candidate,

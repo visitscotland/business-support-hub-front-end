@@ -11,8 +11,9 @@ import YAML from 'yaml';
 import { collect } from '../.github/skills/dependency-triage/scripts/collect.mjs';
 import { readJson } from '../ci/dependency-http.mjs';
 import {
-    inventory, prepare, fingerprint, advisoryRanges, pinTarget, releaseCandidates, agentContextPages, writeAgentContext,
+    inventory, prepare, fingerprint, advisoryRanges, pinTarget, releaseCandidates, releaseDisposition, agentContextPages, writeAgentContext,
 } from '../ci/prepare-dependency-maintenance.mjs';
+import { planGroups, proposalFor } from '../ci/dependency-plan.mjs';
 import { shouldRun, completedState } from '../ci/dependency-maintenance-state.mjs';
 import {
     assess, applyProposal, renderReport, renderBody,
@@ -173,6 +174,62 @@ test('registry candidates cover all advisories and respect release age, Node, de
     });
     assert.deepEqual(candidates.map((c) => c.version), ['1.0.2']);
     assert.ok(candidates.every((c) => c.source.includes('registry.npmjs.org/thing/')));
+});
+
+test('unfixed reports distinguish unpublished fixes from age-deferred and otherwise ineligible releases', async() => {
+    for (const [status, release, expected] of [
+        ['no-published-fix', null, /manually investigate upstream/],
+        ['age-gated', {
+        }, /1\.0\.2 eligible 2026-11-05T12:00:00\.000Z.*Wait until eligible.*critical issues/],
+        ['other-policy-blocked', {
+            engines: {
+                node: '<10',
+            },
+        }, /fails another eligibility rule/],
+    ]) {
+        const m = {
+            versions: {
+                '1.0.0': {
+                },
+            },
+            time: {
+                '1.0.0': '2026-01-01T00:00:00Z',
+            },
+        };
+        if (release) { m.versions['1.0.2'] = release; m.time['1.0.2'] = new Date(now).toISOString(); }
+        const input = await prepare(sample(), {
+            ...options,
+            registryRead: async() => m,
+        });
+        assert.equal(input.releaseDispositions.thing.status, status);
+        const plan = planGroups(input);
+        assert.equal(plan.groups.length, 0);
+        const proposal = proposalFor(plan, []);
+        const triage = applyProposal(input, proposal, input.manifest);
+        const evidence = sample();
+        const body = renderBody(evidence, renderReport(triage), assess(evidence, triage, evidence.files['yarn.lock'].data.content));
+        assert.match(body, expected);
+        assert.ok(!body.includes('no-patch;'));
+        if (status === 'age-gated') {
+            const matured = await prepare(sample(), {
+                ...options,
+                now: now + 7 * 86400_000,
+                registryRead: async() => m,
+            });
+            assert.equal(matured.releaseDispositions.thing.status, 'eligible');
+            assert.equal(matured.releases.thing[0].version, '1.0.2');
+            assert.notEqual(matured.fingerprint, input.fingerprint, 'Age eligibility must invalidate a cached deferral');
+        }
+    }
+    const diagnostic = releaseDisposition('thing', {
+        versions: {
+        },
+        time: {
+        },
+    }, ['1.0.0'], ['invalid'], {
+        now,
+    }, []);
+    assert.equal(diagnostic.status, 'unknown');
 });
 
 test('preparation deduplicates registry reads; timestamps do not invalidate fingerprints but advisories and releases do', async() => {
