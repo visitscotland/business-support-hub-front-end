@@ -199,6 +199,7 @@ post-steps:
         triage-results/smoke-results/
 
         triage-results/status.json
+        triage-results/planning.json
         triage-results/candidate/history.json
       if-no-files-found: ignore
       retention-days: 7
