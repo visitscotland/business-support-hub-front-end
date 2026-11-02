@@ -75,7 +75,7 @@ steps:
   - name: Install test browser and OS libraries
     run: node .yarn/releases/yarn-4.14.1.cjs playwright install --with-deps chromium
   - name: Test the deterministic reporting and replacement helpers
-    run: node --test tests/dependency-maintenance.test.mjs tests/dependency-maintenance-graph.test.mjs tests/dependency-candidate.test.mjs
+    run: node --test tests/dependency-maintenance.test.mjs tests/dependency-maintenance-graph.test.mjs tests/dependency-candidate.test.mjs tests/dependency-execution.test.mjs
   - name: Initialize the structured proposal
     run: node ci/dependency-maintenance.mjs initialize
 post-steps:
@@ -140,7 +140,10 @@ then returns success or a bounded error diagnostic in the SAME call. Do not invo
 Yarn install directly, redirect this helper's output, or read/page through its log.
 On a diagnosed failure revise the proposal, then invoke apply again. Code allows
 one initial install plus at most two repairs across the whole run, rejects identical
-candidates, and restores the last installed manifest/lockfile after failure. Preserve
+candidates, and restores the last installed manifest/lockfile after failure. Network/proxy/TLS failures are infrastructure failures, not proof
+that a package update is incompatible. Do not remove or change pins to repair networking.
+Render the failure report and emit report_incomplete instead of noop for network
+failures; the host will fail validation and prevent caching. Preserve
 the returned diagnostic in deferred package actions. On exhausted budget, stop repairs,
 update decisions to describe the retained result, and render immediately.
 `node ci/dependency-candidate.mjs restore` restores the retained candidate without
@@ -151,6 +154,9 @@ unobserved success. Leave the final calls for reporting and PR safe output.
 Edit only the initialized `triage-results/proposal.json` for reporting:
 `{"schemaVersion":1,"packages":[{"name":"...","ecosystem":"npm","recommendations":[{"targetVersion":null,"pinVersion":null,"applicableFromVersions":[],"compatibility":"...","action":"..."}]}],"changes":[{"field":"resolutions","name":"...","value":"exact-version-or-null","reason":"...","compatibility":"..."}]}`.
 Include an explicit package decision for EVERY listed package, even when deferred.
+A selector targeting only an already-safe copy is rejected; use the vulnerable
+branch or its prepared parent upgrade. After rollback, no proposed upgrade was
+applied: mark every affected batch decision accordingly.
 Each action must explain the package-specific evidence or blocker; generic default
 "not attempted" text is incomplete. Attempt up to three supported candidate groups,
 prioritising within-parent security patches. A no-diff outcome requires explicit

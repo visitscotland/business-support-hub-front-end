@@ -220,3 +220,18 @@ test('apply command regenerates via the checked-in runner and restore never rese
         force: true,
     }); }
 });
+
+
+test('selectors covering only already-safe copies are rejected before installation', () => {
+    const { input, proposal } = fixture();
+    input.triage.packages[0].affectedVersions = ['1.0.0'];
+    input.paths = [{
+        requestedName: 'thing',
+        targetName: 'thing',
+        effectiveVersions: ['1.0.2'],
+        constraint: '^1.0.2',
+        pathVerified: true,
+    }];
+    proposal.changes[0].field = 'resolutions';
+    assert.throws(() => candidateManifest(input, proposal, input.manifest), /already-safe copies/);
+});

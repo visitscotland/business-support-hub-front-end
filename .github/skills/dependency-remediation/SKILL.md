@@ -45,7 +45,9 @@ review is a disclosure requirement, not a reason to skip attempting the update.
    Yarn install, redirect helper output, or view install logs. The helper returns
    bounded diagnostics on failure, restores the last installed candidate and
    persists an initial-install plus two-repair budget. Identical attempts are rejected.
-4. On failure, revise the proposal using the returned diagnostic and retry within
+4. For network/proxy/TLS failures, render the failed result and emit report_incomplete,
+   never a successful noop or a claim of package incompatibility. Do not change
+   dependencies to repair networking. For dependency resolution failures, revise the proposal using the returned diagnostic and retry within
    the persisted budget. If exhausted, record the blocker and render the retained
    result immediately. The restore command retains the attempt counter. Do not
    weaken checks or claim a remaining vulnerable instance is fixed.
@@ -70,5 +72,6 @@ review is a disclosure requirement, not a reason to skip attempting the update.
    from triage-results/pr-body.md. Keep it for human approval; do not approve,
    enable auto-merge, merge, close PRs or push to old branches yourself. A separate
    publisher cleanup job closes earlier matching bot PRs only after success.
-8. With no valid changes, retain the local report and emit a noop. Do not make an
+8. Emit noop only for a fully assessed run with no failed candidate execution.
+   Rolled-back execution failures must remain failed and must not be cached. Do not make an
    empty PR or close an existing maintenance PR without a replacement.
