@@ -35,10 +35,8 @@ tools:
   edit: false
   cli-proxy: false
 jobs:
-  detection:
-    if: needs.agent.result == 'success' && needs.agent.outputs.has_patch == 'true'
   safe_outputs:
-    if: needs.agent.result == 'success' && needs.detection.outputs.detection_success == 'true'
+    if: needs.agent.result == 'success' && needs.agent.outputs.has_patch == 'true'
     pre-steps:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
@@ -97,35 +95,7 @@ jobs:
 safe-outputs:
   staged: false
   report-failure-as-issue: false
-  threat-detection:
-    max-turns: 10
-    max-ai-credits: 50
-    retries: 0
-    engine:
-      id: copilot
-      bare: true
-      harness:
-        max-retries: 0
-      model: gpt-4.1
-    continue-on-error: false
-    steps:
-      - name: Verify explicit detector model against live catalog
-        run: node ci/dependency-detection.mjs model-check
-    post-steps:
-      - name: Persist terminal detector execution state
-        if: always()
-        run: node ci/dependency-detection.mjs record
-      - name: Retain detector diagnostics even on failure
-        if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
-        with:
-          name: dependency-detection-diagnostics
-          path: |-
-            /tmp/gh-aw/threat-detection/detection.log
-            /tmp/gh-aw/threat-detection/execution.json
-            /tmp/gh-aw/threat-detection/detection_result*.json
-          if-no-files-found: warn
-          retention-days: 7
+  threat-detection: false
   create-pull-request:
     title-prefix: "[dependency-maintenance] "
     draft: false
@@ -219,7 +189,7 @@ If the host result is inconsistent, emit report_incomplete with the exact concer
 Otherwise, when validation.changed is non-empty, request exactly one pull request
 using validation.branch, title "Dependency security and pin refresh", and the EXACT pr-body.md contents.
 The existing working-tree changes are the host-validated patch; do not commit or
-alter them. Publication requires an affirmative independent detection verdict.
+alter them. Publication requires the host validation and exact publication checks.
 When validation.changed is empty, emit noop with the EXACT validation.noopMessage. No other output types or duplicate requests are permitted. The host checks
 your output type, the immutable plan snapshot and the exact PR body before publication.
 Never approve/merge PRs, close previous PRs, change instructions or read credentials.
