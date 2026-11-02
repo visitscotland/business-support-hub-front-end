@@ -38,7 +38,7 @@ export function reviewCheck(root, expectedHash, outputTypes, hasPatch) {
         stage: 'review',
         status: 'accepted',
         output: expected,
-        detection: validation.changed.length ? 'required' : 'skipped-no-patch',
+        publication: validation.changed.length ? 'pending-exact-output-checks' : 'skipped-no-patch',
     }));
     return expected;
 }

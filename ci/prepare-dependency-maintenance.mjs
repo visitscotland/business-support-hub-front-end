@@ -447,7 +447,7 @@ export async function main() {
     const yarnConfig = YAML.parse(readFileSync('.yarnrc.yml', 'utf8'));
     assert.equal(yarnConfig.npmMinimalAgeGate, '7d', 'Review preparation when changing the Yarn age gate');
     const policyFiles = ['ci/prepare-dependency-maintenance.mjs', 'ci/dependency-maintenance.mjs',
-        'ci/dependency-host.mjs', 'ci/dependency-plan.mjs', 'ci/dependency-detection.mjs', 'ci/dependency-execution.mjs', 'ci/dependency-candidate.mjs', 'ci/dependency-http.mjs', 'ci/dependency-graph.mjs', 'ci/dependency-runtime.mjs', 'ci/dependency-maintenance-state.mjs', '.github/workflows/dependency-maintenance-agent.md',
+        'ci/dependency-host.mjs', 'ci/dependency-plan.mjs', 'ci/dependency-execution.mjs', 'ci/dependency-candidate.mjs', 'ci/dependency-http.mjs', 'ci/dependency-graph.mjs', 'ci/dependency-runtime.mjs', 'ci/dependency-maintenance-state.mjs', '.github/workflows/dependency-maintenance-agent.md',
         '.github/workflows/dependency-maintenance.yml', '.github/skills/dependency-remediation/SKILL.md',
         '.github/skills/dependency-triage/SKILL.md', '.yarnrc.yml'];
     const result = await prepare(evidence, {

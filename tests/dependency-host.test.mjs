@@ -10,7 +10,6 @@ import { runInNewContext } from 'node:vm';
 import YAML from 'yaml';
 import { planGroups, proposalFor } from '../ci/dependency-plan.mjs';
 import { prepareHost, reviewCheck } from '../ci/dependency-host.mjs';
-import { verifyModel, detectionEvidence } from '../ci/dependency-detection.mjs';
 import { candidateManifest, main as candidateMain } from '../ci/dependency-candidate.mjs';
 
 function inputFixture() {
@@ -312,45 +311,16 @@ test('rejected selectors and unsupported render commands remain in persisted fai
     }); }
 });
 
-test('explicit detector model and terminal evidence reject the unsupported-alias/missing-verdict sequence', () => {
-    assert.equal(verifyModel({
-        endpoints: [{
-            provider: 'copilot',
-            configured: true,
-            models: ['gpt-4.1'],
-        }],
-    }), 'gpt-4.1');
-    assert.throws(() => verifyModel({
-        endpoints: [{
-            provider: 'copilot',
-            configured: true,
-            models: ['detection'],
-        }],
-    }), /absent/);
-    const root = mkdtempSync(join(tmpdir(), 'detector-'));
-    try {
-        assert.equal(detectionEvidence(root), 'failed');
-        assert.equal(JSON.parse(readFileSync(join(root, 'execution.json'))).state, 'failed');
-        writeFileSync(join(root, 'detection_result.json'), 'invalid');
-        assert.equal(detectionEvidence(root), 'failed');
-        writeFileSync(join(root, 'detection_result.json'), '{"verdict":"safe"}');
-        assert.equal(detectionEvidence(root), 'completed');
-    } finally { rmSync(root, {
-        recursive: true,
-        force: true,
-    }); }
-});
-
-test('compiled publication requires an affirmative detector and host body; no-op claims must match host evidence', () => {
+test('compiled publication skips AI detection and requires the host body; no-op claims must match host evidence', () => {
     const source = YAML.parse(readFileSync(new URL('../.github/workflows/dependency-maintenance-agent.md', import.meta.url), 'utf8').split('---')[1]);
     const compiled = YAML.parse(readFileSync(new URL('../.github/workflows/dependency-maintenance-agent.lock.yml', import.meta.url), 'utf8'));
     assert.equal(source.tools.bash, false);
     assert.equal(source.tools.edit, false);
-    assert.equal(source['safe-outputs']['threat-detection']['continue-on-error'], false);
-    assert.equal(source['safe-outputs']['threat-detection'].engine.model, 'gpt-4.1');
-    assert.match(compiled.jobs.safe_outputs.if, /detection_success == 'true'/);
-    assert.match(compiled.jobs.detection.if, /has_patch == 'true'/);
-    assert.match(compiled.jobs.detection.if, /needs.agent.result == 'success'/);
+    assert.equal(source['safe-outputs']['threat-detection'], false);
+    assert.equal(compiled.jobs.detection, undefined);
+    assert.ok(!compiled.jobs.safe_outputs.needs.includes('detection'));
+    assert.match(compiled.jobs.safe_outputs.if, /has_patch == 'true'/);
+    assert.match(compiled.jobs.safe_outputs.if, /needs.agent.result == 'success'/);
     const script = source.jobs.safe_outputs['pre-steps'].at(-1).with.script;
     const execute = (body, passed = true, overrides = {
     }) => runInNewContext(script, {

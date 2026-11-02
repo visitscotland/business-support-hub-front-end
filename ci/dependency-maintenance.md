@@ -47,12 +47,10 @@ verify the complete plan hash and require the correct output type. Successful no
 messages must exactly match the host's unresolved-finding summary. PR publication
 requires the exact host report (allowing standard runtime sanitization).
 
-Independent threat detection runs only for a successful, publishable patch. Both
-engines explicitly use gpt-4.1, verified against the live Copilot catalog captured
-by the reviewer without an additional network lookup. Detector errors fail closed;
-publication requires detection_success=true, not just a successful job. Detector
-logs, structured result and terminal execution status are retained even on failure.
-The detector keeps its separate ten-call/50-credit budget and no whole-pass retry.
+AI threat detection is disabled. A successful host-validated and reviewed patch
+proceeds directly to the exact publication checks and PR creation. The existing
+code quality and security scans run on the opened PR. There is no separate
+detection inference pass or detection credit budget.
 
 A failed attempt cannot become a successful noop by removing its edits. Validated
 results can enter the six-day cache only after the host accepts the review and the
@@ -69,5 +67,5 @@ checks cover their real implementations. A local HTTP CONNECT proxy fixture prov
 Yarn consumes the mapped proxy settings without contacting an external registry.
 
 Compile dependency-maintenance-agent with pinned gh-aw v0.92.0 and validation enabled.
-Tests assert fail-closed detector conditions, exact publication-body checks, no-op
+Tests assert that AI detection stays disabled, exact publication-body checks, no-op
 message checks, immutable review snapshots and durable pre-install failures.
