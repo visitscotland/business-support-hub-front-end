@@ -322,8 +322,22 @@ test('compiled publication skips AI detection and requires the host body; no-op 
     assert.match(compiled.jobs.safe_outputs.if, /has_patch == 'true'/);
     assert.match(compiled.jobs.safe_outputs.if, /needs.agent.result == 'success'/);
     const script = source.jobs.safe_outputs['pre-steps'].at(-1).with.script;
+    const core = {
+        info() {},
+    };
+    let runtimeCore;
     const execute = (body, passed = true, overrides = {
     }) => runInNewContext(script, {
+        core,
+        github: {
+        },
+        context: {
+        },
+        exec: {
+        },
+        io: {
+        },
+        getOctokit() {},
         process: {
             env: {
                 RUNNER_TEMP: '/runtime',
@@ -347,8 +361,15 @@ test('compiled publication skips AI detection and requires the host body; no-op 
                         }],
                     }) : 'host body',
             };
+            if (name.endsWith('setup_globals.cjs')) return {
+                setupGlobals: (providedCore) => { runtimeCore = providedCore; },
+            };
             if (name.endsWith('sanitize_content.cjs')) return {
-                sanitizeContent: (value) => value,
+                sanitizeContent: (value) => {
+                    assert.equal(runtimeCore, core, 'Sanitizer requires initialized framework globals');
+                    runtimeCore.info('Sanitizing body');
+                    return value;
+                },
             };
             if (name === 'node:assert/strict') return assert;
             if (name === 'node:path') return {

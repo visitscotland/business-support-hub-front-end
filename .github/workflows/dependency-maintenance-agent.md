@@ -63,7 +63,10 @@ jobs:
             assert.equal(output.items[0].branch, validation.branch);
             const raw = fs.readFileSync('/tmp/maintenance-report/pr-body.md', 'utf8');
             const path = require('node:path');
-            const { sanitizeContent } = require(path.join(process.env.RUNNER_TEMP, 'gh-aw/actions/sanitize_content.cjs'));
+            const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw/actions');
+            const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+            setupGlobals(core, github, context, exec, io, getOctokit);
+            const { sanitizeContent } = require(path.join(actionsDir, 'sanitize_content.cjs'));
             assert.ok([raw, sanitizeContent(raw)].includes(output.items[0].body), 'Publication body differs from the host-validated report');
   conclusion:
     pre-steps:
