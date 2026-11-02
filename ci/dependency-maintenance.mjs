@@ -229,8 +229,8 @@ export function renderBody(evidence, triageReport, outcomes) {
 
     return [marker, '# Dependency maintenance', '',
         `Repository: ${evidence.repository}. Baseline: ${evidence.baseline.data.sha}. Evidence: ${evidence.collectedAt}.`, '',
-        `> [!WARNING]\n> **${pending.length} findings are NOT fixed by this PR and require human action.** Review this section separately from the proposed fixes.`, '',
-        '## NOT FIXED — human action required', '', table(pending), '',
+        `> [!WARNING]\n> **${pending.length} findings are NOT fixed by this PR.** Follow the per-row action: investigate missing fixes or other blockers; wait for age-deferred fixes, or explicitly approve an age-policy override for critical issues.`, '',
+        '## NOT FIXED — next actions', '', table(pending), '',
         `## Expected to be fixed by this PR (${fixed.length})`, '', table(fixed), '',
         'Expected fixes are based on the proposed lockfile. GitHub alerts reconcile after merge; this is not a claim of verified exploit reachability.', '',
         '## Validation', '',

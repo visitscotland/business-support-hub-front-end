@@ -344,6 +344,34 @@ export function releaseCandidates(name, metadata, currentVersions, ranges, {now 
     }));
 }
 
+export function releaseDisposition(name, metadata, versions, ranges, options, candidates) {
+    if (candidates.length) return {
+        status: 'eligible',
+    };
+    if (!ranges.length || ranges.some((r) => !r || !semver.validRange(r))) return {
+        status: 'unknown',
+    };
+    const fresh = releaseCandidates(name, metadata, versions, ranges, {
+        ...options,
+        ageMs: 0,
+    });
+    const ageMs = options.ageMs ?? 7 * 86400_000;
+    const blocked = fresh.filter((r) => Date.parse(r.publishedAt) + ageMs > options.now);
+    if (blocked.length) return {
+        status: 'age-gated',
+        releases: blocked.map((r) => ({
+            version: r.version,
+            eligibleAt: new Date(Date.parse(r.publishedAt) + ageMs).toISOString(),
+        })),
+    };
+    const publishedFix = Object.keys(metadata.versions).some((v) => semver.valid(v) && !semver.prerelease(v)
+        && versions.some((from) => semver.valid(from) && semver.gt(v, from))
+        && ranges.every((r) => !semver.satisfies(v, r)));
+    return {
+        status: publishedFix ? 'other-policy-blocked' : 'no-published-fix',
+    };
+}
+
 export function fingerprint(value) {
     const stable = (v) => Array.isArray(v) ? v.map(stable) : v && typeof v === 'object'
         ? Object.fromEntries(Object.keys(v).sort().map((key) => [key, stable(v[key])])) : v;
@@ -357,6 +385,8 @@ export async function prepare(evidence, { registryRead, nodeVersion, policyHash,
     const names = unique([...facts.filter((f) => f.ecosystem === 'npm').map((f) => f.name),
         ...pins.filter((p) => p.status === 'parent-requires-newer').map((p) => p.name)]);
     const releases = {
+    };
+    const releaseDispositions = {
     };
     const gaps = [];
     const metadataCache = new Map();
@@ -372,16 +402,21 @@ export async function prepare(evidence, { registryRead, nodeVersion, policyHash,
             metadataCache.set(name, true);
             const fact = facts.find((f) => f.name === name);
             const versions = entries.filter((e) => e.name === name).map((e) => String(e.version));
-            releases[name] = releaseCandidates(name, metadata, versions, fact?.ranges || [], {
+            const candidateOptions = {
                 now,
                 nodeVersion,
                 ageMs,
                 parents: parentsOf(name),
                 purpose,
-            });
+            };
+            releases[name] = releaseCandidates(name, metadata, versions, fact?.ranges || [], candidateOptions);
+            releaseDispositions[name] = releaseDisposition(name, metadata, versions, fact?.ranges || [], candidateOptions, releases[name]);
         } catch {
             metadataCache.set(name, false);
             releases[name] = [];
+            releaseDispositions[name] = {
+                status: 'unknown',
+            };
             gaps.push(`Registry evidence unavailable for ${name}; do not invent a target`);
         }
     };
@@ -406,6 +441,7 @@ export async function prepare(evidence, { registryRead, nodeVersion, policyHash,
         facts,
         pins,
         releases,
+        releaseDispositions,
         paths,
         alerts: evidence.alerts.data.map((a) => ({
             number: a.number,

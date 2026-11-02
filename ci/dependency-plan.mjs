@@ -18,7 +18,7 @@ export function planGroups(input) {
             const versions = path.effectiveVersions.filter((v) => p.affectedVersions.includes(v));
             const candidates = (input.releases[p.name] || []).filter((r) => versions.every((v) => r.applicableFromVersions.includes(v)));
             const child = candidates.find((r) => semver.validRange(path.constraint) && semver.satisfies(r.version, path.constraint)) || candidates[0];
-            if (!child) { blocker = 'no-patch'; continue; }
+            if (!child) { blocker = input.releaseDispositions?.[p.name]?.status || 'unknown-release-evidence'; continue; }
             targets.add(child.version);
             let selector;
             let value = child.version;
@@ -51,6 +51,15 @@ export function planGroups(input) {
                 compatibility: [...caveats].join('; '),
             });
         }
+        const release = input.releaseDispositions?.[p.name];
+        const releaseAction = {
+            'no-published-fix': 'No stable version fixing all recorded advisories is published; manually investigate upstream fixes or alternatives',
+            'age-gated': `Published fix deferred by release-age policy: ${release?.releases?.map((r) => `${r.version} eligible ${r.eligibleAt}`).join('; ')}. Wait until eligible and rerun; for critical issues consider an explicitly approved age-policy override`,
+            'other-policy-blocked': 'Published fix exists but fails another eligibility rule (Node compatibility, deprecation or publication evidence); manually investigate',
+            'unknown': 'Release evidence is incomplete; manually investigate; absence of a candidate does not prove no fix exists',
+            'unknown-release-evidence': 'No applicable prepared candidate; manually investigate release evidence and branch compatibility',
+            'eligible': 'No prepared candidate applies to this affected branch; manually investigate branch compatibility',
+        }[blocker];
         const decision = {
             name: p.name,
             ecosystem: p.ecosystem,
@@ -61,7 +70,7 @@ export function planGroups(input) {
                 applicableFromVersions: blocker ? [] : p.affectedVersions.filter((v) => (input.releases[p.name] || []).find((r) => r.version === [...targets][0])?.applicableFromVersions.includes(v)),
                 compatibility: [...caveats].join('; ') || 'unavailable',
                 action: blocker === 'not-affected' ? `${p.name}: no affected versions recorded in the prepared baseline; alert remains unresolved pending reconciliation`
-                    : blocker ? `${p.name}: ${blocker}; no unverified change attempted`
+                    : blocker ? `${p.name}: ${releaseAction || `${blocker}; no unverified change attempted`}`
                         : `${p.name}: apply verified affected-path fixes; ${[...caveats].join('; ')}`,
             }],
         };
