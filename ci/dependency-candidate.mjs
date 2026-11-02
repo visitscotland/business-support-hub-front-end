@@ -17,36 +17,60 @@ const read = (path) => JSON.parse(readFileSync(path, 'utf8'));
 export function candidateManifest(input, proposal, current) {
     const manifest = structuredClone(current);
     const seen = new Set();
+    const errors = [];
     for (const edit of proposal.changes || []) {
-        assert.ok(fields.includes(edit.field), 'Only dependency fields may change');
-        assert.ok(typeof edit.name === 'string' && edit.name && !['__proto__', 'constructor', 'prototype'].includes(edit.name));
-        const key = `${edit.field}:${edit.name}`;
-        assert.ok(!seen.has(key), 'Duplicate manifest edit');
-        seen.add(key);
-        assert.ok(Object.hasOwn(edit, 'value'), 'Each edit needs value: an exact prepared version or null for removal');
-        const target = ['dependencies', 'devDependencies'].includes(edit.field)
-            ? edit.name : pinTarget(edit.name, Object.keys(input.releases));
-        if (edit.value !== null) {
-            assert.ok(semver.valid(edit.value), 'Use an exact version, never a range or latest');
-            const candidate = input.releases[target]?.find((r) => r.version === edit.value);
-            assert.ok(candidate, `No prepared candidate for ${key}`);
-            assert.ok(candidate.applicableFromVersions?.length
+        try {
+            assert.ok(fields.includes(edit.field), 'Only dependency fields may change');
+            assert.ok(typeof edit.name === 'string' && edit.name && !['__proto__', 'constructor', 'prototype'].includes(edit.name));
+            const key = `${edit.field}:${edit.name}`;
+            assert.ok(!seen.has(key), 'Duplicate manifest edit');
+            seen.add(key);
+            assert.ok(Object.hasOwn(edit, 'value'), 'Each edit needs value: an exact prepared version or null for removal');
+            const target = ['dependencies', 'devDependencies'].includes(edit.field)
+                ? edit.name : pinTarget(edit.name, Object.keys(input.releases));
+            if (edit.value !== null) {
+                assert.ok(semver.valid(edit.value), 'Use an exact version, never a range or latest');
+                const candidate = input.releases[target]?.find((r) => r.version === edit.value);
+                assert.ok(candidate, `No prepared candidate for ${key}`);
+                assert.ok(candidate.applicableFromVersions?.length
                 && candidate.applicableFromVersions.every((v) => semver.gte(edit.value, v)), 'No downgrade candidates');
-            if (edit.field === 'resolutions') {
-                const paths = matchingPaths(edit.name, input.paths || []);
-                const affected = input.triage.packages.find((p) => p.name === target)?.affectedVersions || [];
-                assert.ok(!affected.length || paths?.some((p) => p.effectiveVersions.some((v) => affected.includes(v))),
-                    'Selector only targets already-safe copies; target the affected branch or update its parent');
-                assert.ok(paths && paths.every((p) => p.effectiveVersions.every((v) =>
-                    semver.valid(v) && semver.gte(edit.value, v))), 'Selector would downgrade an installed branch; narrow the selector');
+                if (edit.field === 'resolutions') {
+                    const paths = matchingPaths(edit.name, input.paths || []);
+                    const affected = input.triage.packages.find((p) => p.name === target)?.affectedVersions || [];
+                    assert.ok(!affected.length || paths?.some((p) => p.effectiveVersions.some((v) => affected.includes(v))),
+                        'Selector only targets already-safe copies; target the affected branch or update its parent');
+                    assert.ok(paths && paths.every((p) => p.effectiveVersions.every((v) =>
+                        semver.valid(v) && semver.gte(edit.value, v))), 'Selector would downgrade an installed branch; narrow the selector');
+                }
+                manifest[edit.field] ||= {
+                };
+                manifest[edit.field][edit.name] = edit.value;
+            } else {
+                assert.equal(edit.field, 'resolutions', 'Only evidenced resolution removals are supported');
+                delete manifest.resolutions?.[edit.name];
             }
-            manifest[edit.field] ||= {
-            };
-            manifest[edit.field][edit.name] = edit.value;
-        } else {
-            assert.equal(edit.field, 'resolutions', 'Only evidenced resolution removals are supported');
-            delete manifest.resolutions?.[edit.name];
+        } catch (error) {
+            const target = pinTarget(edit.name, Object.keys(input.releases));
+            const p = input.triage.packages.find((item) => item.name === target);
+            errors.push({
+                field: edit.field,
+                selector: edit.name,
+                package: target,
+                diagnostic: error.message,
+                affectedVersions: p?.affectedVersions || [],
+                matchedVersions: [...new Set((matchingPaths(edit.name, input.paths || []) || []).flatMap((path) => path.effectiveVersions))],
+                candidates: (input.releases[target] || []).map((r) => r.version),
+                parentCandidates: (p?.parents || []).flatMap((parent) => (input.releases[parent.name] || []).map((r) => ({
+                    name: parent.name,
+                    version: r.version,
+                }))),
+            });
         }
+    }
+    if (errors.length) {
+        const error = new Error(errors.map((e) => `${e.selector}: ${e.diagnostic}`).join('; '));
+        error.details = errors;
+        throw error;
     }
     applyProposal(input, proposal, manifest);
     return manifest;
@@ -107,7 +131,7 @@ export function installCandidate(root, state, run = spawnSync) {
     return summary;
 }
 
-export function main(command, root = process.cwd()) {
+function execute(command, root) {
     const directory = resolve(root, 'triage-results/candidate');
     const statePath = resolve(directory, 'state.json');
     const input = read(resolve(root, 'triage-results/agent-input.json'));
@@ -150,11 +174,47 @@ export function main(command, root = process.cwd()) {
     if (!summary.passed) process.exitCode = 1;
 }
 
+export function main(command, root = process.cwd()) {
+    const directory = resolve(root, 'triage-results/candidate');
+    mkdirSync(directory, {
+        recursive: true,
+    });
+    const path = resolve(directory, 'history.json');
+    const history = existsSync(path) ? read(path) : [];
+    const record = {
+        command,
+        call: history.filter((h) => h.command !== 'restore').length + 1,
+        outcome: 'started',
+    };
+    history.push(record);
+    writeFileSync(path, JSON.stringify(history));
+    try {
+        assert.ok(command === 'restore' || record.call <= 3, 'Validation/recovery budget exhausted (three calls total)');
+        execute(command, root);
+        const result = existsSync(resolve(directory, 'result.json')) ? read(resolve(directory, 'result.json')) : null;
+        record.outcome = result?.passed === false && command !== 'restore' ? 'failed' : 'success';
+    } catch (error) {
+        record.outcome = 'failed';
+        record.diagnostic = error.message.slice(0, 3000);
+        record.errors = error.details || [];
+        writeFileSync(resolve(directory, 'result.json'), JSON.stringify({
+            passed: false,
+            rolledBack: true,
+            phase: 'proposal',
+            failureClass: 'proposal',
+            diagnostic: record.diagnostic,
+            errors: record.errors,
+        }));
+        throw error;
+    } finally { writeFileSync(path, JSON.stringify(history)); }
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
     try { main(process.argv[2]); } catch (error) {
         console.error(JSON.stringify({
             passed: false,
-            diagnostic: error.message.slice(0, 4000),
+            diagnostic: error.message.slice(0, 3000),
+            errors: error.details || [],
         }));
         process.exitCode = 1;
     }

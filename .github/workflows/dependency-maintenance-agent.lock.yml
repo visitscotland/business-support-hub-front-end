@@ -1,5 +1,5 @@
-# gh-aw-metadata: {"schema_version":"v4","frontmatter_hash":"eb79d2245f985c215e5cf4b04aca78cd3faceffd98fc81ed62c1bb20da72508e","body_hash":"ee5525efc1886838f0baa05f7050e2ee69f65036b92788f2ffb0adf882962e9e","compiler_version":"v0.92.0","strict":true,"agent_id":"copilot","detection_agent_id":"copilot","engine_versions":{"copilot":"1.0.96"}}
-# gh-aw-manifest: {"version":1,"secrets":["GH_AW_CI_TRIGGER_TOKEN","GH_AW_DEFAULT_OTLP_ENDPOINT","GH_AW_DEFAULT_OTLP_HEADERS","GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN"],"actions":[{"repo":"actions/checkout","sha":"11bd71901bbe5b1630ceea73d27597364c9af683","version":"11bd71901bbe5b1630ceea73d27597364c9af683"},{"repo":"actions/checkout","sha":"3d3c42e5aac5ba805825da76410c181273ba90b1","version":"v7.0.1"},{"repo":"actions/download-artifact","sha":"9000827ccba6bdab643e8b6fd33ac0654aef8333","version":"v8.0.2"},{"repo":"actions/download-artifact","sha":"d3f86a106a0bac45b974a628896c90dbdf5c8093","version":"d3f86a106a0bac45b974a628896c90dbdf5c8093"},{"repo":"actions/github-script","sha":"3a2844b7e9c422d3c10d287c895573f7108da1b3","version":"v9.0.0"},{"repo":"actions/setup-node","sha":"49933ea5288caeca8642d1e84afbd3f7d6820020","version":"49933ea5288caeca8642d1e84afbd3f7d6820020"},{"repo":"actions/setup-node","sha":"949feb2413d6458794dcd2491c4babbbce0c15c1","version":"v7.1.0"},{"repo":"actions/upload-artifact","sha":"cf430e030ddbb5b0abf93d22962f4752f3646cd9","version":"v7.0.2"},{"repo":"actions/upload-artifact","sha":"ea165f8d65b6e75b540449e92b4886f43607fa02","version":"ea165f8d65b6e75b540449e92b4886f43607fa02"},{"repo":"github/gh-aw-actions/setup","sha":"458b269006dcf88e3b5496b6fbecabe4b9a0f954","version":"v0.92.0"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.28.57","digest":"sha256:a9861b2fad1d29c586bbbf98840a61056e30e2720d8d9ec2c0def9049566bd8a","pinned_image":"ghcr.io/github/gh-aw-firewall/agent:0.28.57@sha256:a9861b2fad1d29c586bbbf98840a61056e30e2720d8d9ec2c0def9049566bd8a"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.28.57","digest":"sha256:f2925ff32dc972a5d8b90a7785b6ca68052efd2575fe896556ac457e22e86dcc","pinned_image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.28.57@sha256:f2925ff32dc972a5d8b90a7785b6ca68052efd2575fe896556ac457e22e86dcc"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.28.57","digest":"sha256:be808c16b535ebabd070eebe086fe6bffd5bb86b2e5fe8e5cdad30068eb9c0ac","pinned_image":"ghcr.io/github/gh-aw-firewall/squid:0.28.57@sha256:be808c16b535ebabd070eebe086fe6bffd5bb86b2e5fe8e5cdad30068eb9c0ac"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.4.31","digest":"sha256:dbec0f2ddef6adf83b7764019323096e3e5cc0f3886255f6320555b7fe2a7caf","pinned_image":"ghcr.io/github/gh-aw-mcpg:v0.4.31@sha256:dbec0f2ddef6adf83b7764019323096e3e5cc0f3886255f6320555b7fe2a7caf"},{"image":"ghcr.io/github/gh-aw-node","digest":"sha256:11c2c544876cdbaffefe0f7f1283b74838c209654b4934a78e23ed11f750490f","pinned_image":"ghcr.io/github/gh-aw-node@sha256:11c2c544876cdbaffefe0f7f1283b74838c209654b4934a78e23ed11f750490f"}],"mcp_servers":[{"name":"safeoutputs","tools":["create_pull_request","missing_data","missing_tool","noop","report_incomplete"]}],"threat_detection":{"mode":"enabled"}}
+# gh-aw-metadata: {"schema_version":"v4","frontmatter_hash":"5d6e387c038a1d8169e5d7ac38e86379795e7988c3d2a349d701e788e6e60be2","body_hash":"7ce943e57a9925cc815fd833654e88a9457ebab8cacfd6f5eb1ab79f7cc2c396","compiler_version":"v0.92.0","strict":true,"agent_id":"copilot","agent_model":"gpt-4.1","detection_agent_id":"copilot","detection_agent_model":"gpt-4.1","engine_versions":{"copilot":"1.0.96"}}
+# gh-aw-manifest: {"version":1,"secrets":["GH_AW_CI_TRIGGER_TOKEN","GH_AW_DEFAULT_OTLP_ENDPOINT","GH_AW_DEFAULT_OTLP_HEADERS","GH_AW_GITHUB_MCP_SERVER_TOKEN","GH_AW_GITHUB_TOKEN","GITHUB_TOKEN"],"actions":[{"repo":"actions/checkout","sha":"3d3c42e5aac5ba805825da76410c181273ba90b1","version":"3d3c42e5aac5ba805825da76410c181273ba90b1"},{"repo":"actions/download-artifact","sha":"9000827ccba6bdab643e8b6fd33ac0654aef8333","version":"9000827ccba6bdab643e8b6fd33ac0654aef8333"},{"repo":"actions/github-script","sha":"3a2844b7e9c422d3c10d287c895573f7108da1b3","version":"v9.0.0"},{"repo":"actions/setup-node","sha":"949feb2413d6458794dcd2491c4babbbce0c15c1","version":"949feb2413d6458794dcd2491c4babbbce0c15c1"},{"repo":"actions/upload-artifact","sha":"cf430e030ddbb5b0abf93d22962f4752f3646cd9","version":"cf430e030ddbb5b0abf93d22962f4752f3646cd9"},{"repo":"github/gh-aw-actions/setup","sha":"458b269006dcf88e3b5496b6fbecabe4b9a0f954","version":"v0.92.0"}],"containers":[{"image":"ghcr.io/github/gh-aw-firewall/agent:0.28.57","digest":"sha256:a9861b2fad1d29c586bbbf98840a61056e30e2720d8d9ec2c0def9049566bd8a","pinned_image":"ghcr.io/github/gh-aw-firewall/agent:0.28.57@sha256:a9861b2fad1d29c586bbbf98840a61056e30e2720d8d9ec2c0def9049566bd8a"},{"image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.28.57","digest":"sha256:f2925ff32dc972a5d8b90a7785b6ca68052efd2575fe896556ac457e22e86dcc","pinned_image":"ghcr.io/github/gh-aw-firewall/api-proxy:0.28.57@sha256:f2925ff32dc972a5d8b90a7785b6ca68052efd2575fe896556ac457e22e86dcc"},{"image":"ghcr.io/github/gh-aw-firewall/squid:0.28.57","digest":"sha256:be808c16b535ebabd070eebe086fe6bffd5bb86b2e5fe8e5cdad30068eb9c0ac","pinned_image":"ghcr.io/github/gh-aw-firewall/squid:0.28.57@sha256:be808c16b535ebabd070eebe086fe6bffd5bb86b2e5fe8e5cdad30068eb9c0ac"},{"image":"ghcr.io/github/gh-aw-mcpg:v0.4.31","digest":"sha256:dbec0f2ddef6adf83b7764019323096e3e5cc0f3886255f6320555b7fe2a7caf","pinned_image":"ghcr.io/github/gh-aw-mcpg:v0.4.31@sha256:dbec0f2ddef6adf83b7764019323096e3e5cc0f3886255f6320555b7fe2a7caf"},{"image":"ghcr.io/github/gh-aw-node","digest":"sha256:11c2c544876cdbaffefe0f7f1283b74838c209654b4934a78e23ed11f750490f","pinned_image":"ghcr.io/github/gh-aw-node@sha256:11c2c544876cdbaffefe0f7f1283b74838c209654b4934a78e23ed11f750490f"}],"mcp_servers":[{"name":"safeoutputs","tools":["create_pull_request","missing_data","missing_tool","noop","report_incomplete"]}],"threat_detection":{"mode":"enabled"}}
 # This file was automatically generated by gh-aw (v0.92.0). DO NOT EDIT. To debug this workflow, load the skill at https://github.com/github/gh-aw/blob/main/debug.md
 #
 #    ___                   _   _
@@ -34,15 +34,15 @@
 #   - GITHUB_TOKEN
 #
 # Custom actions used:
-#   - actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+#   - actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 #   - actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+#   - actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
 #   - actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-#   - actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
 #   - actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-#   - actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+#   - actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
 #   - actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+#   - actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
 #   - actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-#   - actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
 #   - github/gh-aw-actions/setup@458b269006dcf88e3b5496b6fbecabe4b9a0f954 # v0.92.0
 #
 # Container images used:
@@ -178,7 +178,7 @@ jobs:
         env:
           GH_AW_INFO_ENGINE_ID: "copilot"
           GH_AW_INFO_ENGINE_NAME: "GitHub Copilot CLI"
-          GH_AW_INFO_MODEL: ${{ vars.GH_AW_MODEL_AGENT_COPILOT || vars.GH_AW_DEFAULT_MODEL_COPILOT || 'auto' }}
+          GH_AW_INFO_MODEL: "gpt-4.1"
           GH_AW_INFO_VERSION: "1.0.96"
           GH_AW_INFO_AGENT_VERSION: "1.0.96"
           GH_AW_INFO_CLI_VERSION: "v0.92.0"
@@ -194,6 +194,7 @@ jobs:
           GH_AW_INFO_AGENT_RUNTIME: ""
           GH_AW_COMPILED_STRICT: "true"
           GH_AW_INFO_TARGET_REPO: ${{ steps.resolve-host-repo.outputs.target_repo }}
+          GH_AW_INFO_MODEL_COSTS: '{"providers":{"github-copilot":{"models":{"gpt-4.1":{"cost":{"cache_read":"5e-07","input":"2e-06","output":"8e-06"}}}}}}'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
@@ -535,14 +536,14 @@ jobs:
         with:
           name: ${{ needs.activation.outputs.artifact_prefix }}activation
           path: /tmp/gh-aw
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version-file: .nvmrc
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
         with:
           name: dependency-evidence
           path: triage-results
@@ -553,9 +554,10 @@ jobs:
       - name: Install test browser and OS libraries
         run: node .yarn/releases/yarn-4.14.1.cjs playwright install --with-deps chromium
       - name: Test the deterministic reporting and replacement helpers
-        run: node --test tests/dependency-maintenance.test.mjs tests/dependency-maintenance-graph.test.mjs tests/dependency-candidate.test.mjs tests/dependency-execution.test.mjs
-      - name: Initialize the structured proposal
-        run: node ci/dependency-maintenance.mjs initialize
+        run: node --test tests/dependency-maintenance.test.mjs tests/dependency-maintenance-graph.test.mjs tests/dependency-candidate.test.mjs tests/dependency-execution.test.mjs tests/dependency-host.test.mjs
+      - id: prepared
+        name: Prepare and validate evidenced remediation on the host
+        run: node ci/dependency-host.mjs prepare
 
       - name: Configure Git credentials
         env:
@@ -879,8 +881,28 @@ jobs:
         id: agentic_execution
         # Copilot CLI tool arguments (sorted):
         # --allow-tool safeoutputs
-        # --allow-tool shell
-        # --allow-tool write
+        # --allow-tool shell(cat)
+        # --allow-tool shell(date)
+        # --allow-tool shell(echo)
+        # --allow-tool shell(git add:*)
+        # --allow-tool shell(git branch:*)
+        # --allow-tool shell(git checkout:*)
+        # --allow-tool shell(git commit:*)
+        # --allow-tool shell(git merge:*)
+        # --allow-tool shell(git rm:*)
+        # --allow-tool shell(git status)
+        # --allow-tool shell(git switch:*)
+        # --allow-tool shell(grep)
+        # --allow-tool shell(head)
+        # --allow-tool shell(ls)
+        # --allow-tool shell(printf)
+        # --allow-tool shell(pwd)
+        # --allow-tool shell(safeoutputs:*)
+        # --allow-tool shell(sort)
+        # --allow-tool shell(tail)
+        # --allow-tool shell(uniq)
+        # --allow-tool shell(wc)
+        # --allow-tool shell(yq)
         timeout-minutes: 60
         run: |
           set -o pipefail
@@ -909,7 +931,7 @@ jobs:
           export COPILOT_API_KEY="$COPILOT_DUMMY_BYOK"
           (umask 177 && touch /tmp/gh-aw/agent-stdio.log)
           # shellcheck disable=SC2016
-          printf '%s\n' '{"$schema":"https://github.com/github/gh-aw-firewall/releases/download/v0.28.57/awf-config.schema.json","network":{"allowDomains":["api.npms.io","api.snapcraft.io","archive.ubuntu.com","azure.archive.ubuntu.com","bun.sh","cdn.jsdelivr.net","crl.geotrust.com","crl.globalsign.com","crl.identrust.com","crl.sectigo.com","crl.thawte.com","crl.usertrust.com","crl.verisign.com","crl3.digicert.com","crl4.digicert.com","crls.ssl.com","deb.nodesource.com","deno.land","esm.sh","get.pnpm.io","googleapis.deno.dev","googlechromelabs.github.io","json-schema.org","json.schemastore.org","jsr.io","keyserver.ubuntu.com","nodejs.org","npm.pkg.github.com","npmjs.com","npmjs.org","ocsp.digicert.com","ocsp.geotrust.com","ocsp.globalsign.com","ocsp.identrust.com","ocsp.sectigo.com","ocsp.ssl.com","ocsp.thawte.com","ocsp.usertrust.com","ocsp.verisign.com","packagecloud.io","packages.cloud.google.com","packages.microsoft.com","ppa.launchpad.net","registry.bower.io","registry.npmjs.com","registry.npmjs.org","registry.yarnpkg.com","repo.yarnpkg.com","s.symcb.com","s.symcd.com","security.ubuntu.com","skimdb.npmjs.com","storage.googleapis.com","telemetry.vercel.com","ts-crl.ws.symantec.com","ts-ocsp.ws.symantec.com","www.googleapis.com","www.npmjs.com","www.npmjs.org","yarnpkg.com"],"isolation":true,"topologyAttach":["awmg-mcpg"]},"apiProxy":{"enabled":true,"enableTokenSteering":true,"maxRuns":30,"maxCacheMisses":5,"maxAiCredits":100,"models":{"agent":["sonnet-6x","gpt-6","gpt-5.4","gpt-5.5","gpt-5.6","gpt-5.3","gemini-pro","any"],"antigravity":["copilot/antigravity*","google/antigravity*","gemini/antigravity*"],"any":["copilot/*","anthropic/*","openai/*","google/*","gemini/*"],"auto":["copilot/auto","large"],"claude":["agent"],"codex":["agent"],"coding":["copilot/gpt-5*codex*","openai/gpt-5*codex*","gpt-5-codex","kimi"],"computer-use":["copilot/*computer-use*","google/*computer-use*","gemini/*computer-use*","openai/*computer-use*"],"copilot":["agent"],"deep-research":["copilot/deep-research*","copilot/o3-deep-research*","copilot/o4-mini-deep-research*","google/deep-research*","gemini/deep-research*","openai/o3-deep-research*","openai/o4-mini-deep-research*"],"detection":["small"],"evals":["small"],"fable":["copilot/*fable*","anthropic/*fable*"],"gemini":["agent"],"gemini-3-flash":["copilot/gemini-3*flash*","google/gemini-3*flash*","gemini/gemini-3*flash*"],"gemini-3-pro":["copilot/gemini-3*pro*","google/gemini-3*pro*","google/nano-banana*","gemini/gemini-3*pro*"],"gemini-3.1-flash":["copilot/gemini-3.1*flash*","google/gemini-3.1*flash*","gemini/gemini-3.1*flash*"],"gemini-3.1-pro":["copilot/gemini-3.1*pro*","google/gemini-3.1*pro*","gemini/gemini-3.1*pro*"],"gemini-3.5-flash":["copilot/gemini-3.5*flash*","google/gemini-3.5*flash*","gemini/gemini-3.5*flash*"],"gemini-3.6-flash":["copilot/gemini-3.6*flash*","google/gemini-3.6*flash*","gemini/gemini-3.6*flash*"],"gemini-3.7-flash":["copilot/gemini-3.7*flash*","google/gemini-3.7*flash*","gemini/gemini-3.7*flash*"],"gemini-3.8-flash":["copilot/gemini-3.8*flash*","google/gemini-3.8*flash*","gemini/gemini-3.8*flash*"],"gemini-flash":["copilot/gemini-*flash*","google/gemini-*flash*","gemini/gemini-*flash*"],"gemini-flash-lite":["copilot/gemini-*flash*lite*","google/gemini-*flash*lite*","gemini/gemini-*flash*lite*"],"gemini-omni":["copilot/gemini-omni*","google/gemini-omni*","gemini/gemini-omni*"],"gemini-pro":["copilot/gemini-*pro*","google/gemini-*pro*","gemini/gemini-*pro*"],"gemma":["copilot/gemma*","google/gemma*","gemini/gemma*"],"gpt-5":["copilot/gpt-5*","openai/gpt-5*"],"gpt-5-codex":["copilot/gpt-5*codex*","openai/gpt-5*codex*"],"gpt-5-mini":["copilot/gpt-5*mini*","openai/gpt-5*mini*"],"gpt-5-nano":["copilot/gpt-5*nano*","openai/gpt-5*nano*"],"gpt-5-pro":["copilot/gpt-5*pro*","openai/gpt-5*pro*"],"gpt-5.1":["copilot/gpt-5.1*","openai/gpt-5.1*"],"gpt-5.2":["copilot/gpt-5.2*","openai/gpt-5.2*"],"gpt-5.3":["copilot/gpt-5.3*","openai/gpt-5.3*"],"gpt-5.4":["copilot/gpt-5.4*","openai/gpt-5.4*"],"gpt-5.5":["copilot/gpt-5.5*","openai/gpt-5.5*"],"gpt-5.6":["copilot/gpt-5.6*","openai/gpt-5.6*"],"gpt-6":["copilot/gpt-6*","openai/gpt-6*"],"grok":["copilot/*grok*","openai/*grok*"],"haiku":["copilot/*haiku*","anthropic/*haiku*"],"image-generation":["copilot/gpt-image*","openai/gpt-image*","openai/chatgpt-image*","copilot/gemini-*image*","google/gemini-*image*","gemini/gemini-*image*","google/imagen*"],"kimi":["copilot/kimi*","openai/kimi*"],"kiwi":["copilot/kiwi*","openai/kiwi*"],"large":["sonnet","gpt-6","gpt-5-pro","gpt-5","gemini-pro"],"lyria":["google/lyria*","gemini/lyria*","copilot/lyria*"],"mai-code":["copilot/MAI-Code*","copilot/mai-code*","openai/MAI-Code*"],"mai-code-1-flash-picker":["copilot/MAI-Code-1-Flash-picker*","copilot/mai-code-1-flash-picker*","openai/MAI-Code-1-Flash-picker*"],"mini":["haiku","gpt-5-mini","gpt-5-nano","gemini-flash-lite"],"nano-banana":["copilot/nano-banana*","google/nano-banana*","gemini/nano-banana*"],"opus":["copilot/*opus*","anthropic/*opus*"],"opusplan":["opus?effort=high"],"raptor-mini":["copilot/raptor*","openai/raptor*"],"reasoning":["copilot/o1*","copilot/o3*","copilot/o4*","openai/o1*","openai/o3*","openai/o4*"],"robotics":["copilot/*robotics*","google/*robotics*","gemini/*robotics*"],"small":["mini"],"small-agent":["haiku","gpt-5-mini","gemini-flash"],"sonnet":["copilot/*sonnet*","anthropic/*sonnet*"],"sonnet-6x":["copilot/*sonnet-4.5*","copilot/*sonnet-4.6*","copilot/*sonnet-5*","copilot/*sonnet-4-5-*","anthropic/*sonnet-4-5-*","copilot/*sonnet-4-6*","anthropic/*sonnet-4-6*","anthropic/*sonnet-5*"],"summarization":["haiku","gpt-5-mini","gemini-flash-lite","mini"],"veo":["google/veo*","gemini/veo*"],"vision":["copilot/gemini-*image*","google/gemini-*image*","gemini/gemini-*image*","copilot/gemini-*flash*","google/gemini-*flash*","gemini/gemini-*flash*"]}},"container":{"imageTag":"0.28.57,squid=sha256:be808c16b535ebabd070eebe086fe6bffd5bb86b2e5fe8e5cdad30068eb9c0ac,agent=sha256:a9861b2fad1d29c586bbbf98840a61056e30e2720d8d9ec2c0def9049566bd8a,api-proxy=sha256:f2925ff32dc972a5d8b90a7785b6ca68052efd2575fe896556ac457e22e86dcc,cli-proxy=sha256:4584f030659ee51958223a3c6156e8119c6a94affbfcd92ce75f204702c52641","agentTimeout":60},"logging":{"proxyLogsDir":"/tmp/gh-aw/sandbox/firewall/logs","auditDir":"/tmp/gh-aw/sandbox/firewall/audit"}}' > "${RUNNER_TEMP}/gh-aw/awf-config.json"
+          printf '%s\n' '{"$schema":"https://github.com/github/gh-aw-firewall/releases/download/v0.28.57/awf-config.schema.json","network":{"allowDomains":["api.npms.io","api.snapcraft.io","archive.ubuntu.com","azure.archive.ubuntu.com","bun.sh","cdn.jsdelivr.net","crl.geotrust.com","crl.globalsign.com","crl.identrust.com","crl.sectigo.com","crl.thawte.com","crl.usertrust.com","crl.verisign.com","crl3.digicert.com","crl4.digicert.com","crls.ssl.com","deb.nodesource.com","deno.land","esm.sh","get.pnpm.io","googleapis.deno.dev","googlechromelabs.github.io","json-schema.org","json.schemastore.org","jsr.io","keyserver.ubuntu.com","nodejs.org","npm.pkg.github.com","npmjs.com","npmjs.org","ocsp.digicert.com","ocsp.geotrust.com","ocsp.globalsign.com","ocsp.identrust.com","ocsp.sectigo.com","ocsp.ssl.com","ocsp.thawte.com","ocsp.usertrust.com","ocsp.verisign.com","packagecloud.io","packages.cloud.google.com","packages.microsoft.com","ppa.launchpad.net","registry.bower.io","registry.npmjs.com","registry.npmjs.org","registry.yarnpkg.com","repo.yarnpkg.com","s.symcb.com","s.symcd.com","security.ubuntu.com","skimdb.npmjs.com","storage.googleapis.com","telemetry.vercel.com","ts-crl.ws.symantec.com","ts-ocsp.ws.symantec.com","www.googleapis.com","www.npmjs.com","www.npmjs.org","yarnpkg.com"],"isolation":true,"topologyAttach":["awmg-mcpg"]},"apiProxy":{"enabled":true,"enableTokenSteering":true,"maxRuns":30,"maxCacheMisses":5,"maxAiCredits":100,"providers":{"github-copilot":{"models":{"gpt-4.1":{"cost":{"cache_read":"5e-07","input":"2e-06","output":"8e-06"}}}}},"models":{"agent":["sonnet-6x","gpt-6","gpt-5.4","gpt-5.5","gpt-5.6","gpt-5.3","gemini-pro","any"],"antigravity":["copilot/antigravity*","google/antigravity*","gemini/antigravity*"],"any":["copilot/*","anthropic/*","openai/*","google/*","gemini/*"],"auto":["copilot/auto","large"],"claude":["agent"],"codex":["agent"],"coding":["copilot/gpt-5*codex*","openai/gpt-5*codex*","gpt-5-codex","kimi"],"computer-use":["copilot/*computer-use*","google/*computer-use*","gemini/*computer-use*","openai/*computer-use*"],"copilot":["agent"],"deep-research":["copilot/deep-research*","copilot/o3-deep-research*","copilot/o4-mini-deep-research*","google/deep-research*","gemini/deep-research*","openai/o3-deep-research*","openai/o4-mini-deep-research*"],"detection":["small"],"evals":["small"],"fable":["copilot/*fable*","anthropic/*fable*"],"gemini":["agent"],"gemini-3-flash":["copilot/gemini-3*flash*","google/gemini-3*flash*","gemini/gemini-3*flash*"],"gemini-3-pro":["copilot/gemini-3*pro*","google/gemini-3*pro*","google/nano-banana*","gemini/gemini-3*pro*"],"gemini-3.1-flash":["copilot/gemini-3.1*flash*","google/gemini-3.1*flash*","gemini/gemini-3.1*flash*"],"gemini-3.1-pro":["copilot/gemini-3.1*pro*","google/gemini-3.1*pro*","gemini/gemini-3.1*pro*"],"gemini-3.5-flash":["copilot/gemini-3.5*flash*","google/gemini-3.5*flash*","gemini/gemini-3.5*flash*"],"gemini-3.6-flash":["copilot/gemini-3.6*flash*","google/gemini-3.6*flash*","gemini/gemini-3.6*flash*"],"gemini-3.7-flash":["copilot/gemini-3.7*flash*","google/gemini-3.7*flash*","gemini/gemini-3.7*flash*"],"gemini-3.8-flash":["copilot/gemini-3.8*flash*","google/gemini-3.8*flash*","gemini/gemini-3.8*flash*"],"gemini-flash":["copilot/gemini-*flash*","google/gemini-*flash*","gemini/gemini-*flash*"],"gemini-flash-lite":["copilot/gemini-*flash*lite*","google/gemini-*flash*lite*","gemini/gemini-*flash*lite*"],"gemini-omni":["copilot/gemini-omni*","google/gemini-omni*","gemini/gemini-omni*"],"gemini-pro":["copilot/gemini-*pro*","google/gemini-*pro*","gemini/gemini-*pro*"],"gemma":["copilot/gemma*","google/gemma*","gemini/gemma*"],"gpt-5":["copilot/gpt-5*","openai/gpt-5*"],"gpt-5-codex":["copilot/gpt-5*codex*","openai/gpt-5*codex*"],"gpt-5-mini":["copilot/gpt-5*mini*","openai/gpt-5*mini*"],"gpt-5-nano":["copilot/gpt-5*nano*","openai/gpt-5*nano*"],"gpt-5-pro":["copilot/gpt-5*pro*","openai/gpt-5*pro*"],"gpt-5.1":["copilot/gpt-5.1*","openai/gpt-5.1*"],"gpt-5.2":["copilot/gpt-5.2*","openai/gpt-5.2*"],"gpt-5.3":["copilot/gpt-5.3*","openai/gpt-5.3*"],"gpt-5.4":["copilot/gpt-5.4*","openai/gpt-5.4*"],"gpt-5.5":["copilot/gpt-5.5*","openai/gpt-5.5*"],"gpt-5.6":["copilot/gpt-5.6*","openai/gpt-5.6*"],"gpt-6":["copilot/gpt-6*","openai/gpt-6*"],"grok":["copilot/*grok*","openai/*grok*"],"haiku":["copilot/*haiku*","anthropic/*haiku*"],"image-generation":["copilot/gpt-image*","openai/gpt-image*","openai/chatgpt-image*","copilot/gemini-*image*","google/gemini-*image*","gemini/gemini-*image*","google/imagen*"],"kimi":["copilot/kimi*","openai/kimi*"],"kiwi":["copilot/kiwi*","openai/kiwi*"],"large":["sonnet","gpt-6","gpt-5-pro","gpt-5","gemini-pro"],"lyria":["google/lyria*","gemini/lyria*","copilot/lyria*"],"mai-code":["copilot/MAI-Code*","copilot/mai-code*","openai/MAI-Code*"],"mai-code-1-flash-picker":["copilot/MAI-Code-1-Flash-picker*","copilot/mai-code-1-flash-picker*","openai/MAI-Code-1-Flash-picker*"],"mini":["haiku","gpt-5-mini","gpt-5-nano","gemini-flash-lite"],"nano-banana":["copilot/nano-banana*","google/nano-banana*","gemini/nano-banana*"],"opus":["copilot/*opus*","anthropic/*opus*"],"opusplan":["opus?effort=high"],"raptor-mini":["copilot/raptor*","openai/raptor*"],"reasoning":["copilot/o1*","copilot/o3*","copilot/o4*","openai/o1*","openai/o3*","openai/o4*"],"robotics":["copilot/*robotics*","google/*robotics*","gemini/*robotics*"],"small":["mini"],"small-agent":["haiku","gpt-5-mini","gemini-flash"],"sonnet":["copilot/*sonnet*","anthropic/*sonnet*"],"sonnet-6x":["copilot/*sonnet-4.5*","copilot/*sonnet-4.6*","copilot/*sonnet-5*","copilot/*sonnet-4-5-*","anthropic/*sonnet-4-5-*","copilot/*sonnet-4-6*","anthropic/*sonnet-4-6*","anthropic/*sonnet-5*"],"summarization":["haiku","gpt-5-mini","gemini-flash-lite","mini"],"veo":["google/veo*","gemini/veo*"],"vision":["copilot/gemini-*image*","google/gemini-*image*","gemini/gemini-*image*","copilot/gemini-*flash*","google/gemini-*flash*","gemini/gemini-*flash*"]}},"container":{"imageTag":"0.28.57,squid=sha256:be808c16b535ebabd070eebe086fe6bffd5bb86b2e5fe8e5cdad30068eb9c0ac,agent=sha256:a9861b2fad1d29c586bbbf98840a61056e30e2720d8d9ec2c0def9049566bd8a,api-proxy=sha256:f2925ff32dc972a5d8b90a7785b6ca68052efd2575fe896556ac457e22e86dcc,cli-proxy=sha256:4584f030659ee51958223a3c6156e8119c6a94affbfcd92ce75f204702c52641","agentTimeout":60},"logging":{"proxyLogsDir":"/tmp/gh-aw/sandbox/firewall/logs","auditDir":"/tmp/gh-aw/sandbox/firewall/audit"}}' > "${RUNNER_TEMP}/gh-aw/awf-config.json"
           cp "${RUNNER_TEMP}/gh-aw/awf-config.json" /tmp/gh-aw/awf-config.json
           export GH_AW_MODELS_JSON_PATH="/tmp/gh-aw/models.json"
           GH_AW_DOCKER_HOST=""
@@ -939,13 +961,13 @@ jobs:
           GH_AW_AWF_ATTEMPT_LOG_NAME=copilot \
           bash "${RUNNER_TEMP}/gh-aw/actions/run_awf_with_startup_retries.sh" -- \
             awf --config "${RUNNER_TEMP}/gh-aw/awf-config.json" --container-workdir "${GITHUB_WORKSPACE}" --mount "${RUNNER_TEMP}/gh-aw:${RUNNER_TEMP}/gh-aw:ro" --mount "${RUNNER_TEMP}/gh-aw:/host${RUNNER_TEMP}/gh-aw:ro" ${GH_AW_TOOL_CACHE_MOUNT:+--mount "$GH_AW_TOOL_CACHE_MOUNT"} ${GH_AW_DOCKER_HOST:+--docker-host "$GH_AW_DOCKER_HOST"} --env-all --exclude-env ACTIONS_ID_TOKEN_REQUEST_TOKEN --exclude-env ACTIONS_ID_TOKEN_REQUEST_URL --exclude-env COPILOT_GITHUB_TOKEN --exclude-env GH_AW_OTLP_ALL_HEADERS --exclude-env GH_AW_OTLP_ENDPOINTS --exclude-env MCP_GATEWAY_AGENT_ID --exclude-env OTEL_EXPORTER_OTLP_ENDPOINT --exclude-env OTEL_EXPORTER_OTLP_HEADERS --mount /tmp/gh-aw:/tmp/gh-aw:rw --log-level info --session-state-dir /tmp/gh-aw/sandbox/agent/session-state --skip-pull \
-            -- /bin/bash -c 'set +o histexpand; export PATH="${RUNNER_TEMP}/gh-aw/mcp-cli/bin:$PATH" && : "${RUNNER_TOOL_CACHE:?RUNNER_TOOL_CACHE must be set}"; GH_AW_TOOL_CACHE="$RUNNER_TOOL_CACHE"; GH_AW_TOOL_BINS="$(find "$GH_AW_TOOL_CACHE" -maxdepth 5 -type d -name bin 2>/dev/null | tr "\n" ":")"; GH_AW_TOOL_BINS="${GH_AW_TOOL_BINS%:}"; export PATH="$PATH${GH_AW_TOOL_BINS:+:}$GH_AW_TOOL_BINS"; [ -n "$GOROOT" ] && export PATH="$GOROOT/bin:$PATH" || true; [ -n "$ERLANG_HOME" ] && export PATH="$ERLANG_HOME/bin:$PATH" || true && GH_AW_NODE_EXEC="${GH_AW_NODE_BIN:-}"; if [ -z "$GH_AW_NODE_EXEC" ] || [ ! -x "$GH_AW_NODE_EXEC" ]; then GH_AW_NODE_EXEC="$(command -v node 2>/dev/null || true)"; fi; if [ -z "$GH_AW_NODE_EXEC" ]; then echo "node runtime missing on this runner — check runtimes.node in workflow YAML" >&2; exit 127; fi; GH_AW_NPM_GLOBAL_ROOT="$(npm root -g 2>/dev/null || true)"; if [ -n "$GH_AW_NPM_GLOBAL_ROOT" ]; then export NODE_PATH="${GH_AW_NPM_GLOBAL_ROOT}${NODE_PATH:+:${NODE_PATH}}"; fi; "$GH_AW_NODE_EXEC" "${RUNNER_TEMP}/gh-aw/actions/copilot_harness.cjs" "${RUNNER_TEMP}/gh-aw/bin/copilot" --add-dir /tmp/gh-aw/ --log-level all --log-dir /tmp/gh-aw/sandbox/agent/logs/ --disable-builtin-mcps --no-ask-user --allow-tool safeoutputs --allow-tool shell --allow-tool write --deny-tool workflow --allow-all-paths --no-custom-instructions --add-dir "${GITHUB_WORKSPACE}" --prompt-file /tmp/gh-aw/aw-prompts/prompt.txt'
+            -- /bin/bash -c 'set +o histexpand; export PATH="${RUNNER_TEMP}/gh-aw/mcp-cli/bin:$PATH" && : "${RUNNER_TOOL_CACHE:?RUNNER_TOOL_CACHE must be set}"; GH_AW_TOOL_CACHE="$RUNNER_TOOL_CACHE"; GH_AW_TOOL_BINS="$(find "$GH_AW_TOOL_CACHE" -maxdepth 5 -type d -name bin 2>/dev/null | tr "\n" ":")"; GH_AW_TOOL_BINS="${GH_AW_TOOL_BINS%:}"; export PATH="$PATH${GH_AW_TOOL_BINS:+:}$GH_AW_TOOL_BINS"; [ -n "$GOROOT" ] && export PATH="$GOROOT/bin:$PATH" || true; [ -n "$ERLANG_HOME" ] && export PATH="$ERLANG_HOME/bin:$PATH" || true && GH_AW_NODE_EXEC="${GH_AW_NODE_BIN:-}"; if [ -z "$GH_AW_NODE_EXEC" ] || [ ! -x "$GH_AW_NODE_EXEC" ]; then GH_AW_NODE_EXEC="$(command -v node 2>/dev/null || true)"; fi; if [ -z "$GH_AW_NODE_EXEC" ]; then echo "node runtime missing on this runner — check runtimes.node in workflow YAML" >&2; exit 127; fi; GH_AW_NPM_GLOBAL_ROOT="$(npm root -g 2>/dev/null || true)"; if [ -n "$GH_AW_NPM_GLOBAL_ROOT" ]; then export NODE_PATH="${GH_AW_NPM_GLOBAL_ROOT}${NODE_PATH:+:${NODE_PATH}}"; fi; "$GH_AW_NODE_EXEC" "${RUNNER_TEMP}/gh-aw/actions/copilot_harness.cjs" "${RUNNER_TEMP}/gh-aw/bin/copilot" --add-dir /tmp/gh-aw/ --log-level all --log-dir /tmp/gh-aw/sandbox/agent/logs/ --disable-builtin-mcps --no-ask-user --allow-tool safeoutputs --allow-tool '\''shell(cat)'\'' --allow-tool '\''shell(date)'\'' --allow-tool '\''shell(echo)'\'' --allow-tool '\''shell(git add:*)'\'' --allow-tool '\''shell(git branch:*)'\'' --allow-tool '\''shell(git checkout:*)'\'' --allow-tool '\''shell(git commit:*)'\'' --allow-tool '\''shell(git merge:*)'\'' --allow-tool '\''shell(git rm:*)'\'' --allow-tool '\''shell(git status)'\'' --allow-tool '\''shell(git switch:*)'\'' --allow-tool '\''shell(grep)'\'' --allow-tool '\''shell(head)'\'' --allow-tool '\''shell(ls)'\'' --allow-tool '\''shell(printf)'\'' --allow-tool '\''shell(pwd)'\'' --allow-tool '\''shell(safeoutputs:*)'\'' --allow-tool '\''shell(sort)'\'' --allow-tool '\''shell(tail)'\'' --allow-tool '\''shell(uniq)'\'' --allow-tool '\''shell(wc)'\'' --allow-tool '\''shell(yq)'\'' --deny-tool workflow --no-custom-instructions --add-dir "${GITHUB_WORKSPACE}" --prompt-file /tmp/gh-aw/aw-prompts/prompt.txt'
         env:
           AWF_REFLECT_ENABLED: 1
           COPILOT_AGENT_RUNNER_TYPE: STANDALONE
           COPILOT_DUMMY_BYOK: dummy-byok-key-for-offline-mode
           COPILOT_GITHUB_TOKEN: ${{ github.token }}
-          COPILOT_MODEL: ${{ vars.GH_AW_MODEL_AGENT_COPILOT || vars.GH_AW_DEFAULT_MODEL_COPILOT || 'auto' }}
+          COPILOT_MODEL: gpt-4.1
           GH_AW_HARNESS_BACKOFF_MULTIPLIER: 2
           GH_AW_HARNESS_INITIAL_DELAY_MS: 30000
           GH_AW_HARNESS_MAX_DELAY_MS: 60000
@@ -1126,12 +1148,16 @@ jobs:
       - name: Reject edits to validation and workflow code
         run: "git diff --exit-code \"$GITHUB_SHA\" -- ci .github tests"
       - name: Restore the authoritative collector snapshot
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: dependency-evidence
           path: triage-results
-      - name: Verify inventory, proposed fixes and production smoke gate
-        run: node ci/dependency-maintenance.mjs validate
+      - env:
+          PREPARED_HASH: ${{ steps.prepared.outputs.plan_hash }}
+          REVIEW_HAS_PATCH: ${{ steps.collect_output.outputs.has_patch }}
+          REVIEW_OUTPUT_TYPES: ${{ steps.collect_output.outputs.output_types }}
+        name: Verify immutable reviewed result and publication intent
+        run: node ci/dependency-host.mjs review-check "$PREPARED_HASH" "$REVIEW_OUTPUT_TYPES" "$REVIEW_HAS_PATCH"
       - if: always()
         name: Collect smoke logs under the report artifact root
         run: |
@@ -1140,11 +1166,11 @@ jobs:
           fi
       - if: always()
         name: Retain report and validation artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           if-no-files-found: ignore
           name: dependency-maintenance-report
-          path: |
+          path: |-
             triage-results/triage.json
             triage-results/proposal.json
             triage-results/weekly-report.md
@@ -1153,6 +1179,9 @@ jobs:
             triage-results/candidate/result.json
             triage-results/candidate/install-*.log
             triage-results/smoke-results/
+
+            triage-results/status.json
+            triage-results/candidate/history.json
           retention-days: ${{ vars.GH_AW_DEFAULT_ARTIFACT_RETENTION_DAYS || '7' }}
 
       # Small dedicated copy of the agent output so safe-output processing
@@ -1264,6 +1293,31 @@ jobs:
           GH_AW_INFO_AWF_VERSION: "v0.28.57"
           GH_AW_INFO_ENGINE_ID: "copilot"
           GH_AW_SETUP_AW_CONTEXT: ${{ inputs.aw_context }}
+      - if: needs.agent.result == 'success' && needs.agent.outputs.has_patch != 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dependency-maintenance-report
+          path: /tmp/maintenance-noop-report
+      - if: needs.agent.result == 'success' && needs.agent.outputs.has_patch != 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ needs.activation.outputs.artifact_prefix }}agent-output-fallback
+          path: /tmp/maintenance-noop-intent
+      - name: Require host-evidenced no-op message
+        if: needs.agent.result == 'success' && needs.agent.outputs.has_patch != 'true'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |-
+            const fs = require('node:fs');
+            const assert = require('node:assert/strict');
+            const validation = JSON.parse(fs.readFileSync('/tmp/maintenance-noop-report/validation.json'));
+            const output = JSON.parse(fs.readFileSync('/tmp/maintenance-noop-intent/agent_output.json'));
+            assert.equal(validation.passed, true);
+            assert.equal(validation.reviewAccepted, true);
+            assert.equal(validation.changed.length, 0);
+            assert.equal(output.items.length, 1);
+            assert.equal(output.items[0].type, 'noop');
+            assert.equal(output.items[0].message, validation.noopMessage);
       - name: Download agent output artifact
         id: download-agent-output
         continue-on-error: true
@@ -1313,7 +1367,7 @@ jobs:
           GH_AW_WORKFLOW_NAME: "Dependency maintenance agent"
           GH_AW_WORKFLOW_SOURCE_URL: "${{ github.server_url }}/${{ github.repository }}/blob/${{ github.ref_name }}/.github/workflows/dependency-maintenance-agent.md"
           GH_AW_ENGINE_ID: "copilot"
-          GH_AW_ENGINE_MODEL: ${{ needs.agent.outputs.model }}
+          GH_AW_ENGINE_MODEL: "gpt-4.1"
           GH_AW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_AW_AGENT_CONCLUSION: ${{ needs.agent.result }}
           GH_AW_NOOP_REPORT_AS_ISSUE: "false"
@@ -1358,7 +1412,7 @@ jobs:
           GH_AW_WORKFLOW_NAME: "Dependency maintenance agent"
           GH_AW_WORKFLOW_SOURCE_URL: "${{ github.server_url }}/${{ github.repository }}/blob/${{ github.ref_name }}/.github/workflows/dependency-maintenance-agent.md"
           GH_AW_ENGINE_ID: "copilot"
-          GH_AW_ENGINE_MODEL: ${{ needs.agent.outputs.model }}
+          GH_AW_ENGINE_MODEL: "gpt-4.1"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -1377,7 +1431,7 @@ jobs:
           GH_AW_WORKFLOW_NAME: "Dependency maintenance agent"
           GH_AW_WORKFLOW_SOURCE_URL: "${{ github.server_url }}/${{ github.repository }}/blob/${{ github.ref_name }}/.github/workflows/dependency-maintenance-agent.md"
           GH_AW_ENGINE_ID: "copilot"
-          GH_AW_ENGINE_MODEL: ${{ needs.agent.outputs.model }}
+          GH_AW_ENGINE_MODEL: "gpt-4.1"
         with:
           github-token: ${{ secrets.GH_AW_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
@@ -1565,7 +1619,8 @@ jobs:
     needs:
       - activation
       - agent
-    if: always() && needs.agent.result != 'skipped'
+    if: >
+      (always() && needs.agent.result != 'skipped') && (needs.agent.result == 'success' && needs.agent.outputs.has_patch == 'true')
     runs-on: ubuntu-latest
     # Permissions for the detection job (workflow permissions default to none).
     permissions:
@@ -1662,6 +1717,9 @@ jobs:
         if: always() && steps.detection_guard.outputs.run_detection == 'true'
         run: |
           bash "${RUNNER_TEMP}/gh-aw/actions/prepare_threat_detection_files.sh"
+      - name: Verify explicit detector model against live catalog
+        if: always() && steps.detection_guard.outputs.run_detection == 'true'
+        run: node ci/dependency-detection.mjs model-check
       - name: Setup threat detection
         if: always() && steps.detection_guard.outputs.run_detection == 'true'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
@@ -1669,7 +1727,7 @@ jobs:
           WORKFLOW_NAME: "Dependency maintenance agent"
           WORKFLOW_DESCRIPTION: "Triage captured Dependabot evidence and propose a validated minimal dependency patch for human review."
           HAS_PATCH: ${{ needs.agent.outputs.has_patch }}
-          GH_AW_DETECTION_CONTINUE_ON_ERROR: "true"
+          GH_AW_DETECTION_CONTINUE_ON_ERROR: "false"
           GH_AW_DETECTION_SKIP_PROMPT_SUMMARY: "true"
         with:
           script: |
@@ -1699,7 +1757,6 @@ jobs:
       - name: Install threat-detect binary
         id: threat_detect_install
         if: always() && steps.detection_guard.outputs.run_detection == 'true'
-        continue-on-error: true
         run: |
           bash "${RUNNER_TEMP}/gh-aw/actions/install_threat_detect_binary.sh" v0.5.2 --artifact-base-url https://github.com/github/gh-aw-threat-detection/releases/download --sha256-amd64 b4ecda6a8f1ee09913c40b58e5e9d3337d2173618d41b1bfdef9207e4e7959b9 --sha256-arm64 f6260a0f9ad72bcb67c7af19c4ce262ca34e2c3d5ccbf912832a8bd277200904
       - name: Execute threat detection with AWF
@@ -1712,7 +1769,7 @@ jobs:
           COPILOT_AGENT_RUNNER_TYPE: STANDALONE
           COPILOT_DUMMY_BYOK: dummy-byok-key-for-offline-mode
           COPILOT_GITHUB_TOKEN: ${{ github.token }}
-          COPILOT_MODEL: detection
+          COPILOT_MODEL: gpt-4.1
           GH_AW_HARNESS_MAX_RETRIES: 0
           GH_AW_LLM_PROVIDER: github
           GH_AW_MAX_TURNS: ${{ vars.GH_AW_DEFAULT_MAX_TURNS || '' }}
@@ -1739,7 +1796,7 @@ jobs:
           WORKFLOW_NAME: "Dependency maintenance agent"
           WORKFLOW_DESCRIPTION: "Triage captured Dependabot evidence and propose a validated minimal dependency patch for human review."
           HAS_PATCH: ${{ needs.agent.outputs.has_patch }}
-          GH_AW_DETECTION_CONTINUE_ON_ERROR: "true"
+          GH_AW_DETECTION_CONTINUE_ON_ERROR: "false"
         run: |
           mkdir -p "/tmp/gh-aw/threat-detection"
           evidence_tmp="/tmp/gh-aw/threat-detection/execution.json.tmp"
@@ -1763,7 +1820,7 @@ jobs:
 
           (umask 177 && touch /tmp/gh-aw/threat-detection/detection.log)
           # shellcheck disable=SC2016
-          printf '%s\n' '{"$schema":"https://github.com/github/gh-aw-firewall/releases/download/v0.28.57/awf-config.schema.json","apiProxy":{"enabled":true,"enableTokenSteering":true,"maxRuns":500,"maxCacheMisses":5,"maxAiCredits":50,"models":{"agent":["sonnet-6x","gpt-6","gpt-5.4","gpt-5.5","gpt-5.6","gpt-5.3","gemini-pro","any"],"antigravity":["copilot/antigravity*","google/antigravity*","gemini/antigravity*"],"any":["copilot/*","anthropic/*","openai/*","google/*","gemini/*"],"auto":["copilot/auto","large"],"claude":["agent"],"codex":["agent"],"coding":["copilot/gpt-5*codex*","openai/gpt-5*codex*","gpt-5-codex","kimi"],"computer-use":["copilot/*computer-use*","google/*computer-use*","gemini/*computer-use*","openai/*computer-use*"],"copilot":["agent"],"deep-research":["copilot/deep-research*","copilot/o3-deep-research*","copilot/o4-mini-deep-research*","google/deep-research*","gemini/deep-research*","openai/o3-deep-research*","openai/o4-mini-deep-research*"],"detection":["small"],"evals":["small"],"fable":["copilot/*fable*","anthropic/*fable*"],"gemini":["agent"],"gemini-3-flash":["copilot/gemini-3*flash*","google/gemini-3*flash*","gemini/gemini-3*flash*"],"gemini-3-pro":["copilot/gemini-3*pro*","google/gemini-3*pro*","google/nano-banana*","gemini/gemini-3*pro*"],"gemini-3.1-flash":["copilot/gemini-3.1*flash*","google/gemini-3.1*flash*","gemini/gemini-3.1*flash*"],"gemini-3.1-pro":["copilot/gemini-3.1*pro*","google/gemini-3.1*pro*","gemini/gemini-3.1*pro*"],"gemini-3.5-flash":["copilot/gemini-3.5*flash*","google/gemini-3.5*flash*","gemini/gemini-3.5*flash*"],"gemini-3.6-flash":["copilot/gemini-3.6*flash*","google/gemini-3.6*flash*","gemini/gemini-3.6*flash*"],"gemini-3.7-flash":["copilot/gemini-3.7*flash*","google/gemini-3.7*flash*","gemini/gemini-3.7*flash*"],"gemini-3.8-flash":["copilot/gemini-3.8*flash*","google/gemini-3.8*flash*","gemini/gemini-3.8*flash*"],"gemini-flash":["copilot/gemini-*flash*","google/gemini-*flash*","gemini/gemini-*flash*"],"gemini-flash-lite":["copilot/gemini-*flash*lite*","google/gemini-*flash*lite*","gemini/gemini-*flash*lite*"],"gemini-omni":["copilot/gemini-omni*","google/gemini-omni*","gemini/gemini-omni*"],"gemini-pro":["copilot/gemini-*pro*","google/gemini-*pro*","gemini/gemini-*pro*"],"gemma":["copilot/gemma*","google/gemma*","gemini/gemma*"],"gpt-5":["copilot/gpt-5*","openai/gpt-5*"],"gpt-5-codex":["copilot/gpt-5*codex*","openai/gpt-5*codex*"],"gpt-5-mini":["copilot/gpt-5*mini*","openai/gpt-5*mini*"],"gpt-5-nano":["copilot/gpt-5*nano*","openai/gpt-5*nano*"],"gpt-5-pro":["copilot/gpt-5*pro*","openai/gpt-5*pro*"],"gpt-5.1":["copilot/gpt-5.1*","openai/gpt-5.1*"],"gpt-5.2":["copilot/gpt-5.2*","openai/gpt-5.2*"],"gpt-5.3":["copilot/gpt-5.3*","openai/gpt-5.3*"],"gpt-5.4":["copilot/gpt-5.4*","openai/gpt-5.4*"],"gpt-5.5":["copilot/gpt-5.5*","openai/gpt-5.5*"],"gpt-5.6":["copilot/gpt-5.6*","openai/gpt-5.6*"],"gpt-6":["copilot/gpt-6*","openai/gpt-6*"],"grok":["copilot/*grok*","openai/*grok*"],"haiku":["copilot/*haiku*","anthropic/*haiku*"],"image-generation":["copilot/gpt-image*","openai/gpt-image*","openai/chatgpt-image*","copilot/gemini-*image*","google/gemini-*image*","gemini/gemini-*image*","google/imagen*"],"kimi":["copilot/kimi*","openai/kimi*"],"kiwi":["copilot/kiwi*","openai/kiwi*"],"large":["sonnet","gpt-6","gpt-5-pro","gpt-5","gemini-pro"],"lyria":["google/lyria*","gemini/lyria*","copilot/lyria*"],"mai-code":["copilot/MAI-Code*","copilot/mai-code*","openai/MAI-Code*"],"mai-code-1-flash-picker":["copilot/MAI-Code-1-Flash-picker*","copilot/mai-code-1-flash-picker*","openai/MAI-Code-1-Flash-picker*"],"mini":["haiku","gpt-5-mini","gpt-5-nano","gemini-flash-lite"],"nano-banana":["copilot/nano-banana*","google/nano-banana*","gemini/nano-banana*"],"opus":["copilot/*opus*","anthropic/*opus*"],"opusplan":["opus?effort=high"],"raptor-mini":["copilot/raptor*","openai/raptor*"],"reasoning":["copilot/o1*","copilot/o3*","copilot/o4*","openai/o1*","openai/o3*","openai/o4*"],"robotics":["copilot/*robotics*","google/*robotics*","gemini/*robotics*"],"small":["mini"],"small-agent":["haiku","gpt-5-mini","gemini-flash"],"sonnet":["copilot/*sonnet*","anthropic/*sonnet*"],"sonnet-6x":["copilot/*sonnet-4.5*","copilot/*sonnet-4.6*","copilot/*sonnet-5*","copilot/*sonnet-4-5-*","anthropic/*sonnet-4-5-*","copilot/*sonnet-4-6*","anthropic/*sonnet-4-6*","anthropic/*sonnet-5*"],"summarization":["haiku","gpt-5-mini","gemini-flash-lite","mini"],"veo":["google/veo*","gemini/veo*"],"vision":["copilot/gemini-*image*","google/gemini-*image*","gemini/gemini-*image*","copilot/gemini-*flash*","google/gemini-*flash*","gemini/gemini-*flash*"]}},"container":{"imageTag":"0.28.57,squid=sha256:be808c16b535ebabd070eebe086fe6bffd5bb86b2e5fe8e5cdad30068eb9c0ac,agent=sha256:a9861b2fad1d29c586bbbf98840a61056e30e2720d8d9ec2c0def9049566bd8a,api-proxy=sha256:f2925ff32dc972a5d8b90a7785b6ca68052efd2575fe896556ac457e22e86dcc,cli-proxy=sha256:4584f030659ee51958223a3c6156e8119c6a94affbfcd92ce75f204702c52641","agentTimeout":10},"logging":{"proxyLogsDir":"/tmp/gh-aw/sandbox/firewall/logs","auditDir":"/tmp/gh-aw/sandbox/firewall/audit"}}' > "${RUNNER_TEMP}/gh-aw/awf-config.json"
+          printf '%s\n' '{"$schema":"https://github.com/github/gh-aw-firewall/releases/download/v0.28.57/awf-config.schema.json","apiProxy":{"enabled":true,"enableTokenSteering":true,"maxRuns":500,"maxCacheMisses":5,"maxAiCredits":50,"providers":{"github-copilot":{"models":{"gpt-4.1":{"cost":{"cache_read":"5e-07","input":"2e-06","output":"8e-06"}}}}},"models":{"agent":["sonnet-6x","gpt-6","gpt-5.4","gpt-5.5","gpt-5.6","gpt-5.3","gemini-pro","any"],"antigravity":["copilot/antigravity*","google/antigravity*","gemini/antigravity*"],"any":["copilot/*","anthropic/*","openai/*","google/*","gemini/*"],"auto":["copilot/auto","large"],"claude":["agent"],"codex":["agent"],"coding":["copilot/gpt-5*codex*","openai/gpt-5*codex*","gpt-5-codex","kimi"],"computer-use":["copilot/*computer-use*","google/*computer-use*","gemini/*computer-use*","openai/*computer-use*"],"copilot":["agent"],"deep-research":["copilot/deep-research*","copilot/o3-deep-research*","copilot/o4-mini-deep-research*","google/deep-research*","gemini/deep-research*","openai/o3-deep-research*","openai/o4-mini-deep-research*"],"detection":["small"],"evals":["small"],"fable":["copilot/*fable*","anthropic/*fable*"],"gemini":["agent"],"gemini-3-flash":["copilot/gemini-3*flash*","google/gemini-3*flash*","gemini/gemini-3*flash*"],"gemini-3-pro":["copilot/gemini-3*pro*","google/gemini-3*pro*","google/nano-banana*","gemini/gemini-3*pro*"],"gemini-3.1-flash":["copilot/gemini-3.1*flash*","google/gemini-3.1*flash*","gemini/gemini-3.1*flash*"],"gemini-3.1-pro":["copilot/gemini-3.1*pro*","google/gemini-3.1*pro*","gemini/gemini-3.1*pro*"],"gemini-3.5-flash":["copilot/gemini-3.5*flash*","google/gemini-3.5*flash*","gemini/gemini-3.5*flash*"],"gemini-3.6-flash":["copilot/gemini-3.6*flash*","google/gemini-3.6*flash*","gemini/gemini-3.6*flash*"],"gemini-3.7-flash":["copilot/gemini-3.7*flash*","google/gemini-3.7*flash*","gemini/gemini-3.7*flash*"],"gemini-3.8-flash":["copilot/gemini-3.8*flash*","google/gemini-3.8*flash*","gemini/gemini-3.8*flash*"],"gemini-flash":["copilot/gemini-*flash*","google/gemini-*flash*","gemini/gemini-*flash*"],"gemini-flash-lite":["copilot/gemini-*flash*lite*","google/gemini-*flash*lite*","gemini/gemini-*flash*lite*"],"gemini-omni":["copilot/gemini-omni*","google/gemini-omni*","gemini/gemini-omni*"],"gemini-pro":["copilot/gemini-*pro*","google/gemini-*pro*","gemini/gemini-*pro*"],"gemma":["copilot/gemma*","google/gemma*","gemini/gemma*"],"gpt-5":["copilot/gpt-5*","openai/gpt-5*"],"gpt-5-codex":["copilot/gpt-5*codex*","openai/gpt-5*codex*"],"gpt-5-mini":["copilot/gpt-5*mini*","openai/gpt-5*mini*"],"gpt-5-nano":["copilot/gpt-5*nano*","openai/gpt-5*nano*"],"gpt-5-pro":["copilot/gpt-5*pro*","openai/gpt-5*pro*"],"gpt-5.1":["copilot/gpt-5.1*","openai/gpt-5.1*"],"gpt-5.2":["copilot/gpt-5.2*","openai/gpt-5.2*"],"gpt-5.3":["copilot/gpt-5.3*","openai/gpt-5.3*"],"gpt-5.4":["copilot/gpt-5.4*","openai/gpt-5.4*"],"gpt-5.5":["copilot/gpt-5.5*","openai/gpt-5.5*"],"gpt-5.6":["copilot/gpt-5.6*","openai/gpt-5.6*"],"gpt-6":["copilot/gpt-6*","openai/gpt-6*"],"grok":["copilot/*grok*","openai/*grok*"],"haiku":["copilot/*haiku*","anthropic/*haiku*"],"image-generation":["copilot/gpt-image*","openai/gpt-image*","openai/chatgpt-image*","copilot/gemini-*image*","google/gemini-*image*","gemini/gemini-*image*","google/imagen*"],"kimi":["copilot/kimi*","openai/kimi*"],"kiwi":["copilot/kiwi*","openai/kiwi*"],"large":["sonnet","gpt-6","gpt-5-pro","gpt-5","gemini-pro"],"lyria":["google/lyria*","gemini/lyria*","copilot/lyria*"],"mai-code":["copilot/MAI-Code*","copilot/mai-code*","openai/MAI-Code*"],"mai-code-1-flash-picker":["copilot/MAI-Code-1-Flash-picker*","copilot/mai-code-1-flash-picker*","openai/MAI-Code-1-Flash-picker*"],"mini":["haiku","gpt-5-mini","gpt-5-nano","gemini-flash-lite"],"nano-banana":["copilot/nano-banana*","google/nano-banana*","gemini/nano-banana*"],"opus":["copilot/*opus*","anthropic/*opus*"],"opusplan":["opus?effort=high"],"raptor-mini":["copilot/raptor*","openai/raptor*"],"reasoning":["copilot/o1*","copilot/o3*","copilot/o4*","openai/o1*","openai/o3*","openai/o4*"],"robotics":["copilot/*robotics*","google/*robotics*","gemini/*robotics*"],"small":["mini"],"small-agent":["haiku","gpt-5-mini","gemini-flash"],"sonnet":["copilot/*sonnet*","anthropic/*sonnet*"],"sonnet-6x":["copilot/*sonnet-4.5*","copilot/*sonnet-4.6*","copilot/*sonnet-5*","copilot/*sonnet-4-5-*","anthropic/*sonnet-4-5-*","copilot/*sonnet-4-6*","anthropic/*sonnet-4-6*","anthropic/*sonnet-5*"],"summarization":["haiku","gpt-5-mini","gemini-flash-lite","mini"],"veo":["google/veo*","gemini/veo*"],"vision":["copilot/gemini-*image*","google/gemini-*image*","gemini/gemini-*image*","copilot/gemini-*flash*","google/gemini-*flash*","gemini/gemini-*flash*"]}},"container":{"imageTag":"0.28.57,squid=sha256:be808c16b535ebabd070eebe086fe6bffd5bb86b2e5fe8e5cdad30068eb9c0ac,agent=sha256:a9861b2fad1d29c586bbbf98840a61056e30e2720d8d9ec2c0def9049566bd8a,api-proxy=sha256:f2925ff32dc972a5d8b90a7785b6ca68052efd2575fe896556ac457e22e86dcc,cli-proxy=sha256:4584f030659ee51958223a3c6156e8119c6a94affbfcd92ce75f204702c52641","agentTimeout":10},"logging":{"proxyLogsDir":"/tmp/gh-aw/sandbox/firewall/logs","auditDir":"/tmp/gh-aw/sandbox/firewall/audit"}}' > "${RUNNER_TEMP}/gh-aw/awf-config.json"
           cp "${RUNNER_TEMP}/gh-aw/awf-config.json" /tmp/gh-aw/awf-config.json
           export GH_AW_MODELS_JSON_PATH="/tmp/gh-aw/models.json"
           GH_AW_DOCKER_HOST=""
@@ -1803,6 +1860,20 @@ jobs:
           mkdir -p /tmp/gh-aw/threat-detection/sandbox/firewall
           if [ -d /tmp/gh-aw/sandbox/firewall/logs ]; then mkdir -p /tmp/gh-aw/threat-detection/sandbox/firewall/logs && cp -r /tmp/gh-aw/sandbox/firewall/logs/. /tmp/gh-aw/threat-detection/sandbox/firewall/logs/; fi
           if [ -d /tmp/gh-aw/sandbox/firewall/audit ]; then mkdir -p /tmp/gh-aw/threat-detection/sandbox/firewall/audit && cp -r /tmp/gh-aw/sandbox/firewall/audit/. /tmp/gh-aw/threat-detection/sandbox/firewall/audit/; fi
+      - name: Persist terminal detector execution state
+        if: always()
+        run: node ci/dependency-detection.mjs record
+      - name: Retain detector diagnostics even on failure
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          if-no-files-found: warn
+          name: dependency-detection-diagnostics
+          path: |-
+            /tmp/gh-aw/threat-detection/detection.log
+            /tmp/gh-aw/threat-detection/execution.json
+            /tmp/gh-aw/threat-detection/detection_result*.json
+          retention-days: ${{ vars.GH_AW_DEFAULT_ARTIFACT_RETENTION_DAYS || '7' }}
       - name: Parse threat detection token usage for step summary
         id: parse_detection_token_usage
         if: always()
@@ -1839,12 +1910,11 @@ jobs:
       - name: Conclude threat detection
         id: detection_conclusion
         if: always()
-        continue-on-error: true
         env:
           RUN_DETECTION: ${{ steps.detection_guard.outputs.run_detection }}
           DETECTION_AGENTIC_EXECUTION_OUTCOME: ${{ steps.detection_agentic_execution.outcome }}
           THREAT_DETECT_INSTALL_OUTCOME: ${{ steps.threat_detect_install.outcome }}
-          GH_AW_DETECTION_CONTINUE_ON_ERROR: "true"
+          GH_AW_DETECTION_CONTINUE_ON_ERROR: "false"
         run: |
           bash "${RUNNER_TEMP}/gh-aw/actions/conclude_threat_detection.sh" /tmp/gh-aw/threat-detection/detection_result.json
 
@@ -1897,7 +1967,8 @@ jobs:
       - detection
     if: >
       ((!cancelled()) && needs.agent.result != 'skipped' && needs.detection.result == 'success') &&
-      (needs.agent.result == 'success')
+      (needs.agent.result == 'success' &&
+      needs.detection.outputs.detection_success == 'true')
     runs-on: ubuntu-slim
     # Permissions for the safe_outputs job (workflow permissions default to none).
     permissions:
@@ -1913,7 +1984,7 @@ jobs:
       GH_AW_DETECTION_CONCLUSION: ${{ needs.detection.outputs.detection_conclusion }}
       GH_AW_DETECTION_REASON: ${{ needs.detection.outputs.detection_reason }}
       GH_AW_ENGINE_ID: "copilot"
-      GH_AW_ENGINE_MODEL: ${{ needs.agent.outputs.model }}
+      GH_AW_ENGINE_MODEL: "gpt-4.1"
       GH_AW_RUNTIME_FEATURES: ${{ vars.GH_AW_RUNTIME_FEATURES }}
       GH_AW_THREAT_DETECTION_AIC: ${{ needs.detection.outputs.aic }}
       GH_AW_WORKFLOW_ID: "dependency-maintenance-agent"
@@ -1952,6 +2023,33 @@ jobs:
           GH_AW_INFO_AWF_VERSION: "v0.28.57"
           GH_AW_INFO_ENGINE_ID: "copilot"
           GH_AW_SETUP_AW_CONTEXT: ${{ inputs.aw_context }}
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dependency-maintenance-report
+          path: /tmp/maintenance-report
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ needs.activation.outputs.artifact_prefix }}agent-output-fallback
+          path: /tmp/maintenance-intent
+      - name: Require exact host-validated PR body
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |-
+            const fs = require('node:fs');
+            const assert = require('node:assert/strict');
+            const validation = JSON.parse(fs.readFileSync('/tmp/maintenance-report/validation.json'));
+            assert.equal(validation.passed, true);
+            assert.equal(validation.reviewAccepted, true);
+            assert.ok(validation.changed.length > 0);
+            const output = JSON.parse(fs.readFileSync('/tmp/maintenance-intent/agent_output.json'));
+            assert.equal(output.items.length, 1);
+            assert.equal(output.items[0].type, 'create_pull_request');
+            assert.equal(output.items[0].title, 'Dependency security and pin refresh');
+            assert.equal(output.items[0].branch, validation.branch);
+            const raw = fs.readFileSync('/tmp/maintenance-report/pr-body.md', 'utf8');
+            const path = require('node:path');
+            const { sanitizeContent } = require(path.join(process.env.RUNNER_TEMP, 'gh-aw/actions/sanitize_content.cjs'));
+            assert.ok([raw, sanitizeContent(raw)].includes(output.items[0].body), 'Publication body differs from the host-validated report');
       - name: Mask OTLP telemetry headers
         run: bash "${RUNNER_TEMP}/gh-aw/actions/mask_otlp_headers.sh"
       - name: Download agent output artifact
