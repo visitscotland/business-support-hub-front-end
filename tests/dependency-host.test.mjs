@@ -325,6 +325,8 @@ test('compiled publication skips AI detection and requires the host body; no-op 
     const core = {
         info() {},
     };
+    const hostBody = '<!-- bsh-dependency-maintenance:v1 -->\nHost body: @nuxt/scripts@1.3.12\n';
+    const transportedBody = 'Host body: @nuxt/scripts@1.3.12';
     let runtimeCore;
     const execute = (body, passed = true, overrides = {
     }) => runInNewContext(script, {
@@ -359,16 +361,17 @@ test('compiled publication skips AI detection and requires the host body; no-op 
                             ...overrides,
                             body,
                         }],
-                    }) : 'host body',
+                    }) : hostBody,
             };
             if (name.endsWith('setup_globals.cjs')) return {
                 setupGlobals: (providedCore) => { runtimeCore = providedCore; },
             };
             if (name.endsWith('sanitize_content.cjs')) return {
-                sanitizeContent: (value) => {
+                sanitizeContent: (value, options) => {
                     assert.equal(runtimeCore, core, 'Sanitizer requires initialized framework globals');
                     runtimeCore.info('Sanitizing body');
-                    return value;
+                    assert.equal(options?.deferMentions, true, 'Collector preserves scoped package names until publication');
+                    return value.replace(/<!--.*?-->/g, '').trim();
                 },
             };
             if (name === 'node:assert/strict') return assert;
@@ -378,13 +381,15 @@ test('compiled publication skips AI detection and requires the host body; no-op 
             throw new Error(name);
         },
     });
-    execute('host body');
+    execute(hostBody);
+    execute(transportedBody);
     assert.throws(() => execute('invented body'), /differs/);
-    assert.throws(() => execute('host body', false));
-    assert.throws(() => execute('host body', true, {
+    assert.throws(() => execute(transportedBody.replace('1.3.12', '9.9.9')), /differs/);
+    assert.throws(() => execute(hostBody, false));
+    assert.throws(() => execute(hostBody, true, {
         branch: 'invented-branch',
     }));
-    assert.throws(() => execute('host body', true, {
+    assert.throws(() => execute(hostBody, true, {
         title: 'All findings fixed',
     }));
 });

@@ -67,7 +67,9 @@ jobs:
             const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
             setupGlobals(core, github, context, exec, io, getOctokit);
             const { sanitizeContent } = require(path.join(actionsDir, 'sanitize_content.cjs'));
-            assert.ok([raw, sanitizeContent(raw)].includes(output.items[0].body), 'Publication body differs from the host-validated report');
+            // Match the collector: mention filtering is deferred to trusted publication.
+            const transported = sanitizeContent(raw, { deferMentions: true });
+            assert.ok([raw, transported].includes(output.items[0].body), 'Publication body differs from the host-validated report');
   conclusion:
     pre-steps:
       - if: needs.agent.result == 'success' && needs.agent.outputs.has_patch != 'true'
