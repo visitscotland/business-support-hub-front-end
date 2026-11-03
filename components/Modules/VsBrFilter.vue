@@ -155,16 +155,17 @@ const getSectionKey = (group: any) => {
     return null;
 };
 
-const resetAllValidationStates = () => {
-    for (const key in validationStates) {
-        const state = validationStates[key as keyof typeof validationStates];
-        state.value = true;
-    };
-};
-
+// Reset validation state for one date picker
 const resetOneValidationState = (id: string) => {
     const state = validationStates[id as keyof typeof validationStates];
     state.value = true;
+};
+
+// Reset validation states for all date pickers
+const resetAllValidationStates = () => {
+    for (const id in validationStates) {
+        resetOneValidationState(id);
+    };
 };
 
 // Reset all input fields.
@@ -175,7 +176,9 @@ const resetAll = () => {
 
 // Reset one input field.
 const resetOne = (id: string) => {
-    resetOneValidationState(id);
+    if(id.endsWith('date')) {
+        resetOneValidationState(id);
+    }
     filter.value.resetOne(id);
 };
 
@@ -260,9 +263,6 @@ function validateDateInput(fieldId: string, value: string): {isValid: boolean} {
 
     const startFieldId = `${fieldId.split('-')[0]}-start-date`;
     const inputtedStartDate = dateFiltersRefs.value[startFieldId].valueAsDate;
-
-
-    console.log(inputtedStartDate);
 
     if (
         isEndDate 
