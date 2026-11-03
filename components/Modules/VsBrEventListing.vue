@@ -257,7 +257,7 @@ const MODAL_BREAKPOINT = 991.98;
 const teleportTarget = ref(`#sidebar-filter-target-${props.tabIndex}`);
 
 // Call the api to get the event card data.
-const { data }: { data: any } = await useFetch(props.eventData.baseEndPoint, {
+const { data }: { data: any } = await useFetch('https://support.visitscotland.org' + props.eventData.baseEndPoint, {
     query: query.value,
 });
 const totalResults = computed(() => data.value.total);
@@ -404,7 +404,7 @@ function updateScreenReaderResultsMessage() {
         ${selectedFilterLabels}` : '';
     const page = data.value.total > 0
         ? `
-            ${configStore.getLabel('essentials.pagination', 'page.page')} ${currentPage.value} 
+            ${configStore.getLabel('essentials.pagination', 'page.page')} 1 
             ${configStore.getLabel('essentials.pagination', 'page.of')} ${numberOfPages.value}.`
         : '';
 
