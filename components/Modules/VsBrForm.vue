@@ -82,7 +82,6 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable import/no-import-module-exports */
 
 import useConfigStore from '~/stores/configStore.ts';
 
@@ -95,7 +94,7 @@ import {
 
 const configStore = useConfigStore();
 
-const props = defineProps<{ module: Object }>();
+const props = defineProps<{ module: object }>();
 const module: any = props.module;
 
 const noJsMessage = module.noJavaScriptMessage || configStore.getLabel('forms', 'form.no-js');

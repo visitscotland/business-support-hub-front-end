@@ -13,6 +13,25 @@ const clVersion = bufferFile('.clversion');
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    devtools: {
+        // DevTools 3.4.2 imports the removed simple-git default export, so it
+        // cannot run with the security-patched simple-git 4 release.
+        enabled: false,
+    },
+
+    // Keep Nuxt's renderer bundled on Windows. Use a function for Unhead so
+    // Nitro gives it priority over node_modules external rules on Linux too.
+    // Match bare imports as well as resolved paths to include every subpath.
+    nitro: {
+        externals: {
+            inline: [
+                /[\\/]node_modules[\\/]nuxt[\\/]dist[\\/]/,
+                (id) => /^(?:@unhead\/[^/]+|unhead)(?:\/|$)/.test(id)
+                    || /[\\/]node_modules[\\/](?:@unhead[\\/][^\\/]+|unhead)[\\/]/.test(id),
+            ],
+        },
+    },
+
     runtimeConfig: {
         BR_RESOURCE_API_ENDPOINT: process.env.BR_RESOURCE_API_ENDPOINT,
         BR_X_FORWARDED_HOST: process.env.BR_X_FORWARDED_HOST,

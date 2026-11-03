@@ -282,7 +282,6 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
     if (queryIndex > -1) {
         query.value[key].splice(queryIndex, 1);
     } else {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete query.value[key];
     }
 
@@ -367,7 +366,6 @@ const clearAllFilters = () => {
     // Delete all parameters from the query.
     Object.keys(query.value).forEach((key) => {
         if (key !== 'sort') {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete query.value[key];
         } else {
             query.value[key] = 'date';
