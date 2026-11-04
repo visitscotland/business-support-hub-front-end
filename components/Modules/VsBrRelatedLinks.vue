@@ -34,7 +34,7 @@
                                 >
                                     <VsLink
                                         class="stretched-link"
-                                        :href="link.link"
+                                        :href="formatLink(link.link)"
                                         icon-size="xs"
                                         type="internal"
                                         variant="secondary"

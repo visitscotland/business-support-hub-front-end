@@ -1,7 +1,7 @@
 <template comments>
     <!--cludooff: index-->
     <section class="vs-module-wrapper vs-module-wrapper--neutral text-start">
-        <VsBrSectionHeader :heading="data.title" />
+        <VsBrSectionHeader :heading="`${data.title} + cheese`" />
 
         <VsContainer>
             <VsRow>
