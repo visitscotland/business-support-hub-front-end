@@ -7,7 +7,9 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import semver from 'semver';
 import { yarnEnvironment, installDiagnostic } from './dependency-execution.mjs';
-import { matchingPaths } from './dependency-graph.mjs';
+import {
+    matchingPaths, resolutionConflicts, installedGraph, verifyGraphChanges,
+} from './dependency-graph.mjs';
 import { applyProposal } from './dependency-maintenance.mjs';
 import { fingerprint, pinTarget } from './prepare-dependency-maintenance.mjs';
 
@@ -36,6 +38,8 @@ export function candidateManifest(input, proposal, current) {
                 && candidate.applicableFromVersions.every((v) => semver.gte(edit.value, v)), 'No downgrade candidates');
                 if (edit.field === 'resolutions') {
                     const paths = matchingPaths(edit.name, input.paths || []);
+                    assert.ok(paths?.length && paths.every((p) => p.pathVerified && semver.validRange(p.constraint)
+                        && semver.satisfies(edit.value, p.constraint)), 'Resolution target must satisfy every matched parent constraint');
                     const affected = input.triage.packages.find((p) => p.name === target)?.affectedVersions || [];
                     assert.ok(!affected.length || paths?.some((p) => p.effectiveVersions.some((v) => affected.includes(v))),
                         'Selector only targets already-safe copies; target the affected branch or update its parent');
@@ -56,6 +60,7 @@ export function candidateManifest(input, proposal, current) {
                 field: edit.field,
                 selector: edit.name,
                 package: target,
+                group: edit.group,
                 diagnostic: error.message,
                 affectedVersions: p?.affectedVersions || [],
                 matchedVersions: [...new Set((matchingPaths(edit.name, input.paths || []) || []).flatMap((path) => path.effectiveVersions))],
@@ -67,6 +72,10 @@ export function candidateManifest(input, proposal, current) {
             });
         }
     }
+    errors.push(...resolutionConflicts(input, manifest).map((e) => ({
+        ...e,
+        group: proposal.changes.find((edit) => edit.name === e.selector)?.group,
+    })));
     if (errors.length) {
         const error = new Error(errors.map((e) => `${e.selector}: ${e.diagnostic}`).join('; '));
         error.details = errors;
@@ -87,7 +96,19 @@ export function reserveAttempt(state, candidateHash) {
     };
 }
 
-export function installCandidate(root, state, run = spawnSync) {
+function preparedInput(root) {
+    const input = read(resolve(root, 'triage-results/agent-input.json'));
+    if (input.pathEvidence) {
+        const proof = read(resolve(root, 'triage-results/dependency-paths.json'));
+        assert.equal(proof.baselineSha, input.baselineSha);
+        assert.equal(proof.fingerprint, input.fingerprint);
+        assert.equal(fingerprint(proof.paths), input.pathEvidence.hash);
+        input.paths = proof.paths;
+    }
+    return input;
+}
+
+export function installCandidate(root, state, run = spawnSync, verify = () => verifyGraphChanges(preparedInput(root), read(resolve(root, 'package.json')), installedGraph(root))) {
     const manifestPath = resolve(root, 'package.json');
     const lockPath = resolve(root, 'yarn.lock');
     const candidateHash = fingerprint(read(manifestPath));
@@ -106,7 +127,11 @@ export function installCandidate(root, state, run = spawnSync) {
             env: yarnEnvironment(),
         });
     } finally { closeSync(fd); }
-    const passed = result.status === 0 && !result.error;
+    let graphError;
+    if (result.status === 0 && !result.error) {
+        try { verify(); } catch (error) { graphError = error; }
+    }
+    const passed = result.status === 0 && !result.error && !graphError;
     if (passed) {
         reserved.manifest = readFileSync(manifestPath, 'utf8');
         reserved.lock = readFileSync(lockPath, 'utf8');
@@ -127,6 +152,16 @@ export function installCandidate(root, state, run = spawnSync) {
         ...installDiagnostic(readFileSync(logPath, 'utf8'), result.error?.code),
     };
     if (passed) summary.failureClass = null;
+    if (graphError) {
+        const proposal = read(resolve(root, 'triage-results/proposal.json'));
+        summary.phase = 'graph';
+        summary.failureClass = 'graph';
+        summary.diagnostic = graphError.message.slice(0, 4000);
+        summary.errors = (graphError.details || []).map((e) => ({
+            ...e,
+            group: proposal.changes.find((edit) => edit.name === e.selector)?.group,
+        }));
+    }
     writeFileSync(resolve(directory, 'result.json'), JSON.stringify(summary, null, 2));
     return summary;
 }
@@ -134,14 +169,7 @@ export function installCandidate(root, state, run = spawnSync) {
 function execute(command, root) {
     const directory = resolve(root, 'triage-results/candidate');
     const statePath = resolve(directory, 'state.json');
-    const input = read(resolve(root, 'triage-results/agent-input.json'));
-    if (input.pathEvidence) {
-        const proof = read(resolve(root, 'triage-results/dependency-paths.json'));
-        assert.equal(proof.baselineSha, input.baselineSha);
-        assert.equal(proof.fingerprint, input.fingerprint);
-        assert.equal(fingerprint(proof.paths), input.pathEvidence.hash);
-        input.paths = proof.paths;
-    }
+    const input = preparedInput(root);
     mkdirSync(directory, {
         recursive: true,
     });
