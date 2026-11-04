@@ -126,24 +126,69 @@ export function assertPinEvidence(input, field, selector, after) {
         `Changed resolution ${selector} needs verified parent paths`);
 }
 
+// Yarn applies the first matching resolution. Never depend on reordering entries
+// or append a different override behind an existing matching selector.
+export function resolutionConflicts(input, manifest) {
+    const entries = Object.entries(manifest.resolutions || {
+    });
+    return entries.flatMap(([selector, value]) => {
+        if (input.manifest.resolutions?.[selector] === value) return [];
+        const paths = matchingPaths(selector, input.paths || []) || [];
+        return entries.filter(([other, target]) => other !== selector && target !== value
+            && (matchingPaths(other, paths) || []).length).map(([other, target]) => ({
+            selector,
+            conflictingSelector: other,
+            expected: value,
+            conflictingTarget: target,
+            diagnostic: `Overlapping resolutions ${selector} (${value}) and ${other} (${target}); manual reconciliation required`,
+        }));
+    });
+}
+
 export function verifyGraphChanges(input, manifest, afterGraph) {
+    for (const field of ['dependencies', 'devDependencies']) for (const [name, target] of Object.entries(manifest[field] || {
+    })) {
+        if (target === input.manifest[field]?.[name]) continue;
+        const paths = afterGraph.paths.filter((p) => p.workspace && p.requestedName === name);
+        if (!paths.length || !semver.validRange(target) || paths.some((p) => !p.pathVerified
+            || p.effectiveVersions.some((v) => !semver.satisfies(v, target)))) {
+            const error = new Error(`Direct dependency ${name} did not resolve to ${target}`);
+            error.details = [{
+                selector: name,
+                expected: target,
+                actualVersions: paths.flatMap((p) => p.effectiveVersions),
+                diagnostic: error.message,
+            }];
+            throw error;
+        }
+    }
     for (const selector of new Set([...Object.keys(input.manifest.resolutions || {
     }), ...Object.keys(manifest.resolutions || {
     })])) {
         const before = input.manifest.resolutions?.[selector];
         const after = manifest.resolutions?.[selector];
         if (before === after) continue;
-        assertPinEvidence(input, 'resolutions', selector, after);
-        const paths = matchingPaths(selector, afterGraph.paths);
-        if (after === undefined) {
-            const prior = matchingPaths(selector, input.paths);
-            // A parent upgrade can legitimately remove every use of the selector.
-            if (!paths.length && !prior.length) continue;
-        }
-        assert.ok(paths.every((p) => p.pathVerified), `Unverified proposed paths for ${selector}`);
-        if (after !== undefined) assert.ok(paths.length && semver.validRange(after)
+        try {
+            assertPinEvidence(input, 'resolutions', selector, after);
+            const paths = matchingPaths(selector, afterGraph.paths);
+            if (after === undefined) {
+                const prior = matchingPaths(selector, input.paths);
+                // A parent upgrade can legitimately remove every use of the selector.
+                if (!paths.length && !prior.length) continue;
+            }
+            assert.ok(paths.every((p) => p.pathVerified), `Unverified proposed paths for ${selector}`);
+            if (after !== undefined) assert.ok(paths.length && semver.validRange(after)
             && paths.every((p) => p.effectiveVersions.every((v) => semver.satisfies(v, after))),
         `Resolution ${selector} did not take effect on every matching path`);
+        } catch (error) {
+            error.details = [{
+                selector,
+                expected: after,
+                actualVersions: [...new Set((matchingPaths(selector, afterGraph.paths) || []).flatMap((p) => p.effectiveVersions))],
+                diagnostic: error.message,
+            }];
+            throw error;
+        }
     }
     const prior = new Map();
     for (const p of input.paths || []) {

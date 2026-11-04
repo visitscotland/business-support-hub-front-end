@@ -1,6 +1,7 @@
 # Dependency maintenance execution
 
-The workflow remains manual and opt-in through DEPENDENCY_MAINTENANCE_ENABLED.
+The workflow runs Wednesday and Friday at 09:00 Europe/London, supports manual
+runs, and remains opt-in through DEPENDENCY_MAINTENANCE_ENABLED.
 Live publication creates a PR for human review; merging remains manual. Jenkins
 and repository Yarn settings are outside this workflow's scope.
 
@@ -17,8 +18,11 @@ ci/dependency-host.mjs prepare runs BEFORE Copilot:
 1. Verify complete registry evidence and the recorded baseline/path proof.
 2. Generate structured package decisions and at most three evidenced candidate groups.
    Prefer groups addressing more alerts and lower-complexity fixes. Use vulnerable
-   descriptor selectors; prefer a prepared parent upgrade across incompatible ranges.
-   Disclose any remaining parent override. Include supported lagging-pin refreshes.
+   descriptor selectors; allow a prepared parent upgrade only when its own parent
+   constraints are satisfied. Defer incompatible child overrides for manual review.
+   Include supported lagging-pin refreshes. Reject conflicting overlapping selectors
+   before installation; reuse an existing selector only when every matching path
+   accepts the target. Do not reorder existing resolutions to alter Yarn precedence.
 3. Validate every edit before changing files. Return all rejected selectors with
    their package, matched/affected versions and prepared candidates. Every failed
    command is persisted in candidate/history.json; validation calls and installs
@@ -27,8 +31,12 @@ ci/dependency-host.mjs prepare runs BEFORE Copilot:
    variables to Yarn child settings, preserving explicit Yarn proxy configuration.
    Classify network/TLS/timeout failures separately. Extract primary errors, omitting
    bundled-source crash dumps and redacting URL credentials. Network failures stop
-   the run; dependency/proposal failures can remove only rejected/least-preferred groups.
-5. Restore retained files after failure, render a report even when execution fails,
+   the run. After install, export Yarn's installed graph and verify expected versions
+   before promoting the candidate checkpoint. Install and graph verification consume
+   one shared attempt. Only structured failures identifying a selected group can
+   remove that group and retry; unattributable failures stop without guessing.
+5. Restore the last graph-validated manifest and lockfile after failure; the next
+   Yarn install reconciles installed files. Render a report even when execution fails,
    and run immutable install, installed graph checks, lint, production build and
    homepage browser tests. Reject edits without evidenced security or pin progress.
 6. Create and commit the bounded dependency patch on a fresh local automation branch.
