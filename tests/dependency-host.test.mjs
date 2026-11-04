@@ -90,11 +90,23 @@ test('planner targets vulnerable descriptors and chooses a prepared parent upgra
             thing: '^1.0.2',
         },
     }];
+    input.paths.push({
+        ...input.paths[0],
+        name: 'app',
+        requestedName: 'parent',
+        targetName: 'parent',
+        constraint: '^1.0.0',
+        declaredRange: 'npm:^1.0.0',
+        effectiveVersions: ['1.0.0'],
+    });
     plan = planGroups(input);
     assert.equal(plan.groups[0].edits[0].name, 'parent');
     assert.equal(plan.groups[0].edits[0].value, '1.0.1');
+    input.releases.parent[0].version = '2.0.0';
+    assert.equal(planGroups(input).groups.length, 0, 'A parent upgrade must satisfy its own parents');
     input.releases.parent = [];
-    assert.equal(planGroups(input).groups[0].edits[0].name, 'parent/thing');
+    assert.equal(planGroups(input).groups.length, 0);
+    assert.equal(planGroups(input).packages[0].disposition, 'requires-parent-upgrade');
     input.paths = [];
     assert.equal(planGroups(input).packages[0].disposition, 'unknown-path');
 });
@@ -114,6 +126,13 @@ function fixture() {
         'thing@npm:^1.0.0': {
             version: '1.0.0',
             resolution: 'thing@npm:1.0.0',
+        },
+        'parent@npm:1.0.0': {
+            version: '1.0.0',
+            resolution: 'parent@npm:1.0.0',
+            dependencies: {
+                thing: 'npm:^1.0.0',
+            },
         },
     });
     writeFileSync(join(root, '.gitignore'), 'triage-results/\n.yarn/\n');
@@ -173,7 +192,13 @@ function fixture() {
     });
     // Exercise the actual candidate command and renderer; application smoke is
     // replaced at the validation seam, whose real implementation has separate tests.
-    writeFileSync(join(root, '.yarn/releases/yarn-4.14.1.cjs'), 'const fs=require(\'node:fs\');fs.writeFileSync(\'yarn.lock\',fs.readFileSync(\'yarn.lock\',\'utf8\').replaceAll(\'1.0.0\',\'1.0.2\'));');
+    writeFileSync(join(root, '.yarn/releases/yarn-4.14.1.cjs'), `
+const fs=require('node:fs');
+if(process.argv[2]==='info') {
+console.log(JSON.stringify({value:'parent@npm:1.0.0',children:{Version:'1.0.0',Dependencies:[{descriptor:'thing@npm:^1.0.0',locator:'thing@npm:1.0.2'}]}}));
+console.log(JSON.stringify({value:'thing@npm:1.0.2',children:{Version:'1.0.2'}}));
+} else fs.writeFileSync('yarn.lock',fs.readFileSync('yarn.lock','utf8').replaceAll('thing@npm:1.0.0','thing@npm:1.0.2').replace('version: 1.0.0','version: 1.0.2'));
+`);
     const calls = [];
     const run = (executable, args, options) => {
         calls.push([executable, ...args]);
@@ -273,6 +298,120 @@ test('only blocked packages produce a diagnostic report and cannot claim a succe
         assert.throws(() => prepareHost(root, run), /No verified remediation available.*thing: unknown-path/);
         assert.equal(JSON.parse(readFileSync(join(root, 'triage-results/validation.json'))).passed, false);
         assert.ok(readFileSync(join(root, 'triage-results/weekly-report.md'), 'utf8').includes('unknown-path'));
+    } finally { rmSync(root, {
+        recursive: true,
+        force: true,
+    }); }
+});
+
+test('overlapping selectors are deferred without reordering or changing installed-safe branches', () => {
+    const input = inputFixture();
+    input.manifest.resolutions = {
+        thing: '1.0.0',
+    };
+    const plan = planGroups(input);
+    assert.equal(plan.groups.length, 0);
+    assert.equal(plan.packages[0].disposition, 'conflicting-resolutions');
+    assert.match(plan.packages[0].recommendations[0].action, /thing@npm:\^1.0.0.*thing/);
+    assert.deepEqual(input.manifest.resolutions, {
+        thing: '1.0.0',
+    });
+    input.pins = [{
+        name: 'thing',
+        selector: 'thing',
+    }];
+    const reused = planGroups(input);
+    assert.equal(reused.groups[0].edits[0].name, 'thing');
+    input.paths.push({
+        ...input.paths[0],
+        name: 'other',
+        constraint: '^2.0.0',
+        effectiveVersions: ['2.0.1'],
+    });
+    assert.equal(planGroups(input).groups.length, 0);
+});
+
+test('host drops an attributed failed group and retains the independent verified fix', () => {
+    const { root, input, run } = fixture();
+    try {
+        const deferred = structuredClone(input.triage.packages[0]);
+        deferred.name = 'broken';
+        deferred.alerts = [{
+            number: 2,
+        }];
+        input.triage.packages.push(deferred);
+        input.paths.push({
+            ...input.paths[0],
+            requestedName: 'broken',
+            targetName: 'broken',
+        });
+        input.releases.broken = input.releases.thing;
+        const evidencePath = join(root, 'triage-results/evidence.json');
+        const evidence = JSON.parse(readFileSync(evidencePath));
+        const alert = structuredClone(evidence.alerts.data[0]);
+        alert.number = 2; alert.dependency.package.name = 'broken';
+        evidence.alerts.data.push(alert);
+        writeFileSync(evidencePath, JSON.stringify(evidence));
+        writeFileSync(join(root, 'triage-results/agent-input.json'), JSON.stringify(input));
+        let attempts = 0;
+        prepareHost(root, (exe, args, opts) => {
+            if (args[0]?.endsWith('dependency-candidate.mjs')) attempts += 1;
+            if (args[0]?.endsWith('dependency-candidate.mjs') && attempts === 1) {
+                mkdirSync(join(root, 'triage-results/candidate'), {
+                    recursive: true,
+                });
+                writeFileSync(join(root, 'triage-results/candidate/result.json'), JSON.stringify({
+                    passed: false,
+                    rolledBack: true,
+                    failureClass: 'graph',
+                    errors: [{
+                        group: 'broken',
+                        selector: 'broken@npm:^1.0.0',
+                    }],
+                }));
+                return {
+                    status: 1,
+                    stderr: 'attributed graph failure',
+                };
+            }
+            return run(exe, args, opts);
+        });
+        assert.equal(attempts, 2);
+        const proposal = JSON.parse(readFileSync(join(root, 'triage-results/proposal.json')));
+        assert.deepEqual(proposal.changes.map((e) => e.group), ['thing']);
+        assert.match(proposal.packages.find((p) => p.name === 'broken').recommendations[0].action, /deferred/);
+    } finally { rmSync(root, {
+        recursive: true,
+        force: true,
+    }); }
+});
+
+test('unattributable graph failures stop without guessing another candidate', () => {
+    const { root, run } = fixture();
+    let attempts = 0;
+    try {
+        assert.throws(() => prepareHost(root, (exe, args, opts) => {
+            if (args[0]?.endsWith('dependency-candidate.mjs')) {
+                attempts += 1;
+                mkdirSync(join(root, 'triage-results/candidate'), {
+                    recursive: true,
+                });
+                writeFileSync(join(root, 'triage-results/candidate/result.json'), JSON.stringify({
+                    passed: false,
+                    rolledBack: true,
+                    failureClass: 'graph',
+                    errors: [],
+                    diagnostic: 'Unattributable graph failure',
+                }));
+                return {
+                    status: 1,
+                    stderr: 'Unattributable graph failure',
+                };
+            }
+            return run(exe, args, opts);
+        }), /Remediation failed/);
+        assert.equal(attempts, 1);
+        assert.equal(JSON.parse(readFileSync(join(root, 'triage-results/validation.json'))).passed, false);
     } finally { rmSync(root, {
         recursive: true,
         force: true,
