@@ -1,40 +1,71 @@
 <template>
     <section class="vs-module-wrapper vs-module-wrapper--light text-start">
-        <VsBrSectionHeader :heading="title" />
+        <VsBrSectionHeader :heading="props.module.title" />
+
         <VsContainer>
             <VsRow>
                 <VsCol
-                    cols="12"
-                    md="3"
-                    v-for="(link, index) in links"
+                    v-for="(link, index) in props.module.links"
                     :key="index"
+                    cols="12"
+                    md="6"
+                    lg="3"
                 >
-                    <VsStretchedLinkCard
-                        :link="formatLink(link.link)"
-                        :type="link.type.toLowerCase()"
-                        class="text-start"
+                    <VsCard
+                        accent-bar
+                        card-style="elevated"
+                        class="py-125"
                     >
-                        <template #stretched-card-header>
-                            {{ link.label }}
+                        <template
+                            v-if="link.contentType"
+                            #vs-card-header
+                        >
+                            <VsBadge variant="subtle">
+                                <div class="px-125">
+                                    {{ link.contentType }}
+                                </div>
+                            </VsBadge>
                         </template>
 
-                        <template #stretched-card-content>
-                            {{ link.teaser }}
+                        <template #vs-card-body>
+                            <div class="px-125">
+                                <VsHeading
+                                    heading-style="heading-xs"
+                                    level="3"
+                                >
+                                    <VsLink
+                                        class="stretched-link"
+                                        :href="formatLink(link.link)"
+                                        icon-size="xs"
+                                        type="internal"
+                                        variant="secondary"
+                                    >
+                                        {{ link.label }}   
+                                    </VsLink>
+                                </VsHeading>
+
+                                <VsBody>
+                                    {{ link.teaser }}
+                                </VsBody>
+                            </div>
                         </template>
 
                         <template
-                            v-if="link.readTime || link.contentType"
-                            #stretched-card-badges
+                            v-if="link.readTime"
+                            #vs-card-footer
                         >
-                            <VsBadge v-if="link.contentType">
-                                {{ link.contentType }}
-                            </VsBadge>
-
-                            <VsBadge v-if="link.readTime">
-                                {{ link.readTime }}
-                            </VsBadge>
+                            <div class="px-125">
+                                <VsDetail
+                                    color="secondary"
+                                    icon="fa-regular fa-clock"
+                                    icon-variant="highlight"
+                                    size="small"
+                                >
+                                    {{ link.readTime }}
+                                </VsDetail>
+                            </div>
                         </template>
-                    </VsStretchedLinkCard>
+                    </VsCard>
                 </VsCol>
             </VsRow>
         </VsContainer>
@@ -44,19 +75,39 @@
 <script setup lang="ts">
 import {
     VsBadge,
+    VsBody,
+    VsCard,
     VsCol,
     VsContainer,
+    VsDetail,
+    VsHeading,
+    VsLink,
     VsRow,
-    VsStretchedLinkCard,
 } from '@visitscotland/component-library/components';
 import VsBrSectionHeader from '~/components/Modules/VsBrSectionHeader.vue';
 
 const props = defineProps<{
-    module: any,
+    module: {
+        title: string;
+        links: {
+            contentType: string;
+            label: string;
+            link: string;
+            readTime: string;
+            teaser: string;
+            // Don't need to type the rest of the links properties.
+            [key: string]: unknown;
+        }[];
+        // Don't need to type the rest of the module properties.
+        [key: string]: unknown;
+    },
 }>();
-
-const {
-    title,
-    links,
-} = props.module;
 </script>
+
+<style lang="scss" scoped>
+.row {
+    @media (max-width: 992px) {
+       gap: 1rem 0;
+    }
+}
+</style>
