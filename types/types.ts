@@ -15,3 +15,6 @@ export type DownloadCardLink = {
     size: string;
     teaser: string;
 };
+
+export type EventsCategories = 'training' | 'industry' | 'travel';
+export type EventsTabKey = Partial<Record<EventsCategories, Date>>;
