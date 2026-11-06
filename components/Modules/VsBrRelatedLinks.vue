@@ -8,7 +8,8 @@
                     v-for="(link, index) in props.module.links"
                     :key="index"
                     cols="12"
-                    md="3"
+                    md="6"
+                    lg="3"
                 >
                     <VsCard
                         accent-bar
@@ -102,3 +103,11 @@ const props = defineProps<{
     },
 }>();
 </script>
+
+<style lang="scss" scoped>
+.row {
+    @media (max-width: 992px) {
+       gap: 1rem 0;
+    }
+}
+</style>
