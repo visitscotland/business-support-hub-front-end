@@ -1,5 +1,5 @@
 import semver from 'semver';
-import { matchingPaths } from './dependency-graph.mjs';
+import { matchingPaths, resolutionConflicts } from './dependency-graph.mjs';
 
 // Select only prepared releases and verified affected paths; never ask the model
 // to construct selectors, infer a version, or decide whether a copy is vulnerable.
@@ -24,20 +24,27 @@ export function planGroups(input) {
             let value = child.version;
             if (!semver.validRange(path.constraint)) { blocker = 'unknown-path'; continue; }
             if (!semver.satisfies(child.version, path.constraint)) {
+                const parentPaths = (input.paths || []).filter((q) => q.requestedName === path.name);
                 const parent = (input.releases[path.name] || []).find((r) => semver.gt(r.version, path.version)
-                    && semver.validRange(r.dependencies[p.name]) && semver.satisfies(child.version, r.dependencies[p.name]));
+                    && semver.validRange(r.dependencies[p.name]) && semver.satisfies(child.version, r.dependencies[p.name])
+                    && parentPaths.length
+                    && parentPaths.every((q) => q.pathVerified
+                        && semver.validRange(q.constraint) && semver.satisfies(r.version, q.constraint)
+                        && q.effectiveVersions.every((v) => semver.gte(r.version, v))));
                 if (parent) {
                     selector = path.name;
                     value = parent.version;
                     caveats.add('requires-parent-update');
                 } else {
-                    selector = `${path.name}/${p.name}`;
-                    caveats.add('parent-constraint-override');
+                    blocker = 'requires-parent-upgrade';
+                    continue;
                 }
             } else {
                 // Reuse a matching existing selector only when it cannot affect a safe/newer branch.
                 selector = input.pins.find((pin) => pin.name === p.name && matchingPaths(pin.selector, [path])?.length
-                    && matchingPaths(pin.selector, input.paths).every((q) => q.effectiveVersions.every((v) => p.affectedVersions.includes(v))))?.selector
+                    && matchingPaths(pin.selector, input.paths).every((q) => q.pathVerified
+                        && semver.validRange(q.constraint) && semver.satisfies(child.version, q.constraint)
+                        && q.effectiveVersions.every((v) => p.affectedVersions.includes(v))))?.selector
                     || `${p.name}@${path.declaredRange}`;
                 caveats.add('within-parent-constraints');
             }
@@ -59,6 +66,7 @@ export function planGroups(input) {
             'unknown': 'Release evidence is incomplete; manually investigate; absence of a candidate does not prove no fix exists',
             'unknown-release-evidence': 'No applicable prepared candidate; manually investigate release evidence and branch compatibility',
             'eligible': 'No prepared candidate applies to this affected branch; manually investigate branch compatibility',
+            'requires-parent-upgrade': 'Patched child is outside parent constraints; a compatible parent upgrade or manual compatibility review is required',
         }[blocker];
         const decision = {
             name: p.name,
@@ -105,9 +113,33 @@ export function planGroups(input) {
         });
     }
     groups.sort((a, b) => b.score - a.score || a.complexity - b.complexity || a.name.localeCompare(b.name));
+    const manifest = structuredClone(input.manifest);
+    manifest.resolutions ||= {
+    };
+    const duplicateEdits = new Set();
+    const values = new Map();
+    for (const group of groups) for (const edit of group.edits) {
+        if (values.has(edit.name) && values.get(edit.name) !== edit.value) duplicateEdits.add(edit.name);
+        values.set(edit.name, edit.value);
+        manifest.resolutions[edit.name] = edit.value;
+    }
+    const conflicts = resolutionConflicts(input, manifest);
+    const blocked = groups.filter((g) => g.edits.some((e) => duplicateEdits.has(e.name)
+        || conflicts.some((c) => [c.selector, c.conflictingSelector].includes(e.name))));
+    for (const group of blocked) {
+        if (group.decision) {
+            group.decision.disposition = 'conflicting-resolutions';
+            group.decision.recommendations = [{
+                targetVersion: null,
+                pinVersion: null,
+                compatibility: 'unresolved',
+                action: `${group.name}: ${conflicts.map((c) => c.diagnostic).join('; ') || 'Conflicting proposed resolution targets'}; no change attempted`,
+            }];
+        }
+    }
     return {
         packages,
-        groups,
+        groups: groups.filter((g) => !blocked.includes(g)),
     };
 }
 
@@ -125,6 +157,9 @@ export function proposalFor(plan, groups, failures = []) {
                 action: p.disposition === 'planned' ? `${p.name}: deferred by bounded group/repair budget. ${failures.join('; ')}` : p.recommendations[0].action,
             }],
         }),
-        changes: groups.flatMap((g) => g.edits),
+        changes: groups.flatMap((g) => g.edits.map((edit) => ({
+            ...edit,
+            group: g.name,
+        }))),
     };
 }

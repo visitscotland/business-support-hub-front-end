@@ -77,7 +77,7 @@ export function prepareHost(root, run = spawnSync) {
             input.paths = proof.paths;
         }
         const plan = planGroups(input);
-        const blockers = plan.packages.filter((p) => ['unknown-path', 'conflicting-targets'].includes(p.disposition));
+        const blockers = plan.packages.filter((p) => ['unknown-path', 'conflicting-targets', 'conflicting-resolutions'].includes(p.disposition));
         writeFileSync(resolve(directory, 'planning.json'), JSON.stringify({
             packages: plan.packages,
             selectedGroups: plan.groups.slice(0, 3).map((g) => g.name),
@@ -99,10 +99,11 @@ export function prepareHost(root, run = spawnSync) {
                 const resultPath = resolve(directory, 'candidate/result.json');
                 const result = existsSync(resultPath) ? read(resultPath) : null;
                 if (!result || ['network', 'timeout'].includes(result.failureClass)) break;
-                // Remove only the named rejected group; dependency failures drop
-                // the least preferred remaining group. No new targets are invented.
-                const rejected = result.errors?.map((e) => e.package) || [];
-                groups = rejected.length ? groups.filter((g) => !rejected.includes(g.name)) : groups.slice(0, -1);
+                // Only structured, attributable failures can remove a group.
+                // Never guess which dependency caused an install or graph failure.
+                const rejected = result.errors?.map((e) => e.group || e.package).filter(Boolean) || [];
+                if (!rejected.length || !rejected.every((name) => groups.some((g) => g.name === name))) break;
+                groups = groups.filter((g) => !rejected.includes(g.name));
             }
         }
         phase('reporting', 'started');

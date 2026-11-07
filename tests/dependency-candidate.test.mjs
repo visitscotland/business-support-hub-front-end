@@ -93,7 +93,7 @@ test('global resolution cannot downgrade another installed release branch', () =
         effectiveVersions: ['2.0.0'],
     }];
     proposal.changes[0].field = 'resolutions';
-    assert.throws(() => candidateManifest(input, proposal, input.manifest), /downgrade an installed branch/);
+    assert.throws(() => candidateManifest(input, proposal, input.manifest), /downgrade an installed branch|parent constraint/);
 });
 
 test('one initial install and two distinct repairs are allowed, identical candidates are not retried', () => {
@@ -179,7 +179,7 @@ test('successful regeneration retains the exact final manifest and lockfile', ()
             return {
                 status: 0,
             };
-        });
+        }, () => {});
         assert.equal(result.passed, true);
         const state = JSON.parse(readFileSync(join(root, 'triage-results/candidate/state.json')));
         assert.equal(state.lock, 'resolved lock');
@@ -190,6 +190,53 @@ test('successful regeneration retains the exact final manifest and lockfile', ()
     }); }
 });
 
+
+test('graph failure restores the last validated checkpoint and consumes the attempt', () => {
+    const root = mkdtempSync(join(tmpdir(), 'candidate-graph-'));
+    try {
+        mkdirSync(join(root, 'triage-results/candidate'), {
+            recursive: true,
+        });
+        const baseline = {
+            attempts: 0,
+            hashes: [],
+            manifest: '{"name":"baseline"}',
+            lock: 'baseline lock',
+        };
+        writeFileSync(join(root, 'package.json'), '{"name":"candidate"}');
+        writeFileSync(join(root, 'yarn.lock'), 'candidate lock');
+        writeFileSync(join(root, 'triage-results/proposal.json'), JSON.stringify({
+            changes: [{
+                name: 'parent/thing',
+                group: 'thing',
+            }],
+        }));
+        const result = installCandidate(root, baseline, () => ({
+            status: 0,
+        }), () => {
+            const error = new Error('Resolution did not take effect');
+            error.details = [{
+                selector: 'parent/thing',
+                expected: '1.0.2',
+                actualVersions: ['1.0.0'],
+            }];
+            throw error;
+        });
+        assert.equal(result.failureClass, 'graph');
+        assert.equal(result.errors[0].group, 'thing');
+        assert.deepEqual(result.errors[0].actualVersions, ['1.0.0']);
+        assert.equal(result.rolledBack, true);
+        const saved = JSON.parse(readFileSync(join(root, 'triage-results/candidate/state.json')));
+        assert.equal(saved.attempts, 1);
+        assert.equal(saved.manifest, baseline.manifest);
+        assert.equal(saved.lock, baseline.lock);
+        assert.equal(readFileSync(join(root, 'package.json'), 'utf8'), baseline.manifest);
+        assert.equal(readFileSync(join(root, 'yarn.lock'), 'utf8'), baseline.lock);
+    } finally { rmSync(root, {
+        recursive: true,
+        force: true,
+    }); }
+});
 
 test('apply command regenerates via the checked-in runner and restore never resets its budget', () => {
     const root = mkdtempSync(join(tmpdir(), 'candidate-command-'));
@@ -207,11 +254,24 @@ test('apply command regenerates via the checked-in runner and restore never rese
         writeFileSync(join(root, 'yarn.lock'), 'baseline lock');
         writeFileSync(join(root, 'triage-results/agent-input.json'), JSON.stringify(input));
         writeFileSync(join(root, 'triage-results/proposal.json'), JSON.stringify(proposal));
+        const regeneratedLock = JSON.stringify({
+            'fixture@workspace:.': {
+                resolution: 'fixture@workspace:.',
+                version: '1.0.0',
+                dependencies: {
+                    thing: 'npm:1.0.2',
+                },
+            },
+            'thing@npm:1.0.2': {
+                resolution: 'thing@npm:1.0.2',
+                version: '1.0.2',
+            },
+        });
         writeFileSync(join(root, '.yarn/releases/yarn-4.14.1.cjs'),
-            'require(\'node:fs\').writeFileSync(\'yarn.lock\', \'regenerated lock\');');
+            `if(process.argv[2]==='info') console.log(JSON.stringify({value:'fixture@workspace:.',children:{Version:'1.0.0',Dependencies:[{descriptor:'thing@npm:1.0.2',locator:'thing@npm:1.0.2'}]}})); else require('node:fs').writeFileSync('yarn.lock',${JSON.stringify(regeneratedLock)});`);
         main('apply', root);
         assert.equal(JSON.parse(readFileSync(join(root, 'package.json'))).dependencies.thing, '1.0.2');
-        assert.equal(readFileSync(join(root, 'yarn.lock'), 'utf8'), 'regenerated lock');
+        assert.equal(readFileSync(join(root, 'yarn.lock'), 'utf8'), regeneratedLock);
         assert.throws(() => main('apply', root), /Identical candidate/);
         main('restore', root);
         assert.equal(JSON.parse(readFileSync(join(root, 'triage-results/candidate/state.json'))).attempts, 1);
