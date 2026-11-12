@@ -73,6 +73,7 @@
     "@vue/compiler-sfc": "3.5.44"
   },
   "resolutions": {
+    "@nuxt/cli": "4.0.3",
     "simple-git": "4.0.2",
     "minimist": "latest",
     "minimatch": "^10.2.5",
