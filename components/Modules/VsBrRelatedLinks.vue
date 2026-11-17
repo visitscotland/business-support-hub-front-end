@@ -110,4 +110,8 @@ const props = defineProps<{
        gap: 1rem 0;
     }
 }
+
+.vs-badge {
+    padding-left: 0;
+}
 </style>
