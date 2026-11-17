@@ -41,8 +41,7 @@
                                 class="date-input--error-msg"
                                 no-margins
                             >
-                                <!--@TODO Needs a proper error message-->
-                                Error. Date outside of acceptable range
+                                {{ configStore.getLabel('events-listings-module', 'invalid-date') }}
                             </VsDetail>
                         </div>
                     </fieldset>
