@@ -18,3 +18,5 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+smoke-results/
+triage-results/

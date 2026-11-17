@@ -28,7 +28,7 @@ import {
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';
 
-const props = defineProps<{ module: Object }>();
+const props = defineProps<{ module: object }>();
 const module: any = props.module;
 
 </script>

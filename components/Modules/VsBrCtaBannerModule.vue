@@ -1,8 +1,11 @@
 <template>
-    <VsModuleWrapper
-        :class="nested ? 'pt-0' : null"
-        class="vs-cta-banner-module"
-        :theme="themeValue"
+    <section
+        :class="[
+            'vs-module-wrapper',
+            `vs-module-wrapper--${themeValue || 'light'}`,
+            'vs-cta-banner-module',
+            nested ? 'pt-0' : null,
+        ]"
     >
         <VsContainer>
             <VsRow>
@@ -38,7 +41,7 @@
                 </VsCol>
             </VsRow>
         </VsContainer>
-    </VsModuleWrapper>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -49,7 +52,6 @@ import {
     VsCol,
     VsContainer,
     VsHeading,
-    VsModuleWrapper,
     VsRow,
 } from '@visitscotland/component-library/components';
 import VsBrRichText from '~/components/Modules/VsBrRichText.vue';

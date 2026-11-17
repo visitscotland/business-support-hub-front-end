@@ -45,6 +45,13 @@
             >
                 {{ configStore.getLabel('essentials.pagination', 'results.result') }} ({{ data.total }})
             </div>
+            
+            <div
+                aria-live="polite"
+                class="sr-only"
+            >
+                {{ screenReaderResultsMessage }}
+            </div>
 
             <div
                 :id="`sidebar-filter-target-${tabIndex}`"
@@ -80,6 +87,7 @@
                         icon-position="right"
                         @click="removeSelectedFilter(selectedFilter.fieldId, selectedFilter.key, selectedFilter.value)"
                     >
+                        <span class="sr-only">{{ configStore.getLabel('events-listings-module', 'remove-filter') }}</span>
                         {{ selectedFilter.label }}
                     </VsButton>
                 </div>
@@ -104,10 +112,7 @@
                 </div>
             </div>
 
-            <div
-                aria-live="polite"
-                class="mt-150"
-            >
+            <div class="mt-150">
                 <template v-if="data.results && data.results.length > 0">
                     <!-- TODO: Add `is-featured` prop if set in the CMS. -->
                     <VsBrEventCard
@@ -287,7 +292,6 @@ const removeSelectedFilter = (fieldId: string, key: string, value: string | bool
     if (queryIndex > -1) {
         query.value[key].splice(queryIndex, 1);
     } else {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete query.value[key];
     }
 
@@ -372,12 +376,14 @@ watch(currentPage, (newPage, oldPage) => {
     });
 });
 
+// Update the screen reader results message when the data changes.
+watch(data, () => updateScreenReaderResultsMessage());
+
 // Clear all filters and remove all query parameters.
 const clearAllFilters = () => {
     // Delete all parameters from the query.
     Object.keys(query.value).forEach((key) => {
         if (key !== 'sort') {
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete query.value[key];
         } else {
             query.value[key] = 'date';
@@ -406,6 +412,25 @@ const setIcon = (linkType: string) => {
     return undefined;
 };
 
+const screenReaderResultsMessage = ref('');
+// Set text to update screenreaders when the results change.
+function updateScreenReaderResultsMessage() { 
+    const selectedFilterLabels = selectedFilters.value.map((filter) => filter.label).join(', ');
+
+    const numberOfResults = `${data.value.total} ${configStore.getLabel('essentials.pagination', 'results.result')}
+        ${configStore.getLabel('events-listings-module', 'found')}`;
+    const sortedBy = `${configStore.getLabel('events-listings-module', 'sort-by')} ${selectedSortBy.value}`;
+    const filters = selectedFilters.value.length > 0 ? `${configStore.getLabel('events-listings-module', 'matching')} 
+        ${selectedFilterLabels}` : '';
+    const page = data.value.total > 0
+        ? `
+            ${configStore.getLabel('essentials.pagination', 'page.page')} 1 
+            ${configStore.getLabel('essentials.pagination', 'page.of')} ${numberOfPages.value}.`
+        : '';
+
+    screenReaderResultsMessage.value = `${numberOfResults} ${filters}. ${sortedBy}. ${page}`;
+};
+
 const updateWidth = () => {
     windowWidth.value = window.innerWidth;
 };
@@ -413,6 +438,7 @@ const updateWidth = () => {
 onMounted(() => {
     updateWidth();
     window.addEventListener('resize', updateWidth);
+    updateScreenReaderResultsMessage();
 });
 
 onBeforeUnmount(() => {

@@ -13,6 +13,7 @@
                 </div>
             </VsAlert>
         </div>
+
         <VsRow v-if="view === 'features'">
             <VsCol
                 cols="12"
@@ -33,7 +34,7 @@
                         </legend>
                         <div
                             v-for="(feature) in features"
-                            :key="feature + index"
+                            :key="`${feature}${index}`"
                         >
                             <VsCheckbox
                                 v-if="feature.groupDescription === group"
@@ -49,19 +50,17 @@
             </VsCol>
             <div class="w-lg-400">
                 <VsButton
-                    :variant="view === 'results' ? 'secondary' : 'primary'"
+                    variant="primary"
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
                 >
-                    <span v-if="view === 'features'">
+                    <span>
                         {{ labels['viewToggle-results'] }}
-                    </span>
-                    <span v-if="view === 'results'">
-                        {{ labels['viewToggle-features'] }}
                     </span>
                 </VsButton>
             </div>
         </VsRow>
+
         <VsRow v-if="view === 'results'">
             <VsCol
                 cols="12"
@@ -76,36 +75,60 @@
                 >
                     {{ labels['results-heading'] }}
                 </VsHeading>
+                <VsButton
+                    class="mb-100"
+                    variant="secondary"
+                    :onclick="toggleView"
+                    icon="fa-regular fa-arrow-left"
+                    v-if="view === 'results'"
+                >
+                    {{ labels['viewToggle-features'] }}
+                </VsButton>
                 <div class="d-flex flex-column gap-200">
                     <div
                         class="comparator-result"
                         v-for="(provider, index) in matchingProviders"
                         :key="provider.name + index"
                     >
-                        <VsHeading heading-style="heading-xs" level="3">
-                            <VsLink
-                                :href="provider.url"
-                                type="external"
-                                icon-size="sm"
-                            >
-                                {{ provider.name }}
-                            </VsLink>
-                        </VsHeading>
-                        <VsBrRichText :input-content="provider.description" />
+                        <VsCard
+                            card-style="elevated"
+                            fill-color="vs-color-background-secondary"
+                        >
+                            <template #vs-card-body>
+                                <div class="px-125">
+                                    <VsHeading
+                                        heading-style="heading-xs"
+                                        level="3"
+                                    >
+                                        <VsLink
+                                            class="stretched-link"
+                                            :href="provider.url"
+                                            icon-size="sm"
+                                            type="external"
+                                        >
+                                            {{ provider.name }}
+                                        </VsLink>
+                                    </VsHeading>
+
+                                    <VsBody>
+                                        <VsBrRichText :input-content="provider.description" />
+                                    </VsBody>
+                                </div>
+                            </template>
+                        </VsCard>
                     </div>
                 </div>
             </VsCol>
             <div class="button-wrapper w-lg-400">
                 <VsButton
-                    class="mt-100"
-                    :variant="view === 'results' ? 'secondary' : 'primary'"
+                    v-if="(matchingProviders.length > 3)"
+                    class="mt-300"
+                    variant="secondary"
                     :onclick="toggleView"
                     :disabled="matchingProviders.length === 0 || selectedFeatureValues.length === 0"
+                    icon="fa-regular fa-arrow-left"
                 >
-                    <span v-if="view === 'features'">
-                        {{ labels['viewToggle-results'] }}
-                    </span>
-                    <span v-if="view === 'results'">
+                    <span>
                         {{ labels['viewToggle-features'] }}
                     </span>
                 </VsButton>
@@ -118,9 +141,11 @@
     </VsContainer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue';
 import {
+    VsBody,
+    VsCard,
     VsRow,
     VsContainer,
     VsCol,
@@ -136,25 +161,37 @@ import useConfigStore from '~/stores/configStore.ts';
 const configStore = useConfigStore();
 const labels = configStore.labels['online-booking-system-comparator'];
 
-const props = defineProps({
-    features: {
-        type: Array,
-        required: true,
-    },
-    providers: {
-        type: Array,
-        required: true,
-    },
-});
+type Feature = {
+    id: string;
+    name: string;
+    description: string;
+    group: string;
+    groupDescription: string;
+};
 
-const view = ref('features');
+type Provider = {
+    name: string;
+    url: string;
+    features: string[];
+    description: string;
+    contact: string;
+};
 
-function checkboxLabel(name, description) {
+type Props = {
+    features: Feature[];
+    providers: Provider[];
+};
+
+const props = defineProps<Props>();
+
+const view = ref<'features' | 'results'>('features');
+
+function checkboxLabel(name: string, description: string) {
     return description === null ? `${name}` : `${name} - ${description}`;
 }
 
 // Values from selected checkboxes
-const selectedFeatureValues = ref([]);
+const selectedFeatureValues = ref<string[]>([]);
 //  ...are used get a list of feature objects to add to the form payload
 const selectedFeatures = computed(() => (
     props.features.filter((feature) => selectedFeatureValues.value.includes(feature.id))
@@ -183,14 +220,15 @@ const selectedProviders = computed(() => (
 
 const groups = new Set(props.features.map((feature) => feature.groupDescription));
 
-function toggleView() {
+async function toggleView() {
     if (view.value === 'features') {
         view.value = 'results';
     } else if (view.value === 'results') {
         view.value = 'features';
     };
 
-    document.querySelector('#vs-br-comparator').scrollIntoView();
+    await nextTick();
+    document.querySelector('#vs-br-comparator')?.scrollIntoView(true);
 }
 </script>
 

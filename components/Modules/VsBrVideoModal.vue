@@ -53,8 +53,8 @@ import useConfigStore from '~/stores/configStore.ts';
 const configStore = useConfigStore();
 
 interface IProps {
-    isVideoModal: boolean,
-    closeBtnText: string,
+    isVideoModal?: boolean,
+    closeBtnText?: string,
     modalId: string,
     video: any,
 };
@@ -62,9 +62,6 @@ interface IProps {
 const props = withDefaults(defineProps<IProps>(), {
     isVideoModal: false,
     closeBtnText: 'Close',
-    modalId: '',
-    video: {
-    },
 });
 
 const {

@@ -23,15 +23,37 @@
 
     <template v-if="!isHomePage">
         <VsBrPageIntro
-            v-if="documentData.theme !== 'top-level'"
+            v-if="documentData.theme === 'standard'"
             :content="documentData"
             :light-background="true"
-            :table-of-contents-links="documentData.theme === 'standard' ? tableOfContentsLinks : undefined"
+            :table-of-contents-links="tableOfContentsLinks"
         />
+
+        <template v-else-if="documentData.theme === 'simple'">
+            <VsContainer
+                class="mt-075 mt-lg-200"
+            >
+                <VsRow>
+                    <VsCol
+                        cols="10"
+                        lg="8"
+                    >
+                        <VsBrBreadcrumb
+                            :breadcrumb="breadcrumb"
+                            :is-home="false"
+                        />
+                    </VsCol>
+                </VsRow>
+            </VsContainer>
+
+            <VsBrHeroSectionModule
+                :content="documentData"
+            />
+        </template>
 
         <div
             class="my-n300"
-            v-if="documentData.theme === 'top-level'"
+            v-else-if="documentData.theme === 'top-level'"
         >
             <VsBrArticleModule
                 :module="topLevelArticleModule"
