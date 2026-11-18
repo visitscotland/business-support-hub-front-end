@@ -54,16 +54,10 @@
                             v-if="link.readTime"
                             #vs-card-footer
                         >
-                            <div class="px-125">
-                                <VsDetail
-                                    color="secondary"
-                                    icon="fa-regular fa-clock"
-                                    icon-variant="highlight"
-                                    size="small"
-                                >
-                                    {{ link.readTime }}
-                                </VsDetail>
-                            </div>
+                            <VsArticleDetails 
+                                :article-read-time="link.readTime"
+                                class="px-125 mb-150"
+                            />
                         </template>
                     </VsCard>
                 </VsCol>
@@ -74,12 +68,12 @@
 
 <script setup lang="ts">
 import {
+    VsArticleDetails,
     VsBadge,
     VsBody,
     VsCard,
     VsCol,
     VsContainer,
-    VsDetail,
     VsHeading,
     VsLink,
     VsRow,
