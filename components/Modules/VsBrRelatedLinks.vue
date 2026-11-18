@@ -14,16 +14,16 @@
                     <VsCard
                         accent-bar
                         card-style="elevated"
-                        class="py-125"
                     >
                         <template
                             v-if="link.contentType"
                             #vs-card-header
                         >
-                            <VsBadge variant="subtle">
-                                <div class="px-125">
-                                    {{ link.contentType }}
-                                </div>
+                            <VsBadge
+                                class="mt-125 mx-075"
+                                variant="subtle"
+                            >
+                                Article
                             </VsBadge>
                         </template>
 
@@ -44,7 +44,7 @@
                                     </VsLink>
                                 </VsHeading>
 
-                                <VsBody>
+                                <VsBody class="mb-150">
                                     {{ link.teaser }}
                                 </VsBody>
                             </div>
@@ -109,9 +109,5 @@ const props = defineProps<{
     @media (max-width: 992px) {
        gap: 1rem 0;
     }
-}
-
-.vs-badge {
-    padding-left: 0;
 }
 </style>
