@@ -12,8 +12,7 @@
                 class="event-filter__toggle"
                 @click.prevent="modalOpen(tabIndex)"
             >
-                <!-- TODO: Add filter button label from CMS -->
-                Filters
+                {{ configStore.getLabel('events-listings-module', 'filter') }}
             </VsButton>
             <!-- TODO: Add Close filters button label from CMS -->
             <VsModal
@@ -34,8 +33,7 @@
                             class="w-100"
                             @click="modalClose(tabIndex)"
                         >
-                            <!-- TODO: Add apply button label from CMS -->
-                            Apply
+                            {{ configStore.getLabel('events-listings-module', 'apply') }}
                         </VsButton>
                     </div>
                 </VsRow>
