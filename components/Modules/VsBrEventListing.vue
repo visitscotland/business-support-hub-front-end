@@ -114,7 +114,6 @@
 
             <div class="mt-150">
                 <template v-if="data.results && data.results.length > 0">
-                    <!-- TODO: Add `is-featured` prop if set in the CMS. -->
                     <VsBrEventCard
                         v-for="(result, index) in data.results"
                         :key="`${result.title}-${index}`"
@@ -122,6 +121,7 @@
                         :cta-icon="setIcon(result.cta.type)"
                         :cta-label="result.cta.label"
                         data-event-listing="True"
+                        :is-featured="result.featured"
                     >
                         <template #event-card-header>
                             {{ result.title }}
