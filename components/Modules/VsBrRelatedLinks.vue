@@ -14,16 +14,16 @@
                     <VsCard
                         accent-bar
                         card-style="elevated"
-                        class="py-125"
                     >
                         <template
                             v-if="link.contentType"
                             #vs-card-header
                         >
-                            <VsBadge variant="subtle">
-                                <div class="px-125">
-                                    {{ link.contentType }}
-                                </div>
+                            <VsBadge
+                                class="mt-125 mx-075"
+                                variant="subtle"
+                            >
+                                Article
                             </VsBadge>
                         </template>
 
@@ -44,7 +44,7 @@
                                     </VsLink>
                                 </VsHeading>
 
-                                <VsBody>
+                                <VsBody class="mb-150">
                                     {{ link.teaser }}
                                 </VsBody>
                             </div>
@@ -54,16 +54,10 @@
                             v-if="link.readTime"
                             #vs-card-footer
                         >
-                            <div class="px-125">
-                                <VsDetail
-                                    color="secondary"
-                                    icon="fa-regular fa-clock"
-                                    icon-variant="highlight"
-                                    size="small"
-                                >
-                                    {{ link.readTime }}
-                                </VsDetail>
-                            </div>
+                            <VsArticleDetails 
+                                :article-read-time="link.readTime"
+                                class="px-125 mb-150"
+                            />
                         </template>
                     </VsCard>
                 </VsCol>
@@ -74,12 +68,12 @@
 
 <script setup lang="ts">
 import {
+    VsArticleDetails,
     VsBadge,
     VsBody,
     VsCard,
     VsCol,
     VsContainer,
-    VsDetail,
     VsHeading,
     VsLink,
     VsRow,
