@@ -11,10 +11,10 @@
 }
 
 .assistant-chat-form__conversation-controls-container .cludo-button {
-    --button-foreground-color: #1F49D6 !important;
-    --button-outline-color: #1F49D6 !important;
+    --button-foreground-color: #441B65 !important;
+    --button-outline-color: #441B65 !important;
 
-    --button-background-color--hover: #1F49D6 !important;
+    --button-background-color--hover: #8535C5 !important;
     --button-foreground-color--hover: #FFFFFF !important;
     padding-top: 0;
     padding-bottom: 0;
@@ -44,11 +44,11 @@
 }
 
 .cludo-assistant-button {
-    --button-background-color: #1F49D6 !important;
+    --button-background-color: #441B65 !important;
     --button-foreground-color: #FFFFFF !important;
-    --button-outline-color: #1F49D6 !important;
-    --button-background-color--hover: #FFFFFF !important;
-    --button-foreground-color--hover: #1F49D6 !important;
+    --button-outline-color: #441B65 !important;
+    --button-background-color--hover: #8535C5 !important;
+    --button-foreground-color--hover: #FFFFFF !important;
 
     background-color: var(--button-background-color) !important;
     border: 2px solid var(--button-outline-color) !important;
@@ -66,15 +66,15 @@
 
 /*
     Cludo serves this icon as a base64 png regardless of the upload format giving us less control
-    than with an SVG. This changes the white icon to a #1F49D6 one as desired.
+    than with an SVG. This keeps the icon white against the Thistle hover and focus background.
  */
 
 .cludo-assistant-button:hover i {
-    filter: brightness(0) saturate(100%) invert(19%) sepia(78%) saturate(4505%) hue-rotate(229deg) brightness(87%) contrast(91%);
+    filter: brightness(0) invert(1);
 }
 
 .cludo-assistant-button:focus i {
-    filter: brightness(0) saturate(100%) invert(19%) sepia(78%) saturate(4505%) hue-rotate(229deg) brightness(87%) contrast(91%);
+    filter: brightness(0) invert(1);
 }
 
 .assistant-result-item__result-path {
@@ -102,4 +102,17 @@
 
 .cludo-assistant .assistant-chat-message__chat-message-content {
     font-size: 1rem;
+}
+.assistant-chat-form__conversation-controls-container .cludo-button:hover,
+.assistant-chat-form__conversation-controls-container .cludo-button:focus,
+.cludo-assistant-button:hover,
+.cludo-assistant-button:focus {
+    border-color: #8535C5 !important;
+}
+
+.assistant-chat-form__conversation-controls-container .cludo-button:active,
+.cludo-assistant-button:active {
+    background-color: #5B2487 !important;
+    border-color: #5B2487 !important;
+    color: #FFFFFF !important;
 }
