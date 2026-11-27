@@ -87,7 +87,7 @@
     "@vue/runtime-core": "3.5.45",
     "@vue/runtime-dom": "3.5.45",
     "@vue/server-renderer": "3.5.45",
-    "@vue/shared": "3.5.44",
+    "@vue/shared": "3.5.45",
     "vite@npm:^8.0.0": "8.3.4",
     "launch-editor": "2.14.2",
     "undici@npm:^6.25.0": "6.29.1",
